@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1220" />
-  <title>Lernwelt – Dein Lernzentrum</title>
+  <title>BUILT – Lernplattform</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
   <style>
@@ -164,7 +164,9 @@
     textarea.code{width:100%;height:420px;resize:vertical;border:0;outline:0;background:#0b1220;color:#dbeafe;padding:18px;font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;line-height:1.7}
     .CodeMirror{height:470px;background:#0b1220!important;color:#e5e7eb;font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;line-height:1.65}
     .CodeMirror-gutters{background:#0f172a!important;border-right:1px solid #253047!important}
-    .CodeMirror-linenumber{color:#64748b!important}
+    .CodeMirror-linenumber{color:#64748b!important;padding:0 10px 0 8px!important;min-width:28px;text-align:right}
+    .CodeMirror-lines{padding:10px 0!important}
+    .CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{padding:0 12px!important}
     .cm-s-material-darker .cm-keyword{color:#c792ea}
     .cm-s-material-darker .cm-string{color:#c3e88d}
     .cm-s-material-darker .cm-number{color:#f78c6c}
@@ -182,10 +184,15 @@
     .starter-steps{margin:0;padding-left:18px;color:#475569;font-size:13px;line-height:1.65}
     .starter-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
     .video-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
-    .code-suggestion{position:absolute;display:none;z-index:5;left:18px;top:82px;background:#111827;border:1px solid #334155;border-radius:10px;padding:8px 10px;color:#e2e8f0;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;box-shadow:0 14px 35px rgba(0,0,0,.32);pointer-events:none}
-    .code-suggestion.show{display:flex;align-items:center;gap:12px}
-    .code-suggestion .completion{color:#fff;font-weight:700}
-    .code-suggestion .tab-key{color:#94a3b8;font-size:11px;border:1px solid #475569;border-radius:6px;padding:2px 6px;background:#0f172a}
+    .code-suggestion{position:absolute;display:none;z-index:20;left:18px;top:82px;width:min(390px,calc(100% - 36px));background:#111827;border:1px solid #334155;border-radius:11px;color:#e2e8f0;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;box-shadow:0 16px 42px rgba(0,0,0,.38);overflow:hidden}
+    .code-suggestion.show{display:block}
+    .suggestion-list{max-height:248px;overflow:hidden;padding:5px}
+    .suggestion-item{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 9px;border-radius:7px;color:#cbd5e1}
+    .suggestion-item.selected{background:#263553;color:#fff}
+    .suggestion-item .completion{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+    .suggestion-item .kind{color:#7dd3fc;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+    .suggestion-help{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-top:1px solid #293548;color:#94a3b8;font-size:10px;background:#0f172a}
+    .keycap{border:1px solid #475569;border-radius:5px;padding:1px 5px;color:#cbd5e1}
     .console{background:#101827;color:#cbd5e1;border-radius:18px;padding:18px;min-height:170px;font-family:monospace;font-size:13px;white-space:pre-wrap;overflow:auto}
     .stdin-box{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none;background:#fff;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px}
     .runner-state{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;padding:5px 8px;border-radius:999px;background:#eef2ff;color:#4f46e5}
@@ -238,8 +245,8 @@
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <div class="brand-mark">L</div>
-      <div><strong>Lernwelt</strong><span>Dein Lernzentrum</span></div>
+      <div class="brand-mark">B</div>
+      <div><strong>BUILT</strong><span>Lernplattform</span></div>
     </div>
     <nav class="nav">
       <button class="active" data-page="home"><span class="ico">⌂</span>Startseite</button>
@@ -276,7 +283,7 @@
       <section class="page active" id="page-home">
         <div class="hero">
           <div class="hero-inner">
-            <div class="eyebrow">Lernwelt Dashboard</div>
+            <div class="eyebrow">BUILT Dashboard</div>
             <h2>Alles zum Lernen. An einem Ort.</h2>
             <p>Organisiere deine Fächer, trainiere mit Karteikarten und Tests, programmiere im Code-Labor und behalte deinen Lernfortschritt im Blick.</p>
             <div class="hero-actions">
@@ -345,10 +352,13 @@ class Program
 {
     static void Main()
     {
-        Console.WriteLine("Hallo Lernwelt!");
+        Console.WriteLine("Hallo BUILT!");
     }
 }</textarea>
-            <div class="code-suggestion" id="codeSuggestion"><span class="completion" id="codeSuggestionText"></span><span class="tab-key">Tab ↹</span></div>
+            <div class="code-suggestion" id="codeSuggestion">
+              <div class="suggestion-list" id="codeSuggestionList"></div>
+              <div class="suggestion-help"><span><span class="keycap">↑</span> <span class="keycap">↓</span> auswählen</span><span><span class="keycap">Tab</span> übernehmen</span></div>
+            </div>
           </div>
           <div class="card panel">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px">
@@ -439,8 +449,11 @@ class Program
   function navigate(page){
     pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
     navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-    document.getElementById('topTitle').textContent=titleMap[page]||'Lernwelt';
+    document.getElementById('topTitle').textContent=titleMap[page]||'BUILT';
     document.getElementById('sidebar').classList.remove('open');
+    if(page==='code' && window.codeEditorCM){
+      setTimeout(()=>window.codeEditorCM.refresh(),30);
+    }
     window.scrollTo({top:0,behavior:'smooth'});
   }
   navButtons.forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
@@ -541,7 +554,9 @@ class Program
 
   const textareaEditor=document.getElementById('codeEditor');
   const suggestionBox=document.getElementById('codeSuggestion');
-  const suggestionText=document.getElementById('codeSuggestionText');
+  const suggestionList=document.getElementById('codeSuggestionList');
+  let completionMatches=[];
+  let completionIndex=0;
   let activeCompletion=null;
 
   const editor=CodeMirror.fromTextArea(textareaEditor,{
@@ -554,6 +569,8 @@ class Program
     lineWrapping:false,
     autoCloseBrackets:true
   });
+  window.codeEditorCM=editor;
+  setTimeout(()=>editor.refresh(),50);
 
   const csharpCompletions=[
   "Console.WriteLine",
@@ -765,6 +782,28 @@ class Program
   ".Union",
   ".Intersect",
   ".Except",
+  "ConsoleColor",
+  "ConsoleColor.Black",
+  "ConsoleColor.DarkBlue",
+  "ConsoleColor.DarkGreen",
+  "ConsoleColor.DarkCyan",
+  "ConsoleColor.DarkRed",
+  "ConsoleColor.DarkMagenta",
+  "ConsoleColor.DarkYellow",
+  "ConsoleColor.Gray",
+  "ConsoleColor.DarkGray",
+  "ConsoleColor.Blue",
+  "ConsoleColor.Green",
+  "ConsoleColor.Cyan",
+  "ConsoleColor.Red",
+  "ConsoleColor.Magenta",
+  "ConsoleColor.Yellow",
+  "ConsoleColor.White",
+  "Console.ForegroundColor = ConsoleColor.Green;",
+  "Console.ForegroundColor = ConsoleColor.Red;",
+  "Console.ForegroundColor = ConsoleColor.Yellow;",
+  "Console.BackgroundColor = ConsoleColor.Black;",
+  "Console.ResetColor();",
   "Math.Abs",
   "Math.Max",
   "Math.Min",
@@ -946,34 +985,86 @@ class Program
     return {cur,prefix,start:{line:cur.line,ch:cur.ch-prefix.length}};
   }
 
+  function completionKind(item){
+    if(item.includes('ConsoleColor') || item.includes('ForegroundColor') || item.includes('BackgroundColor')) return 'Farbe';
+    if(item.startsWith('Console.')) return 'Console';
+    if(item.includes('(')) return 'Methode';
+    if(item.includes('<')) return 'Typ';
+    if(/^(if|else|for|foreach|while|switch|try|catch|class|public|private|static|return)$/.test(item)) return 'Keyword';
+    return 'C#';
+  }
+
+  function renderCompletionMenu(){
+    suggestionList.innerHTML=completionMatches.map((item,i)=>
+      '<div class="suggestion-item'+(i===completionIndex?' selected':'')+'">'+
+        '<span class="completion">'+escapeHtml(item)+'</span>'+
+        '<span class="kind">'+completionKind(item)+'</span>'+
+      '</div>'
+    ).join('');
+  }
+
   function updateCodeSuggestion(){
     const {cur,prefix,start}=currentTokenInfo();
-    if(prefix.length<2){activeCompletion=null;suggestionBox.classList.remove('show');return;}
+    if(prefix.length<2){
+      activeCompletion=null;
+      completionMatches=[];
+      suggestionBox.classList.remove('show');
+      return;
+    }
+
     const lower=prefix.toLowerCase();
-    const found=csharpCompletions.find(item=>{
-      const candidate=item.toLowerCase();
-      return candidate.startsWith(lower) && candidate!==lower;
-    });
-    if(!found){activeCompletion=null;suggestionBox.classList.remove('show');return;}
-    activeCompletion={start,end:cur,full:found};
-    suggestionText.textContent=found;
+    completionMatches=csharpCompletions
+      .filter(item=>item.toLowerCase().startsWith(lower) && item.toLowerCase()!==lower)
+      .slice(0,8);
+
+    if(!completionMatches.length){
+      activeCompletion=null;
+      suggestionBox.classList.remove('show');
+      return;
+    }
+
+    if(completionIndex>=completionMatches.length) completionIndex=0;
+    activeCompletion={start,end:cur,full:completionMatches[completionIndex]};
+    renderCompletionMenu();
     suggestionBox.classList.add('show');
 
     const coords=editor.cursorCoords(cur,'local');
-    suggestionBox.style.left=Math.min(coords.left+48,Math.max(18,editor.getWrapperElement().clientWidth-260))+'px';
+    const width=editor.getWrapperElement().clientWidth;
+    suggestionBox.style.left=Math.min(coords.left+48,Math.max(18,width-410))+'px';
     suggestionBox.style.top=(coords.bottom+45)+'px';
   }
 
-  editor.on('change',updateCodeSuggestion);
+  function moveCompletion(delta){
+    if(!completionMatches.length) return;
+    completionIndex=(completionIndex+delta+completionMatches.length)%completionMatches.length;
+    const info=currentTokenInfo();
+    activeCompletion={start:info.start,end:info.cur,full:completionMatches[completionIndex]};
+    renderCompletionMenu();
+  }
+
+  editor.on('change',()=>{
+    completionIndex=0;
+    updateCodeSuggestion();
+  });
   editor.on('cursorActivity',updateCodeSuggestion);
-  editor.on('blur',()=>suggestionBox.classList.remove('show'));
+  editor.on('blur',()=>setTimeout(()=>suggestionBox.classList.remove('show'),100));
 
   editor.setOption('extraKeys',{
+    'Up':cm=>{
+      if(completionMatches.length && suggestionBox.classList.contains('show')) moveCompletion(-1);
+      else cm.execCommand('goLineUp');
+    },
+    'Down':cm=>{
+      if(completionMatches.length && suggestionBox.classList.contains('show')) moveCompletion(1);
+      else cm.execCommand('goLineDown');
+    },
     'Tab':cm=>{
-      if(activeCompletion){
-        cm.replaceRange(activeCompletion.full,activeCompletion.start,activeCompletion.end);
-        cm.setCursor({line:activeCompletion.start.line,ch:activeCompletion.start.ch+activeCompletion.full.length});
+      if(activeCompletion && completionMatches.length && suggestionBox.classList.contains('show')){
+        const chosen=completionMatches[completionIndex];
+        cm.replaceRange(chosen,activeCompletion.start,activeCompletion.end);
+        cm.setCursor({line:activeCompletion.start.line,ch:activeCompletion.start.ch+chosen.length});
         activeCompletion=null;
+        completionMatches=[];
         suggestionBox.classList.remove('show');
       }else{
         cm.replaceSelection('    ','end');
