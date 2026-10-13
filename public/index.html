@@ -5145,6 +5145,405 @@
       }
     }
 
+
+    /* ===== BUILT – Study OS / Neo Brutal ===== */
+    :root{
+      --bg:#f3f0e8;
+      --panel:#fffdf7;
+      --text:#111111;
+      --muted:#5f5f5f;
+      --line:#111111;
+      --accent:#2855ff;
+      --yellow:#ffd84d;
+      --coral:#ff8066;
+      --mint:#9ee7c0;
+      --shadow:5px 5px 0 #111111;
+      --radius:0px;
+    }
+
+    html,body,.main,.content,.page{background:#f3f0e8 !important;color:#111 !important}
+    body{background:#f3f0e8 !important}
+
+    .app{display:block !important}
+
+    .sidebar{
+      position:sticky !important;
+      top:0 !important;
+      width:100% !important;
+      height:auto !important;
+      min-height:0 !important;
+      z-index:50 !important;
+      padding:10px 18px !important;
+      background:#111 !important;
+      border:none !important;
+      display:flex !important;
+      align-items:center !important;
+      gap:18px !important;
+      box-shadow:none !important;
+    }
+
+    .brand{padding:0 !important;min-width:150px !important}
+    .brand-mark{
+      width:34px !important;height:34px !important;
+      border-radius:0 !important;
+      background:#ffd84d !important;
+      color:#111 !important;
+      box-shadow:none !important;
+      border:2px solid #111 !important;
+    }
+    .brand strong{color:#fff !important;font-size:16px !important}
+    .brand span{display:none !important}
+
+    .nav{
+      display:flex !important;
+      flex:1 !important;
+      gap:4px !important;
+      overflow-x:auto !important;
+      white-space:nowrap !important;
+      scrollbar-width:none !important;
+    }
+    .nav::-webkit-scrollbar{display:none !important}
+    .nav button{
+      width:auto !important;
+      padding:8px 10px !important;
+      border-radius:0 !important;
+      color:#d5d5d5 !important;
+      font-size:11px !important;
+      font-weight:750 !important;
+      border:1px solid transparent !important;
+      background:transparent !important;
+    }
+    .nav button:hover{color:#fff !important;background:#222 !important}
+    .nav button.active{
+      background:#fff !important;
+      color:#111 !important;
+      border-color:#fff !important;
+      box-shadow:none !important;
+    }
+    .nav .ico{display:none !important}
+
+    .sidebar-footer{margin:0 0 0 auto !important}
+    .profile{
+      background:transparent !important;
+      border:none !important;
+      padding:0 !important;
+      border-radius:0 !important;
+    }
+    .profile .avatar{
+      width:32px !important;height:32px !important;
+      border-radius:50% !important;
+      background:#2855ff !important;
+      color:#fff !important;
+    }
+    .profile strong,.profile small{display:none !important}
+
+    .topbar{display:none !important}
+
+    .content{
+      padding:34px 34px 60px !important;
+      max-width:1500px !important;
+      margin:0 auto !important;
+    }
+
+    .btn,.icon-btn{
+      border:2px solid #111 !important;
+      background:#fff !important;
+      color:#111 !important;
+      border-radius:0 !important;
+      box-shadow:3px 3px 0 #111 !important;
+      font-weight:850 !important;
+    }
+    .btn:hover,.icon-btn:hover{
+      transform:translate(2px,2px) !important;
+      box-shadow:1px 1px 0 #111 !important;
+      background:#fff !important;
+    }
+    .btn.primary{
+      background:#2855ff !important;
+      color:#fff !important;
+      border-color:#111 !important;
+      box-shadow:3px 3px 0 #111 !important;
+    }
+
+    .os-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.4fr) minmax(300px,.6fr);
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .os-hero-copy{
+      min-height:330px;
+      padding:34px;
+      background:#fffdf7;
+      border:2px solid #111;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .os-kicker{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.16em;
+      margin-bottom:20px;
+    }
+
+    .os-hero h2{
+      margin:0 0 16px;
+      font-size:58px;
+      line-height:.92;
+      letter-spacing:-.06em;
+      text-transform:uppercase;
+      max-width:760px;
+    }
+
+    .os-hero p{
+      margin:0;
+      max-width:650px;
+      color:#4d4d4d;
+      line-height:1.65;
+      font-size:13px;
+    }
+
+    .os-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+
+    .os-today{
+      padding:24px;
+      background:#ffd84d;
+      border:2px solid #111;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:330px;
+    }
+    .os-today-top{
+      display:flex;
+      justify-content:space-between;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.12em;
+    }
+    .os-today-top strong{font-size:36px;line-height:1}
+    .os-today-main{display:flex;align-items:flex-end;gap:14px}
+    .os-big{font-size:84px;font-weight:950;line-height:.8;letter-spacing:-.08em}
+    .os-today-main strong{font-size:16px}
+    .os-today-main p{font-size:11px;margin:4px 0 0;line-height:1.45}
+
+    .os-bento{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .os-stat{
+      min-height:120px;
+      padding:18px;
+      border:2px solid #111;
+      box-shadow:4px 4px 0 #111;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .os-stat.yellow{background:#ffd84d}
+    .os-stat.blue{background:#2855ff;color:#fff}
+    .os-stat.coral{background:#ff8066}
+    .os-stat.mint{background:#9ee7c0}
+    .os-stat span{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.14em}
+    .os-stat strong{font-size:38px;line-height:1;font-weight:950}
+    .os-stat small{font-size:10px;font-weight:800}
+
+    .os-main-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.6fr) minmax(280px,.5fr);
+      gap:18px;
+      margin-bottom:28px;
+    }
+
+    .os-subjects,.os-launcher,.os-challenges,.os-note,.os-quote{
+      background:#fffdf7;
+      border:2px solid #111;
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .os-section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .os-section-head>div:first-child{
+      display:flex;align-items:center;gap:10px
+    }
+    .os-section-head span{
+      width:28px;height:28px;
+      display:grid;place-items:center;
+      background:#111;color:#fff;
+      font-size:9px;font-weight:900;
+    }
+    .os-section-head h3{
+      margin:0;
+      font-size:19px;
+      text-transform:uppercase;
+      letter-spacing:-.03em;
+    }
+
+    #homeSubjects.subject-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:10px !important;
+    }
+
+    #homeSubjects .subject-card{
+      background:#fff !important;
+      border:2px solid #111 !important;
+      border-radius:0 !important;
+      box-shadow:3px 3px 0 #111 !important;
+      min-height:145px !important;
+      padding:15px !important;
+    }
+    #homeSubjects .subject-card:nth-child(4n+1){background:#fff6ca !important}
+    #homeSubjects .subject-card:nth-child(4n+2){background:#e8efff !important}
+    #homeSubjects .subject-card:nth-child(4n+3){background:#ffe9e3 !important}
+    #homeSubjects .subject-card:nth-child(4n+4){background:#e5f8ee !important}
+    #homeSubjects .subject-card:hover{
+      transform:translate(2px,2px) !important;
+      box-shadow:1px 1px 0 #111 !important;
+    }
+    #homeSubjects .subject-badge{
+      background:#111 !important;color:#fff !important;border-radius:0 !important
+    }
+    #homeSubjects .progress{background:#fff !important;border:1px solid #111 !important;height:6px !important}
+    #homeSubjects .progress span{background:#111 !important}
+
+    .os-launch-list{display:grid;gap:8px}
+    .os-launch-list button{
+      display:grid;
+      grid-template-columns:34px 1fr auto;
+      align-items:center;
+      gap:10px;
+      width:100%;
+      padding:11px 12px;
+      background:#fff;
+      border:2px solid #111;
+      text-align:left;
+      font:inherit;
+      cursor:pointer;
+      box-shadow:2px 2px 0 #111;
+    }
+    .os-launch-list button:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 #111}
+    .os-launch-list b{
+      width:28px;height:28px;display:grid;place-items:center;background:#111;color:#fff
+    }
+    .os-launch-list span{font-size:11px;font-weight:850}
+    .os-launch-list i{font-style:normal;font-weight:900}
+
+    .os-challenges{margin-bottom:20px}
+
+    .starter-controls{display:flex;align-items:center;gap:8px}
+    .starter-carousel{
+      background:transparent !important;
+      border:none !important;
+      border-radius:0 !important;
+      box-shadow:none !important;
+      padding:0 !important;
+    }
+    .starter-grid{gap:10px !important}
+    .starter-card{
+      background:#fff !important;
+      border:2px solid #111 !important;
+      border-radius:0 !important;
+      box-shadow:3px 3px 0 #111 !important;
+      min-height:215px !important;
+      padding:15px !important;
+    }
+    .starter-card:nth-child(4n+1){background:#fff6ca !important}
+    .starter-card:nth-child(4n+2){background:#e8efff !important}
+    .starter-card:nth-child(4n+3){background:#ffe9e3 !important}
+    .starter-card:nth-child(4n+4){background:#e5f8ee !important}
+    .starter-card:hover{
+      transform:translate(2px,2px) !important;
+      box-shadow:1px 1px 0 #111 !important;
+    }
+    .starter-card .level{
+      background:#111 !important;
+      color:#fff !important;
+      border-radius:0 !important;
+    }
+
+    .os-bottom{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .os-note{background:#9ee7c0}
+    .os-quote{background:#2855ff;color:#fff}
+    .os-note span,.os-quote span{
+      font-size:9px;font-weight:900;letter-spacing:.16em
+    }
+    .os-note h3,.os-quote h3{
+      font-size:32px;
+      line-height:1;
+      letter-spacing:-.04em;
+      text-transform:uppercase;
+      margin:18px 0 10px;
+    }
+    .os-note p{font-size:12px;margin:0 0 18px}
+
+    .page-title,.card,.panel,.flash-card,.test-row,.game-card,.home-quick .tool-card,.empty,.modal-card{
+      border-radius:0 !important;
+    }
+    .page-title{
+      background:#fffdf7 !important;
+      border:2px solid #111 !important;
+      box-shadow:4px 4px 0 #111 !important;
+    }
+    .page-title h2{text-transform:uppercase !important;letter-spacing:-.04em !important}
+    .card,.panel,.flash-card,.test-row,.game-card{
+      background:#fffdf7 !important;
+      border:2px solid #111 !important;
+      box-shadow:3px 3px 0 #111 !important;
+    }
+    .tag,.status{
+      background:#111 !important;color:#fff !important;border-radius:0 !important
+    }
+
+    .modal{background:rgba(17,17,17,.55) !important}
+    .modal-card{
+      background:#fffdf7 !important;
+      border:2px solid #111 !important;
+      box-shadow:7px 7px 0 #111 !important;
+    }
+    .field input,.field textarea,.field select,.stdin-box{
+      border:2px solid #111 !important;
+      border-radius:0 !important;
+      background:#fff !important;
+      box-shadow:none !important;
+    }
+    .field input:focus,.field textarea:focus,.field select:focus,.stdin-box:focus{
+      border-color:#2855ff !important;
+      box-shadow:3px 3px 0 #2855ff !important;
+    }
+
+    @media(max-width:1050px){
+      .sidebar{flex-wrap:wrap !important}
+      .nav{order:3;width:100%}
+      .os-hero,.os-main-grid{grid-template-columns:1fr !important}
+      .os-bento{grid-template-columns:repeat(2,1fr)}
+      #homeSubjects.subject-grid{grid-template-columns:1fr !important}
+    }
+    @media(max-width:700px){
+      .content{padding:20px 14px 40px !important}
+      .os-hero h2{font-size:42px}
+      .os-bento,.os-bottom{grid-template-columns:1fr}
+      .os-big{font-size:64px}
+    }
+
   </style>
 </head>
 <body>
@@ -5187,89 +5586,92 @@
 
     <div class="content">
       <section class="page active" id="page-home">
-        <section class="clean-hero">
-          <div class="clean-hero-copy">
-            <div class="home-kicker"><span>●</span> BUILT · Dein Lernzentrum</div>
-            <h2>Lernen mit Ruhe, Struktur und Fokus.</h2>
-            <p>Fächer, Karteikarten, Tests, C# und Fokuszeit an einem Ort. Klar aufgebaut, damit du schnell findest, was du gerade brauchst.</p>
-            <div class="hero-actions">
+        <section class="os-hero">
+          <div class="os-hero-copy">
+            <div class="os-kicker">BUILT / STUDY OS</div>
+            <h2>Heute lernen.<br>Ohne Umwege.</h2>
+            <p>Öffne ein Fach, starte eine Übung oder spring direkt ins Code-Labor. Alles Wichtige ist sofort sichtbar.</p>
+            <div class="os-actions">
               <button class="btn primary" data-go="subjects">Fächer öffnen</button>
-              <button class="btn" data-go="code">Code-Labor starten</button>
+              <button class="btn" data-go="code">Code-Labor</button>
             </div>
           </div>
-          <figure class="clean-hero-media">
-            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=88" alt="Berglandschaft in der Natur">
-            <figcaption>Raum zum Denken.</figcaption>
-          </figure>
+          <div class="os-today">
+            <div class="os-today-top"><span>HEUTE</span><strong>01</strong></div>
+            <div class="os-today-main">
+              <div class="os-big">25</div>
+              <div><strong>Minuten Fokus</strong><p>Ein Block. Eine Aufgabe. Danach Pause.</p></div>
+            </div>
+            <button class="btn" data-go="focus">Fokus starten →</button>
+          </div>
         </section>
 
-        <section class="nature-strip" aria-label="Natur und Lernen">
-          <article class="nature-card">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=84" alt="Ruhiger Wald">
-            <div class="nature-card-copy"><span>Fokus</span><strong>Ruhe finden</strong><p>Konzentriert an einer Sache arbeiten.</p></div>
-          </article>
-          <article class="nature-card">
-            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=84" alt="Weite Naturlandschaft">
-            <div class="nature-card-copy"><span>Fortschritt</span><strong>Schritt für Schritt</strong><p>Kleine Einheiten, sichtbarer Fortschritt.</p></div>
-          </article>
-          <article class="nature-card">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=84" alt="See in den Bergen">
-            <div class="nature-card-copy"><span>Pause</span><strong>Kopf frei bekommen</strong><p>Kurz abschalten und danach weiterlernen.</p></div>
-          </article>
+        <section class="os-bento">
+          <div class="os-stat yellow">
+            <span>Fächer</span>
+            <strong id="metricSubjects">0</strong>
+            <small>aktiv</small>
+          </div>
+          <div class="os-stat blue">
+            <span>Karteikarten</span>
+            <strong>0</strong>
+            <small>gesamt</small>
+          </div>
+          <div class="os-stat coral">
+            <span>Tests</span>
+            <strong>0</strong>
+            <small>abgeschlossen</small>
+          </div>
+          <div class="os-stat mint">
+            <span>Fokus</span>
+            <strong>0m</strong>
+            <small>heute</small>
+          </div>
         </section>
 
-        <div class="home-metrics">
-          <div class="home-stat"><div class="home-stat-icon">▦</div><div><div class="home-stat-value" id="metricSubjects">0</div><div class="home-stat-label">aktive Fächer</div></div></div>
-          <div class="home-stat"><div class="home-stat-icon">◫</div><div><div class="home-stat-value">0</div><div class="home-stat-label">Karteikarten</div></div></div>
-          <div class="home-stat"><div class="home-stat-icon">✓</div><div><div class="home-stat-value">0</div><div class="home-stat-label">Tests abgeschlossen</div></div></div>
-          <div class="home-stat"><div class="home-stat-icon">◷</div><div><div class="home-stat-value">0m</div><div class="home-stat-label">Fokuszeit heute</div></div></div>
-        </div>
-
-        <div class="home-content-grid">
-          <section class="home-subject-panel">
-            <div class="home-section-head">
-              <div><h3>Deine Fächer</h3><p>Ein Fach auswählen und nur dessen Inhalte sehen.</p></div>
+        <section class="os-main-grid">
+          <div class="os-subjects">
+            <div class="os-section-head">
+              <div><span>01</span><h3>Deine Fächer</h3></div>
               <button class="btn" id="addSubjectHome">+ Neues Fach</button>
             </div>
             <div class="grid subject-grid" id="homeSubjects"></div>
-          </section>
+          </div>
 
-          <aside class="home-side-stack">
-            <div class="home-side-card">
-              <h4>Schnell starten</h4>
-              <p>Direkt zum Werkzeug, ohne Umwege.</p>
-              <div class="home-shortcut-list">
-                <div class="home-shortcut" data-go="flashcards"><div class="home-shortcut-left"><div class="home-shortcut-icon">◫</div><strong>Karteikarten</strong></div><span>→</span></div>
-                <div class="home-shortcut" data-go="tests"><div class="home-shortcut-left"><div class="home-shortcut-icon">✓</div><strong>Tests</strong></div><span>→</span></div>
-                <div class="home-shortcut" data-go="code"><div class="home-shortcut-left"><div class="home-shortcut-icon">&lt;/&gt;</div><strong>Code-Labor</strong></div><span>→</span></div>
-                <div class="home-shortcut" data-go="focus"><div class="home-shortcut-left"><div class="home-shortcut-icon">◷</div><strong>Fokusmodus</strong></div><span>→</span></div>
-                <a class="home-shortcut poly-link" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener"><div class="home-shortcut-left"><div class="home-shortcut-icon">◇</div><strong>PolyTrack Pause</strong></div><span>↗</span></a>
-              </div>
+          <aside class="os-launcher">
+            <div class="os-section-head"><div><span>02</span><h3>Schnellstart</h3></div></div>
+            <div class="os-launch-list">
+              <button data-go="flashcards"><b>◫</b><span>Karteikarten</span><i>→</i></button>
+              <button data-go="tests"><b>✓</b><span>Tests</span><i>→</i></button>
+              <button data-go="code"><b>&lt;/&gt;</b><span>Code-Labor</span><i>→</i></button>
+              <button data-go="games"><b>◇</b><span>Lernspiele</span><i>→</i></button>
+              <button data-go="focus"><b>◷</b><span>Fokus & Pausen</span><i>→</i></button>
             </div>
           </aside>
-        </div>
+        </section>
 
-        <section class="home-section">
-          <div class="home-section-head">
-            <div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben. Aufgabe ansehen, selbst programmieren und üben.</p></div>
-            <div style="display:flex;align-items:center;gap:10px">
+        <section class="os-challenges">
+          <div class="os-section-head">
+            <div><span>03</span><h3>C# Challenges</h3></div>
+            <div class="starter-controls">
               <span class="starter-counter" id="starterCounter">1–4 von 10</span>
-              <div class="starter-nav">
-                <button class="icon-btn" id="starterPrev" title="Vorherige Übungen">←</button>
-                <button class="icon-btn" id="starterNext" title="Weitere Übungen">→</button>
-              </div>
+              <button class="icon-btn" id="starterPrev">←</button>
+              <button class="icon-btn" id="starterNext">→</button>
             </div>
           </div>
           <div class="starter-carousel"><div class="starter-grid" id="starterGrid"></div></div>
         </section>
 
-        <section class="home-section">
-          <div class="home-section-head"><div><h3>Werkzeuge</h3><p>Die wichtigsten Bereiche von BUILT.</p></div></div>
-          <div class="home-quick">
-            <div class="card tool-card" data-go="flashcards"><div class="tool-icon">◫</div><h4>Karteikarten</h4><p>Wissen gezielt wiederholen.</p></div>
-            <div class="card tool-card" data-go="tests"><div class="tool-icon">✓</div><h4>Tests</h4><p>Wissen prüfen und üben.</p></div>
-            <div class="card tool-card" data-go="games"><div class="tool-icon">◇</div><h4>Lernspiele</h4><p>Abwechslung beim Lernen.</p></div>
-            <div class="card tool-card" data-go="focus"><div class="tool-icon">◷</div><h4>Fokus & Pausen</h4><p>Konzentriert in Lernblöcken arbeiten.</p></div>
+        <section class="os-bottom">
+          <div class="os-note">
+            <span>PAUSE</span>
+            <h3>Kopf voll?</h3>
+            <p>5 Minuten raus aus dem Lernmodus.</p>
+            <a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener">PolyTrack öffnen ↗</a>
+          </div>
+          <div class="os-quote">
+            <span>BUILT</span>
+            <h3>Weniger suchen.<br>Mehr machen.</h3>
           </div>
         </section>
       </section>
