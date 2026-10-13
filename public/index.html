@@ -2809,6 +2809,20 @@
     .focus-wrap .timer{color:#4f725f !important}
 
   </style>
+
+<style>
+  #builtStyleSwitcher{position:fixed;right:20px;bottom:20px;z-index:99999;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  #builtStyleToggle{display:flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.16);background:#111;color:#fff;padding:11px 14px;border-radius:12px;font-size:12px;font-weight:800;box-shadow:0 12px 32px rgba(0,0,0,.18);cursor:pointer}
+  #builtStyleToggle .dot{width:8px;height:8px;border-radius:50%;background:#8fd6a7}
+  #builtStyleMenu{display:none;position:absolute;right:0;bottom:52px;width:230px;padding:9px;background:rgba(255,255,255,.97);border:1px solid rgba(0,0,0,.12);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.18);backdrop-filter:blur(16px)}
+  #builtStyleMenu.open{display:block}
+  #builtStyleMenu .title{padding:7px 9px 9px;color:#7a7a7a;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+  #builtStyleMenu a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;color:#171717;text-decoration:none;border-radius:9px;font-size:12px;font-weight:750}
+  #builtStyleMenu a:hover{background:#f1f3f0}
+  #builtStyleMenu a.active{background:#111;color:#fff}
+  #builtStyleMenu a small{font-size:9px;opacity:.62;font-weight:700}
+  @media(max-width:700px){#builtStyleSwitcher{right:12px;bottom:12px}#builtStyleMenu{width:210px}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -4200,5 +4214,24 @@ class Program
 
 
 
+
+<!-- BUILT STYLE SWITCHER -->
+<div id="builtStyleSwitcher">
+  <div id="builtStyleMenu">
+    <div class="title">Gespeicherte Styles</div>
+    <a href="/styles/built.html" class="active"><span>BUILT</span><small>AKTIV</small></a><a href="/styles/built-pages.html" class=""><span>BUILT Pages</span><small>ÖFFNEN</small></a><a href="/styles/alpine-minimal.html" class=""><span>Alpine Minimal</span><small>ÖFFNEN</small></a><a href="/styles/built-luxus.html" class=""><span>BUILT Luxus</span><small>ÖFFNEN</small></a>
+  </div>
+  <button id="builtStyleToggle" type="button" aria-label="Gespeicherte Styles öffnen"><span class="dot"></span> Styles</button>
+</div>
+<script>
+(function(){
+  const b=document.getElementById('builtStyleToggle');
+  const m=document.getElementById('builtStyleMenu');
+  if(!b||!m) return;
+  b.addEventListener('click',function(e){e.stopPropagation();m.classList.toggle('open')});
+  document.addEventListener('click',function(e){if(!m.contains(e.target)&&e.target!==b)m.classList.remove('open')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')m.classList.remove('open')});
+})();
+</script>
 </body>
 </html>
