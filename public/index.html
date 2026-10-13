@@ -108,7 +108,18 @@
     .section-head h3{font-size:20px;margin:0;letter-spacing:-.03em}
     .section-head p{margin:5px 0 0;color:var(--muted);font-size:13px}
     .subject-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .subject-card{padding:20px;position:relative;overflow:hidden}
+    .subject-card{padding:20px;position:relative;overflow:hidden;cursor:pointer;transition:.2s}
+    .subject-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#c7d2fe}
+    .subject-card.selected{border-color:#818cf8;box-shadow:0 0 0 3px #eef2ff,var(--shadow)}
+    .subject-context{display:none;align-items:center;gap:9px;padding:8px 11px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800}
+    .subject-context.show{display:flex}
+    .subject-context .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+    .subject-context button{border:0;background:transparent;color:var(--muted);padding:0 2px;font-size:15px;line-height:1}
+    .context-empty{min-height:360px;display:grid;place-items:center;text-align:center}
+    .context-empty-inner{max-width:440px}
+    .context-empty .big{font-size:40px;margin-bottom:12px}
+    .subject-workspace{display:none}
+    .subject-workspace.show{display:block}
     .subject-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
     .subject-badge{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#eef2ff;font-weight:900;color:#4f46e5}
     .subject-card h4{margin:17px 0 4px;font-size:17px}
@@ -225,6 +236,7 @@
         <h1 id="topTitle">Startseite</h1>
       </div>
       <div class="topbar-actions">
+        <div class="subject-context" id="subjectContext"><span class="dot"></span><span id="subjectContextName"></span><button id="clearSubject" title="Fach verlassen">×</button></div>
         <button class="icon-btn" title="Suche">⌕</button>
         <button class="btn primary" id="quickAdd">+ Hinzufügen</button>
       </div>
@@ -270,14 +282,22 @@
       </section>
 
       <section class="page" id="page-flashcards">
-        <div class="page-title"><div><h2>Karteikarten</h2><p>Erstelle Lernsets und wiederhole Inhalte gezielt.</p></div><button class="btn primary">+ Lernset erstellen</button></div>
-        <div class="empty card"><div class="emoji">◫</div><h4>Noch keine Karteikarten</h4><p>Deine Plattform ist bewusst leer gestartet. Sobald du ein Lernset erstellst, erscheint es hier.</p><button class="btn primary">Erstes Lernset erstellen</button></div>
+        <div id="flashcardsNoSubject" class="context-empty">
+          <div class="context-empty-inner"><div class="big">◫</div><h2>Kein Fach ausgewählt</h2><p class="muted">Karteikarten werden immer nur innerhalb eines Fachs angezeigt. Wähle zuerst ein Fach aus.</p><button class="btn primary" data-go="subjects">Zu den Fächern</button></div>
+        </div>
+        <div id="flashcardsWorkspace" class="subject-workspace">
+          <div class="page-title"><div><h2 id="flashcardsTitle">Karteikarten</h2><p>Hier erscheinen ausschliesslich die Karteikarten dieses Fachs.</p></div><button class="btn primary">+ Lernset erstellen</button></div>
+          <div class="empty card"><div class="emoji">◫</div><h4>Noch keine Karteikarten in diesem Fach</h4><p>Neue Karteikarten werden diesem ausgewählten Fach zugeordnet und nicht mit anderen Fächern vermischt.</p><button class="btn primary">Erstes Lernset erstellen</button></div>
+        </div>
       </section>
 
       <section class="page" id="page-tests">
-        <div class="page-title"><div><h2>Tests</h2><p>Kurze Checks, grosse Prüfungen und Auswertungen.</p></div><button class="btn primary">+ Test erstellen</button></div>
-        <div class="card panel">
-          <div class="empty"><div class="emoji">✓</div><h4>Noch keine Tests vorhanden</h4><p>Erstelle später eigene Fragen pro Fach. Ergebnisse und Fortschritt werden hier gesammelt.</p><button class="btn primary">Test erstellen</button></div>
+        <div id="testsNoSubject" class="context-empty">
+          <div class="context-empty-inner"><div class="big">✓</div><h2>Kein Fach ausgewählt</h2><p class="muted">Tests werden immer pro Fach getrennt. Wähle zuerst das gewünschte Fach aus.</p><button class="btn primary" data-go="subjects">Zu den Fächern</button></div>
+        </div>
+        <div id="testsWorkspace" class="subject-workspace">
+          <div class="page-title"><div><h2 id="testsTitle">Tests</h2><p>Hier erscheinen ausschliesslich die Tests dieses Fachs.</p></div><button class="btn primary">+ Test erstellen</button></div>
+          <div class="card panel"><div class="empty"><div class="emoji">✓</div><h4>Noch keine Tests in diesem Fach</h4><p>Neue Tests werden automatisch diesem ausgewählten Fach zugeordnet.</p><button class="btn primary">Test erstellen</button></div></div>
         </div>
       </section>
 
@@ -365,7 +385,9 @@ class Program
 <script>
   const STORAGE_KEY = 'lernwelt_subjects_v2';
   const CODE_KEY = 'lernwelt_code_v1';
+  const ACTIVE_SUBJECT_KEY = 'lernwelt_active_subject_v1';
   let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let activeSubjectId = localStorage.getItem(ACTIVE_SUBJECT_KEY) || null;
 
   const pages = document.querySelectorAll('.page');
   const navButtons = document.querySelectorAll('.nav button[data-page]');
@@ -379,7 +401,10 @@ class Program
     window.scrollTo({top:0,behavior:'smooth'});
   }
   navButtons.forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-  document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.go)));
+  document.addEventListener('click',e=>{
+    const go=e.target.closest('[data-go]');
+    if(go) navigate(go.dataset.go);
+  });
   document.getElementById('mobileMenu').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
 
   const modal=document.getElementById('subjectModal');
@@ -391,14 +416,58 @@ class Program
 
   function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
   function subjectCard(s){
-    return `<article class="card subject-card">
-      <div class="top"><div class="subject-badge">${escapeHtml(s.icon||'📘')}</div><button class="icon-btn" onclick="deleteSubject('${s.id}')" title="Löschen">⋯</button></div>
+    const selected=s.id===activeSubjectId?' selected':'';
+    return `<article class="card subject-card${selected}" onclick="selectSubject('${s.id}')">
+      <div class="top"><div class="subject-badge">${escapeHtml(s.icon||'📘')}</div><button class="icon-btn" onclick="event.stopPropagation();deleteSubject('${s.id}')" title="Löschen">⋯</button></div>
       <h4>${escapeHtml(s.name)}</h4><p>${escapeHtml(s.desc||'Noch keine Beschreibung hinterlegt.')}</p>
       <div class="progress"><span style="width:0%"></span></div>
-      <div class="subject-meta"><span>0 Inhalte</span><span>0%</span></div>
+      <div class="subject-meta"><span>Fach öffnen</span><span>→</span></div>
     </article>`;
   }
+  function getActiveSubject(){
+    return subjects.find(s=>s.id===activeSubjectId)||null;
+  }
+  function updateSubjectContext(){
+    const subject=getActiveSubject();
+    const context=document.getElementById('subjectContext');
+    context.classList.toggle('show',!!subject);
+    document.getElementById('subjectContextName').textContent=subject?subject.name:'';
+
+    const flashWorkspace=document.getElementById('flashcardsWorkspace');
+    const flashEmpty=document.getElementById('flashcardsNoSubject');
+    const testWorkspace=document.getElementById('testsWorkspace');
+    const testEmpty=document.getElementById('testsNoSubject');
+    flashWorkspace.classList.toggle('show',!!subject);
+    flashEmpty.style.display=subject?'none':'grid';
+    testWorkspace.classList.toggle('show',!!subject);
+    testEmpty.style.display=subject?'none':'grid';
+
+    if(subject){
+      document.getElementById('flashcardsTitle').textContent='Karteikarten · '+subject.name;
+      document.getElementById('testsTitle').textContent='Tests · '+subject.name;
+    }
+  }
+  window.selectSubject=function(id){
+    activeSubjectId=id;
+    localStorage.setItem(ACTIVE_SUBJECT_KEY,id);
+    renderSubjects();
+    updateSubjectContext();
+    navigate('flashcards');
+  }
+  function clearActiveSubject(){
+    activeSubjectId=null;
+    localStorage.removeItem(ACTIVE_SUBJECT_KEY);
+    renderSubjects();
+    updateSubjectContext();
+    navigate('home');
+  }
+  document.getElementById('clearSubject').addEventListener('click',clearActiveSubject);
+
   function renderSubjects(){
+    if(activeSubjectId && !subjects.some(s=>s.id===activeSubjectId)){
+      activeSubjectId=null;
+      localStorage.removeItem(ACTIVE_SUBJECT_KEY);
+    }
     const home=document.getElementById('homeSubjects');
     const grid=document.getElementById('subjectGrid');
     document.getElementById('metricSubjects').textContent=subjects.length;
@@ -409,10 +478,12 @@ class Program
       home.innerHTML=subjects.slice(0,3).map(subjectCard).join('');
       grid.innerHTML=subjects.map(subjectCard).join('');
     }
+    updateSubjectContext();
   }
   window.deleteSubject=function(id){
     if(!confirm('Dieses Fach wirklich löschen?')) return;
     subjects=subjects.filter(s=>s.id!==id);
+    if(activeSubjectId===id){activeSubjectId=null;localStorage.removeItem(ACTIVE_SUBJECT_KEY);}
     localStorage.setItem(STORAGE_KEY,JSON.stringify(subjects));renderSubjects();
   }
   document.getElementById('modalSave').addEventListener('click',()=>{
