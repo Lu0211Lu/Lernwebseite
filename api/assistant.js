@@ -1,10 +1,19 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ error: 'Nur POST ist erlaubt.' });
+module.exports = async function handler(req, res) {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      status: 'ok',
+      service: 'BUILT AI',
+      keyConfigured: Boolean(apiKey),
+      model: 'gpt-6.1-sol'
+    });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'GET, POST');
+    return res.status(405).json({ error: 'Nur GET und POST sind erlaubt.' });
+  }
   if (!apiKey) {
     return res.status(503).json({
       error: 'BUILT AI ist noch nicht aktiviert. OPENAI_API_KEY fehlt in Vercel.'
