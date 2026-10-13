@@ -5617,7 +5617,7 @@ class Program
         <div class="flash-stage">
           <div class="flash-side-pile known">
             <div class="pile-count">${flashPracticeState.known.length}</div>
-            <div class="pile-label">← richtig</div>
+            <div class="pile-label">nicht gewusst ←</div>
           </div>
 
           <article class="flash-big-card ${flashPracticeState.revealed?'revealed':''}" onclick="toggleFlashAnswer()">
@@ -5630,14 +5630,14 @@ class Program
 
           <div class="flash-side-pile unknown">
             <div class="pile-count">${flashPracticeState.unknown.length}</div>
-            <div class="pile-label">nicht gewusst →</div>
+            <div class="pile-label">richtig →</div>
           </div>
         </div>
 
         <div class="flash-controls">
-          <button class="btn flash-choice known-btn" onclick="markFlashKnown()">← Gewusst</button>
+          <button class="btn flash-choice unknown-btn" onclick="markFlashUnknown()">← Nicht gewusst</button>
           <div class="flash-middle-actions"><button class="btn" onclick="toggleFlashAnswer()">Lösung</button></div>
-          <button class="btn flash-choice unknown-btn" onclick="markFlashUnknown()">Nicht gewusst →</button>
+          <button class="btn flash-choice known-btn" onclick="markFlashKnown()">Gewusst →</button>
         </div>
       </div>`;
   }
@@ -5694,10 +5694,10 @@ class Program
       toggleFlashAnswer();
     } else if(e.key==='ArrowLeft'){
       e.preventDefault();
-      markFlashKnown();
+      markFlashUnknown();
     } else if(e.key==='ArrowRight'){
       e.preventDefault();
-      markFlashUnknown();
+      markFlashKnown();
     }
   });
 
