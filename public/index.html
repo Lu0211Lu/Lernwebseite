@@ -233,6 +233,9 @@
     .ai-side h4{margin:0 0 8px}
     .ai-side p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
     .ai-action-result{margin-top:8px;padding:8px 10px;border-radius:10px;background:#ecfdf5;color:#047857;font-size:11px;font-weight:800}
+    .ai-local-note{padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:11px;color:#475569;line-height:1.55}
+    .ai-progress{height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:8px}
+    .ai-progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#5b5cf0,#7c3aed);transition:width .2s}
     .generated-list{display:grid;gap:10px;margin-top:14px}
     .generated-item{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff}
     .generated-item strong{display:block;margin-bottom:5px}
@@ -449,7 +452,7 @@ class Program
       <section class="page" id="page-ai">
         <div class="page-title">
           <div><h2>BUILT AI</h2><p>Frag nach Hilfe oder lass Lerninhalte schneller erstellen.</p></div>
-          <span class="status">Keine Adminrechte</span>
+          <span class="status">Keine Adminrechte · lokal</span>
         </div>
         <div class="ai-layout">
           <div class="card ai-chat">
@@ -480,12 +483,15 @@ class Program
           </div>
           <aside class="ai-side">
             <div class="card">
-              <h4>Was BUILT AI darf</h4>
-              <p>Fragen beantworten, C# erklären und Lösungen liefern sowie Fächer, Karteikarten und Tests als Lerninhalte erstellen.</p>
+              <h4>Kostenlose lokale KI</h4>
+              <p>BUILT AI läuft direkt in deinem Browser. Dafür brauchst du kein OpenAI-Guthaben und kannst sehr viele Fragen stellen.</p>
+              <div class="ai-local-note" style="margin-top:10px">Beim ersten Start wird ein KI-Modell geladen und im Browser zwischengespeichert. Das kann je nach Internet und Gerät einige Minuten dauern.</div>
+              <div class="ai-progress"><span id="aiModelProgress"></span></div>
+              <p id="aiModelStatus" style="margin-top:8px">Modell noch nicht geladen.</p>
             </div>
             <div class="card">
               <h4>Was BUILT AI nicht darf</h4>
-              <p>Keine Website-Dateien ändern, keine Deployments auslösen, keine Benutzer verwalten und keine Adminrechte verwenden.</p>
+              <p>Keine Website-Dateien ändern, keine Deployments auslösen, keine Benutzer verwalten und keine Adminrechte verwenden. Die KI arbeitet nur im Lernbereich deines Browsers.</p>
             </div>
             <div class="card">
               <h4>Erstellte Inhalte</h4>
@@ -1792,7 +1798,7 @@ class Program
     if(!aiHistory.length){
       const welcome=document.createElement('div');
       welcome.className='ai-message assistant';
-      welcome.textContent='Hallo! Frag mich alles – von allgemeinen Fragen über Schule bis C#. Ich kann auch aus deinem Stoff Fächer, Karteikarten oder Tests erstellen.';
+      welcome.textContent='Hallo! Frag mich alles – von allgemeinen Fragen über Schule bis C#. BUILT AI läuft kostenlos direkt in deinem Browser, ohne API-Credits. Beim ersten Start muss das KI-Modell einmal geladen werden.';
       wrap.appendChild(welcome);
       return;
     }
@@ -1800,6 +1806,82 @@ class Program
   }
 
   let aiRequestInFlight=false;
+  let localAiEngine=null;
+  let localAiLoadingPromise=null;
+  const LOCAL_AI_MODEL='Llama-3.2-1B-Instruct-q4f16_1-MLC';
+
+  async function ensureLocalAi(){
+    if(localAiEngine) return localAiEngine;
+    if(localAiLoadingPromise) return localAiLoadingPromise;
+
+    const statusEl=document.getElementById('aiModelStatus');
+    const progressEl=document.getElementById('aiModelProgress');
+
+    if(!('gpu' in navigator)){
+      throw new Error('Dein Browser unterstützt WebGPU nicht. Bitte öffne BUILT in einer aktuellen Version von Chrome oder Edge.');
+    }
+
+    localAiLoadingPromise=(async()=>{
+      try{
+        statusEl.textContent='Lokale KI wird vorbereitet …';
+        const webllm=await import('https://esm.run/@mlc-ai/web-llm');
+
+        localAiEngine=await webllm.CreateMLCEngine(
+          LOCAL_AI_MODEL,
+          {
+            initProgressCallback:(report)=>{
+              const text=String(report?.text||'KI-Modell wird geladen …');
+              statusEl.textContent=text;
+              const p=Number(report?.progress);
+              if(Number.isFinite(p)) progressEl.style.width=Math.max(0,Math.min(100,p*100))+'%';
+            },
+            logLevel:'WARN'
+          },
+          {context_window_size:4096}
+        );
+
+        progressEl.style.width='100%';
+        statusEl.textContent='Lokale KI bereit · keine Credits nötig';
+        document.getElementById('aiState').textContent='Lokal bereit';
+        document.getElementById('aiState').className='runner-state live';
+        return localAiEngine;
+      }catch(error){
+        localAiEngine=null;
+        progressEl.style.width='0%';
+        statusEl.textContent='Lokale KI konnte nicht geladen werden.';
+        throw error;
+      }finally{
+        localAiLoadingPromise=null;
+      }
+    })();
+
+    return localAiLoadingPromise;
+  }
+
+  function localAiSystemPrompt(){
+    return `Du bist BUILT AI, ein hilfreicher deutschsprachiger Lern- und Programmierassistent.
+Du darfst allgemeine Fragen beantworten und bei C# sehr konkret helfen.
+Wenn der Benutzer etwas erstellen lassen will, antworte normal mit hilfreichem Inhalt.
+Du hast keinerlei Adminrechte und darfst keine Website-Dateien, Deployments, Konten oder Rechte verändern.
+Antworte verständlich, direkt und korrekt. Bei C# darfst du vollständige Lösungen liefern.`;
+  }
+
+  async function askLocalAi(message){
+    const engine=await ensureLocalAi();
+    const chatHistory=aiHistory.slice(-8).map(x=>({role:x.role,content:x.content}));
+    const response=await engine.chat.completions.create({
+      messages:[
+        {role:'system',content:localAiSystemPrompt()},
+        ...chatHistory,
+        {role:'user',content:message}
+      ],
+      temperature:0.4,
+      max_tokens:900
+    });
+    const text=response?.choices?.[0]?.message?.content;
+    if(!text) throw new Error('Die lokale KI hat keine Antwort geliefert.');
+    return String(text);
+  }
 
   function addTransientAiMessage(text,role='assistant'){
     const wrap=document.getElementById('aiMessages');
@@ -1824,58 +1906,24 @@ class Program
     addAiMessage(message,'user');
     input.value='';
     button.disabled=true;
-    state.textContent='Denkt…';
+    state.textContent=localAiEngine?'Denkt…':'Lädt KI…';
     state.className='runner-state';
 
-    const thinking=addTransientAiMessage('BUILT AI denkt …','assistant');
-    const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),35000);
+    const thinking=addTransientAiMessage(localAiEngine?'BUILT AI denkt …':'BUILT AI lädt das kostenlose lokale Modell …','assistant');
 
     try{
-      const response=await fetch('/api/assistant',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          message,
-          history:aiHistory.slice(0,-1),
-          context:{
-            activeSubject:getActiveSubject()?.name||null,
-            subjects:subjects.map(s=>({name:s.name,description:s.desc||''})),
-            currentCode:(window.codeEditorCM && typeof window.codeEditorCM.getValue==='function') ? window.codeEditorCM.getValue() : ''
-          }
-        }),
-        signal:controller.signal
-      });
-
-      const raw=await response.text();
-      let data;
-      try{ data=raw ? JSON.parse(raw) : {}; }
-      catch{ data={error:raw || 'Ungültige Serverantwort.'}; }
-
-      if(!response.ok){
-        throw new Error(data.error || ('BUILT AI Fehler '+response.status));
-      }
-
+      const answer=await askLocalAi(message);
       thinking.remove();
-      addAiMessage(data.answer || 'Erledigt.','assistant');
-
-      const results=applyAiActions(data.actions);
-      if(results.length){
-        addAiMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
-      }
-
-      state.textContent='Bereit';
+      addAiMessage(answer,'assistant');
+      state.textContent='Lokal bereit';
       state.className='runner-state live';
     }catch(error){
       thinking.remove();
-      const messageText=error?.name==='AbortError'
-        ? 'BUILT AI hat zu lange gebraucht. Bitte nochmals versuchen.'
-        : (error?.message || String(error));
+      const messageText=error?.message || String(error);
       addAiMessage(messageText,'error',false);
       state.textContent='Fehler';
       state.className='runner-state error';
     }finally{
-      clearTimeout(timeout);
       aiRequestInFlight=false;
       button.disabled=false;
       input.focus();
@@ -1955,59 +2003,7 @@ class Program
     }
 
     async function submitBuiltAI(){
-      if(sending) return;
-      const text=input.value.trim();
-      if(!text) return;
-
-      sending=true;
-      input.value='';
-      send.disabled=true;
-      state.textContent='Denkt…';
-      state.className='runner-state';
-      addMessage(text,'user');
-      const thinking=addMessage('BUILT AI denkt …','assistant');
-
-      const controller=new AbortController();
-      const timer=setTimeout(()=>controller.abort(),35000);
-
-      try{
-        const response=await fetch('/api/assistant',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({message:text,history:[],context:{}}),
-          signal:controller.signal
-        });
-
-        const raw=await response.text();
-        let data={};
-        try{ data=raw?JSON.parse(raw):{}; }catch(_){ data={error:raw||'Ungültige Serverantwort.'}; }
-
-        if(!response.ok) throw new Error(data.error||('Fehler '+response.status));
-
-        thinking.remove();
-        addMessage(data.answer||'Erledigt.','assistant');
-
-        if(Array.isArray(data.actions) && data.actions.length && typeof window.applyAiActions==='function'){
-          const results=window.applyAiActions(data.actions);
-          if(Array.isArray(results)&&results.length) addMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
-        }
-
-        state.textContent='Bereit';
-        state.className='runner-state live';
-      }catch(err){
-        thinking.remove();
-        const msg=err && err.name==='AbortError'
-          ? 'BUILT AI hat zu lange gebraucht. Bitte nochmals versuchen.'
-          : (err?.message||String(err));
-        addMessage(msg,'error');
-        state.textContent='Fehler';
-        state.className='runner-state error';
-      }finally{
-        clearTimeout(timer);
-        sending=false;
-        send.disabled=false;
-        input.focus();
-      }
+      if(typeof sendAiMessage==='function') return sendAiMessage();
     }
 
     // Capture phase: this becomes the single authoritative send path.
