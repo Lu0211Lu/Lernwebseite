@@ -222,8 +222,8 @@
     .ai-message.user{align-self:flex-end;background:#111827;color:#fff;border-bottom-right-radius:5px}
     .ai-message.assistant{align-self:flex-start;background:#eef2ff;color:#1e293b;border-bottom-left-radius:5px}
     .ai-message.error{background:#fef2f2;color:#991b1b}
-    .ai-compose{padding:14px;border-top:1px solid var(--line);background:#fff}
-    .ai-compose textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:12px;outline:none}
+    .ai-compose{padding:14px;border-top:1px solid var(--line);background:#fff;position:relative;z-index:3}
+    .ai-compose textarea{width:100%;min-height:110px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:12px;outline:none;background:#fff;color:var(--text);pointer-events:auto;user-select:text;position:relative;z-index:2}
     .ai-compose textarea:focus{border-color:#a5b4fc;box-shadow:0 0 0 4px #eef2ff}
     .ai-compose-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px}
     .ai-chips{display:flex;gap:8px;flex-wrap:wrap}
@@ -1823,9 +1823,24 @@ class Program
     }
   });
   document.querySelectorAll('[data-ai-prompt]').forEach(btn=>btn.addEventListener('click',()=>{
-    document.getElementById('aiInput').value=btn.dataset.aiPrompt;
-    document.getElementById('aiInput').focus();
+    const aiInput=document.getElementById('aiInput');
+    aiInput.value=btn.dataset.aiPrompt;
+    aiInput.removeAttribute('disabled');
+    aiInput.removeAttribute('readonly');
+    aiInput.focus();
   }));
+
+  const aiInputEl=document.getElementById('aiInput');
+  aiInputEl.removeAttribute('disabled');
+  aiInputEl.removeAttribute('readonly');
+  aiInputEl.addEventListener('click',()=>aiInputEl.focus());
+  aiInputEl.addEventListener('focus',()=>{
+    aiInputEl.style.borderColor='#a5b4fc';
+  });
+  aiInputEl.addEventListener('blur',()=>{
+    aiInputEl.style.borderColor='';
+  });
+
   renderAiContent();
 
   let timerSeconds=25*60,timerId=null;
