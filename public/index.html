@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1220" />
   <title>Lernwelt – Dein Lernzentrum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
   <style>
     :root{
       --bg:#f4f7fb;
@@ -160,6 +162,26 @@
     .editor{background:#0b1220;color:#e2e8f0;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);position:relative}
     .editor-head{padding:12px 16px;background:#101a2f;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;color:#94a3b8;font-size:12px}
     textarea.code{width:100%;height:420px;resize:vertical;border:0;outline:0;background:#0b1220;color:#dbeafe;padding:18px;font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;line-height:1.7}
+    .CodeMirror{height:470px;background:#0b1220!important;color:#e5e7eb;font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;line-height:1.65}
+    .CodeMirror-gutters{background:#0f172a!important;border-right:1px solid #253047!important}
+    .CodeMirror-linenumber{color:#64748b!important}
+    .cm-s-material-darker .cm-keyword{color:#c792ea}
+    .cm-s-material-darker .cm-string{color:#c3e88d}
+    .cm-s-material-darker .cm-number{color:#f78c6c}
+    .cm-s-material-darker .cm-comment{color:#637777;font-style:italic}
+    .cm-s-material-darker .cm-variable{color:#eeffff}
+    .cm-s-material-darker .cm-variable-2{color:#82aaff}
+    .cm-s-material-darker .cm-def{color:#82aaff}
+    .cm-s-material-darker .cm-type{color:#ffcb6b}
+    .starter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .starter-card{padding:22px;display:flex;flex-direction:column;gap:12px;min-height:245px;transition:.2s}
+    .starter-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+    .starter-card .level{display:inline-flex;width:max-content;padding:5px 9px;border-radius:999px;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:800}
+    .starter-card h4{font-size:18px;margin:2px 0 0}
+    .starter-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+    .starter-steps{margin:0;padding-left:18px;color:#475569;font-size:13px;line-height:1.65}
+    .starter-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+    .video-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
     .code-suggestion{position:absolute;display:none;z-index:5;left:18px;top:82px;background:#111827;border:1px solid #334155;border-radius:10px;padding:8px 10px;color:#e2e8f0;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;box-shadow:0 14px 35px rgba(0,0,0,.32);pointer-events:none}
     .code-suggestion.show{display:flex;align-items:center;gap:12px}
     .code-suggestion .completion{color:#fff;font-weight:700}
@@ -195,7 +217,7 @@
     .mobile-menu{display:none}
     @media(max-width:1100px){
       .grid.metrics,.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .subject-grid,.library-grid,.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .subject-grid,.library-grid,.games-grid,.starter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .two-col,.code-shell{grid-template-columns:1fr}
     }
     @media(max-width:800px){
@@ -207,7 +229,7 @@
       .topbar{padding:0 16px}
       .hero{padding:26px 22px}
       .hero h2{font-size:31px}
-      .grid.metrics,.subject-grid,.library-grid,.quick-grid,.games-grid,.admin-grid{grid-template-columns:1fr}
+      .grid.metrics,.subject-grid,.library-grid,.quick-grid,.games-grid,.starter-grid,.admin-grid{grid-template-columns:1fr}
       .timer{font-size:64px}
     }
   </style>
@@ -274,6 +296,9 @@
 
         <div class="section-head"><div><h3>Deine Fächer</h3><p>Starte mit einem Fach oder erstelle ein neues.</p></div><button class="btn" id="addSubjectHome">+ Neues Fach</button></div>
         <div class="grid subject-grid" id="homeSubjects"></div>
+
+        <div class="section-head"><div><h3>C# Starter-Projekte</h3><p>10 Projekte zum Üben – unabhängig vom ausgewählten Fach und jederzeit verfügbar.</p></div><button class="btn" data-go="code">Zum Code-Labor</button></div>
+        <div class="grid starter-grid" id="starterGrid"></div>
 
         <div class="section-head"><div><h3>Schnellzugriff</h3><p>Die wichtigsten Lernwerkzeuge direkt erreichbar.</p></div></div>
         <div class="grid quick-grid">
@@ -398,6 +423,8 @@ class Program
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
 <script>
   const STORAGE_KEY = 'lernwelt_subjects_v2';
   const CODE_KEY = 'lernwelt_code_v1';
@@ -512,633 +539,778 @@ class Program
   });
   renderSubjects();
 
-  const editor=document.getElementById('codeEditor');
+  const textareaEditor=document.getElementById('codeEditor');
   const suggestionBox=document.getElementById('codeSuggestion');
   const suggestionText=document.getElementById('codeSuggestionText');
   let activeCompletion=null;
 
+  const editor=CodeMirror.fromTextArea(textareaEditor,{
+    mode:'text/x-csharp',
+    theme:'material-darker',
+    lineNumbers:true,
+    indentUnit:4,
+    tabSize:4,
+    indentWithTabs:false,
+    lineWrapping:false,
+    autoCloseBrackets:true
+  });
+
   const csharpCompletions=[
-      "Console.WriteLine",
-      "Console.Write",
-      "Console.ReadLine",
-      "Console.ReadKey",
-      "Console.Read",
-      "Console.Clear",
-      "Console.Beep",
-      "Console.Title",
-      "Console.ForegroundColor",
-      "Console.BackgroundColor",
-      "Console.ResetColor",
-      "Console.CursorLeft",
-      "Console.CursorTop",
-      "Console.SetCursorPosition",
-      "string",
-      "string.Empty",
-      "string.IsNullOrEmpty",
-      "string.IsNullOrWhiteSpace",
-      "string.Join",
-      "string.Concat",
-      "string.Format",
-      "string.Compare",
-      "string.Equals",
-      "string.Copy",
-      "string.Intern",
-      "string.CompareOrdinal",
-      "StringBuilder",
-      "StringBuilder.Append",
-      "StringBuilder.AppendLine",
-      "int",
-      "int.Parse",
-      "int.TryParse",
-      "int.MaxValue",
-      "int.MinValue",
-      "long",
-      "long.Parse",
-      "long.TryParse",
-      "short",
-      "byte",
-      "sbyte",
-      "uint",
-      "ulong",
-      "ushort",
-      "double",
-      "double.Parse",
-      "double.TryParse",
-      "double.NaN",
-      "double.PositiveInfinity",
-      "double.NegativeInfinity",
-      "float",
-      "decimal",
-      "decimal.Parse",
-      "decimal.TryParse",
-      "bool",
-      "bool.Parse",
-      "bool.TryParse",
-      "char",
-      "char.IsDigit",
-      "char.IsLetter",
-      "char.IsWhiteSpace",
-      "char.ToUpper",
-      "char.ToLower",
-      "object",
-      "dynamic",
-      "var",
-      "const",
-      "null",
-      "true",
-      "false",
-      "default",
-      "nameof",
-      "typeof",
-      "sizeof",
-      "if",
-      "else",
-      "switch",
-      "case",
-      "for",
-      "foreach",
-      "while",
-      "do",
-      "break",
-      "continue",
-      "return",
-      "goto",
-      "try",
-      "catch",
-      "finally",
-      "throw",
-      "checked",
-      "unchecked",
-      "lock",
-      "using",
-      "namespace",
-      "public",
-      "private",
-      "protected",
-      "internal",
-      "static",
-      "readonly",
-      "volatile",
-      "sealed",
-      "abstract",
-      "virtual",
-      "override",
-      "partial",
-      "async",
-      "await",
-      "class",
-      "struct",
-      "record",
-      "interface",
-      "enum",
-      "delegate",
-      "event",
-      "operator",
-      "implicit",
-      "explicit",
-      "new",
-      "this",
-      "base",
-      "get",
-      "set",
-      "init",
-      "value",
-      "params",
-      "ref",
-      "out",
-      "in",
-      "is",
-      "as",
-      "where",
-      "when",
-      "yield",
-      "yield return",
-      "yield break",
-      "List<T>",
-      "List<int>",
-      "List<string>",
-      "List<object>",
-      "Dictionary<TKey,TValue>",
-      "Dictionary<string,int>",
-      "Dictionary<string,string>",
-      "HashSet<T>",
-      "Queue<T>",
-      "Stack<T>",
-      "LinkedList<T>",
-      "SortedSet<T>",
-      "SortedDictionary<TKey,TValue>",
-      "KeyValuePair<TKey,TValue>",
-      "IEnumerable<T>",
-      "ICollection<T>",
-      "IList<T>",
-      "IDictionary<TKey,TValue>",
-      "IReadOnlyList<T>",
-      "IReadOnlyCollection<T>",
-      "Array",
-      "Array.Empty<T>",
-      "Array.Sort",
-      "Array.Reverse",
-      "Array.Copy",
-      "Array.IndexOf",
-      "Array.Find",
-      "Array.FindAll",
-      "Array.Exists",
-      "Enumerable.Range",
-      "Enumerable.Repeat",
-      "Enumerable.Empty<T>",
-      "Enumerable.Concat",
-      "Enumerable.SequenceEqual",
-      ".Add",
-      ".AddRange",
-      ".Remove",
-      ".RemoveAt",
-      ".RemoveAll",
-      ".Clear",
-      ".Contains",
-      ".ContainsKey",
-      ".ContainsValue",
-      ".Count",
-      ".Capacity",
-      ".Insert",
-      ".InsertRange",
-      ".IndexOf",
-      ".LastIndexOf",
-      ".Find",
-      ".FindAll",
-      ".FindIndex",
-      ".FindLast",
-      ".FindLastIndex",
-      ".Exists",
-      ".Sort",
-      ".Reverse",
-      ".ToArray",
-      ".ToList",
-      ".ToDictionary",
-      ".ToHashSet",
-      ".First",
-      ".FirstOrDefault",
-      ".Last",
-      ".LastOrDefault",
-      ".Single",
-      ".SingleOrDefault",
-      ".Where",
-      ".Select",
-      ".SelectMany",
-      ".OrderBy",
-      ".OrderByDescending",
-      ".ThenBy",
-      ".ThenByDescending",
-      ".GroupBy",
-      ".Join",
-      ".GroupJoin",
-      ".Any",
-      ".All",
-      ".LongCount",
-      ".Sum",
-      ".Average",
-      ".Min",
-      ".Max",
-      ".Aggregate",
-      ".Skip",
-      ".SkipWhile",
-      ".Take",
-      ".TakeWhile",
-      ".Distinct",
-      ".Union",
-      ".Intersect",
-      ".Except",
-      ".Zip",
-      ".Append",
-      ".Prepend",
-      ".Cast",
-      ".OfType",
-      ".AsEnumerable",
-      ".AsQueryable",
-      ".ElementAt",
-      ".ElementAtOrDefault",
-      ".DefaultIfEmpty",
-      "Math.Abs",
-      "Math.Max",
-      "Math.Min",
-      "Math.Round",
-      "Math.Floor",
-      "Math.Ceiling",
-      "Math.Sqrt",
-      "Math.Pow",
-      "Math.Sin",
-      "Math.Cos",
-      "Math.Tan",
-      "Math.Asin",
-      "Math.Acos",
-      "Math.Atan",
-      "Math.Atan2",
-      "Math.Log",
-      "Math.Log10",
-      "Math.Exp",
-      "Math.Sign",
-      "Math.Truncate",
-      "Math.Clamp",
-      "Math.PI",
-      "Math.E",
-      "Random",
-      "Random.Next",
-      "Random.NextDouble",
-      "Random.NextBytes",
-      "Random.Shared",
-      "DateTime",
-      "DateTime.Now",
-      "DateTime.UtcNow",
-      "DateTime.Today",
-      "DateTime.Parse",
-      "DateTime.TryParse",
-      "DateTime.DaysInMonth",
-      "DateTime.IsLeapYear",
-      "DateTime.MinValue",
-      "DateTime.MaxValue",
-      "DateOnly",
-      "TimeOnly",
-      "TimeSpan",
-      "TimeSpan.FromSeconds",
-      "TimeSpan.FromMinutes",
-      "TimeSpan.FromHours",
-      "TimeSpan.FromDays",
-      "Stopwatch",
-      "Stopwatch.StartNew",
-      "Guid",
-      "Guid.NewGuid",
-      "Guid.Empty",
-      "Guid.Parse",
-      "Guid.TryParse",
-      "Convert.ToInt32",
-      "Convert.ToInt64",
-      "Convert.ToDouble",
-      "Convert.ToDecimal",
-      "Convert.ToBoolean",
-      "Convert.ToString",
-      "Convert.ToChar",
-      "Convert.ToDateTime",
-      "Convert.ToByte",
-      "Convert.ToBase64String",
-      "Convert.FromBase64String",
-      "Enum.Parse",
-      "Enum.TryParse",
-      "Enum.GetValues",
-      "Enum.GetNames",
-      "Enum.IsDefined",
-      "File",
-      "File.Exists",
-      "File.ReadAllText",
-      "File.ReadAllLines",
-      "File.WriteAllText",
-      "File.WriteAllLines",
-      "File.AppendAllText",
-      "File.Copy",
-      "File.Move",
-      "File.Delete",
-      "File.Create",
-      "File.Open",
-      "File.OpenRead",
-      "File.OpenWrite",
-      "File.ReadAllBytes",
-      "File.WriteAllBytes",
-      "Directory",
-      "Directory.Exists",
-      "Directory.CreateDirectory",
-      "Directory.GetFiles",
-      "Directory.GetDirectories",
-      "Directory.Delete",
-      "Directory.Move",
-      "Directory.GetCurrentDirectory",
-      "Directory.SetCurrentDirectory",
-      "Path",
-      "Path.Combine",
-      "Path.GetFileName",
-      "Path.GetExtension",
-      "Path.GetDirectoryName",
-      "Path.GetFullPath",
-      "Path.GetTempPath",
-      "Path.GetTempFileName",
-      "Path.ChangeExtension",
-      "Path.DirectorySeparatorChar",
-      "Stream",
-      "FileStream",
-      "MemoryStream",
-      "StreamReader",
-      "StreamWriter",
-      "BinaryReader",
-      "BinaryWriter",
-      "TextReader",
-      "TextWriter",
-      "HttpClient",
-      "HttpRequestMessage",
-      "HttpResponseMessage",
-      "HttpMethod",
-      "HttpContent",
-      "StringContent",
-      "FormUrlEncodedContent",
-      "Uri",
-      "UriBuilder",
-      "WebUtility",
-      "JsonSerializer",
-      "JsonDocument",
-      "JsonElement",
-      "JsonSerializerOptions",
-      "Regex",
-      "Regex.Match",
-      "Regex.Matches",
-      "Regex.IsMatch",
-      "Regex.Replace",
-      "Regex.Split",
-      "Match",
-      "Group",
-      "Capture",
-      "Task",
-      "Task.Run",
-      "Task.Delay",
-      "Task.WhenAll",
-      "Task.WhenAny",
-      "Task.CompletedTask",
-      "Task.FromResult",
-      "ValueTask",
-      "CancellationToken",
-      "CancellationTokenSource",
-      "Thread",
-      "Thread.Sleep",
-      "ThreadPool",
-      "Monitor",
-      "SemaphoreSlim",
-      "Mutex",
-      "Exception",
-      "ArgumentException",
-      "ArgumentNullException",
-      "InvalidOperationException",
-      "NullReferenceException",
-      "FormatException",
-      "IndexOutOfRangeException",
-      "IOException",
-      "FileNotFoundException",
-      "UnauthorizedAccessException",
-      "NotImplementedException",
-      "NotSupportedException",
-      "TimeoutException",
-      "OperationCanceledException",
-      "Debug.WriteLine",
-      "Trace.WriteLine",
-      "Debugger.Break",
-      "Environment.NewLine",
-      "Environment.Exit",
-      "Environment.GetEnvironmentVariable",
-      "Environment.MachineName",
-      "Environment.UserName",
-      "Environment.CurrentDirectory",
-      "Environment.OSVersion",
-      "Environment.ProcessorCount",
-      "GC.Collect",
-      "GC.GetTotalMemory",
-      "GC.SuppressFinalize",
-      "Activator.CreateInstance",
-      "Convert",
-      "BitConverter",
-      "Buffer.BlockCopy",
-      "Tuple",
-      "Tuple.Create",
-      "ValueTuple",
-      "Lazy<T>",
-      "Nullable<T>",
-      "WeakReference",
-      "CultureInfo",
-      "NumberFormatInfo",
-      "DateTimeFormatInfo",
-      "Encoding.UTF8",
-      "Encoding.ASCII",
-      "Encoding.Unicode",
-      "Encoding.Default",
-      "Encoding.GetEncoding",
-      "StringComparer.Ordinal",
-      "StringComparer.OrdinalIgnoreCase",
-      "StringComparison.Ordinal",
-      "StringComparison.OrdinalIgnoreCase",
-      "EqualityComparer<T>.Default",
-      "Comparer<T>.Default",
-      "IDisposable",
-      "IComparable<T>",
-      "IEquatable<T>",
-      "ICloneable",
-      "Attribute",
-      "ObsoleteAttribute",
-      "SerializableAttribute",
-      "Action",
-      "Action<T>",
-      "Func<TResult>",
-      "Func<T,TResult>",
-      "Predicate<T>",
-      "Comparison<T>",
-      "EventHandler",
-      "EventArgs",
-      "EventHandler<TEventArgs>",
-      "Nullable.GetUnderlyingType",
-      "RuntimeHelpers.GetHashCode",
-      "Parallel.For",
-      "Parallel.ForEach",
-      "Parallel.Invoke",
-      "Interlocked.Increment",
-      "Interlocked.Decrement",
-      "Interlocked.Exchange",
-      "Interlocked.CompareExchange",
-      "ConcurrentDictionary<TKey,TValue>",
-      "ConcurrentQueue<T>",
-      "ConcurrentStack<T>",
-      "ConcurrentBag<T>",
-      "ImmutableArray<T>",
-      "ImmutableList<T>",
-      "ImmutableDictionary<TKey,TValue>",
-      "Span<T>",
-      "ReadOnlySpan<T>",
-      "Memory<T>",
-      "ReadOnlyMemory<T>",
-      "BitArray",
-      "BitConverter.GetBytes",
-      "BitConverter.ToInt32",
-      "BitConverter.ToString",
-      "StackTrace",
-      "StackFrame",
-      "Process.Start",
-      "Process.GetCurrentProcess",
-      "Process.GetProcesses",
-      "Version",
-      "Version.Parse",
-      "Version.TryParse",
-      "Uri.EscapeDataString",
-      "Uri.UnescapeDataString",
-      "decimal.Round",
-      "decimal.Ceiling",
-      "decimal.Floor",
-      "decimal.MaxValue",
-      "decimal.MinValue",
-      "DateTime.AddDays",
-      "DateTime.AddHours",
-      "DateTime.AddMinutes",
-      "DateTime.AddMonths",
-      "DateTime.AddYears",
-      "DateTime.ToString",
-      "DateTime.Compare",
-      "DateTime.Equals",
-      "TimeSpan.TotalMilliseconds",
-      "TimeSpan.TotalSeconds",
-      "TimeSpan.TotalMinutes",
-      "TimeSpan.TotalHours",
-      "TimeSpan.TotalDays",
-      ".Length",
-      ".Trim",
-      ".TrimStart",
-      ".TrimEnd",
-      ".ToUpper",
-      ".ToLower",
-      ".StartsWith",
-      ".EndsWith",
-      ".Replace",
-      ".Substring",
-      ".Split",
-      ".PadLeft",
-      ".PadRight",
-      ".ToCharArray",
-      ".Equals",
-      ".CompareTo",
-      ".GetHashCode",
-      ".GetType",
-      ".ToString",
-      ".GetAwaiter",
-      ".ConfigureAwait",
-      ".Dispose",
-      ".DisposeAsync",
-      "DictionaryEntry",
-      "Hashtable",
-      "ArrayList",
-      "SortedList",
-      "System.Console",
-      "System.Math",
-      "System.IO.File",
-      "System.IO.Directory",
-      "System.IO.Path",
-      "System.Text.StringBuilder",
-      "System.Text.RegularExpressions.Regex",
-      "System.Text.Json.JsonSerializer",
-      "System.Net.Http.HttpClient",
-      "System.Collections.Generic.List<T>",
-      "System.Collections.Generic.Dictionary<TKey,TValue>",
-      "System.Threading.Tasks.Task",
-      "System.Threading.CancellationToken",
-      "Main",
-      "static void Main",
-      "static async Task Main",
-      "Console.WriteLine()",
-      "Console.ReadLine()",
-      "new List<T>()",
-      "new Dictionary<TKey,TValue>()"
-  ];
+  "Console.WriteLine",
+  "Console.Write",
+  "Console.ReadLine",
+  "Console.ReadKey",
+  "Console.Read",
+  "Console.Clear",
+  "Console.Beep",
+  "Console.Title",
+  "Console.ForegroundColor",
+  "Console.BackgroundColor",
+  "Console.ResetColor",
+  "Console.CursorLeft",
+  "Console.CursorTop",
+  "Console.SetCursorPosition",
+  "string",
+  "string.Empty",
+  "string.IsNullOrEmpty",
+  "string.IsNullOrWhiteSpace",
+  "string.Join",
+  "string.Concat",
+  "string.Format",
+  "string.Compare",
+  "string.Equals",
+  "string.CompareOrdinal",
+  "StringBuilder",
+  "StringBuilder.Append",
+  "StringBuilder.AppendLine",
+  "int",
+  "int.Parse",
+  "int.TryParse",
+  "int.MaxValue",
+  "int.MinValue",
+  "long",
+  "long.Parse",
+  "long.TryParse",
+  "short",
+  "byte",
+  "sbyte",
+  "uint",
+  "ulong",
+  "ushort",
+  "double",
+  "double.Parse",
+  "double.TryParse",
+  "double.NaN",
+  "float",
+  "decimal",
+  "decimal.Parse",
+  "decimal.TryParse",
+  "bool",
+  "bool.Parse",
+  "bool.TryParse",
+  "char",
+  "char.IsDigit",
+  "char.IsLetter",
+  "char.IsWhiteSpace",
+  "char.ToUpper",
+  "char.ToLower",
+  "object",
+  "dynamic",
+  "var",
+  "const",
+  "null",
+  "true",
+  "false",
+  "default",
+  "nameof",
+  "typeof",
+  "sizeof",
+  "if",
+  "else",
+  "switch",
+  "case",
+  "for",
+  "foreach",
+  "while",
+  "do",
+  "break",
+  "continue",
+  "return",
+  "goto",
+  "try",
+  "catch",
+  "finally",
+  "throw",
+  "checked",
+  "unchecked",
+  "lock",
+  "using",
+  "namespace",
+  "public",
+  "private",
+  "protected",
+  "internal",
+  "static",
+  "readonly",
+  "sealed",
+  "abstract",
+  "virtual",
+  "override",
+  "partial",
+  "async",
+  "await",
+  "class",
+  "struct",
+  "record",
+  "interface",
+  "enum",
+  "delegate",
+  "event",
+  "operator",
+  "implicit",
+  "explicit",
+  "new",
+  "this",
+  "base",
+  "get",
+  "set",
+  "init",
+  "params",
+  "ref",
+  "out",
+  "in",
+  "is",
+  "as",
+  "where",
+  "when",
+  "yield return",
+  "yield break",
+  "List<T>",
+  "List<int>",
+  "List<string>",
+  "Dictionary<TKey,TValue>",
+  "Dictionary<string,int>",
+  "Dictionary<string,string>",
+  "HashSet<T>",
+  "Queue<T>",
+  "Stack<T>",
+  "LinkedList<T>",
+  "SortedSet<T>",
+  "SortedDictionary<TKey,TValue>",
+  "IEnumerable<T>",
+  "ICollection<T>",
+  "IList<T>",
+  "IDictionary<TKey,TValue>",
+  "Array",
+  "Array.Empty<T>",
+  "Array.Sort",
+  "Array.Reverse",
+  "Array.Copy",
+  "Array.IndexOf",
+  "Array.Find",
+  "Array.FindAll",
+  "Array.Exists",
+  "Enumerable.Range",
+  "Enumerable.Repeat",
+  "Enumerable.Empty<T>",
+  "Enumerable.Concat",
+  "Enumerable.SequenceEqual",
+  ".Add",
+  ".AddRange",
+  ".Remove",
+  ".RemoveAt",
+  ".RemoveAll",
+  ".Clear",
+  ".Contains",
+  ".ContainsKey",
+  ".ContainsValue",
+  ".Count",
+  ".Capacity",
+  ".Insert",
+  ".IndexOf",
+  ".LastIndexOf",
+  ".Find",
+  ".FindAll",
+  ".Sort",
+  ".Reverse",
+  ".ToArray",
+  ".ToList",
+  ".ToDictionary",
+  ".ToHashSet",
+  ".First",
+  ".FirstOrDefault",
+  ".Last",
+  ".LastOrDefault",
+  ".Single",
+  ".SingleOrDefault",
+  ".Where",
+  ".Select",
+  ".SelectMany",
+  ".OrderBy",
+  ".OrderByDescending",
+  ".ThenBy",
+  ".ThenByDescending",
+  ".GroupBy",
+  ".Join",
+  ".Any",
+  ".All",
+  ".Sum",
+  ".Average",
+  ".Min",
+  ".Max",
+  ".Aggregate",
+  ".Skip",
+  ".Take",
+  ".Distinct",
+  ".Union",
+  ".Intersect",
+  ".Except",
+  "Math.Abs",
+  "Math.Max",
+  "Math.Min",
+  "Math.Round",
+  "Math.Floor",
+  "Math.Ceiling",
+  "Math.Sqrt",
+  "Math.Pow",
+  "Math.Sin",
+  "Math.Cos",
+  "Math.Tan",
+  "Math.Log",
+  "Math.Exp",
+  "Math.Clamp",
+  "Math.PI",
+  "Math.E",
+  "Random",
+  "Random.Next",
+  "Random.NextDouble",
+  "Random.NextBytes",
+  "Random.Shared",
+  "DateTime",
+  "DateTime.Now",
+  "DateTime.UtcNow",
+  "DateTime.Today",
+  "DateTime.Parse",
+  "DateTime.TryParse",
+  "DateTime.DaysInMonth",
+  "DateTime.IsLeapYear",
+  "TimeSpan",
+  "TimeSpan.FromSeconds",
+  "TimeSpan.FromMinutes",
+  "Stopwatch",
+  "Stopwatch.StartNew",
+  "Guid",
+  "Guid.NewGuid",
+  "Guid.Empty",
+  "Guid.Parse",
+  "Guid.TryParse",
+  "Convert.ToInt32",
+  "Convert.ToInt64",
+  "Convert.ToDouble",
+  "Convert.ToDecimal",
+  "Convert.ToBoolean",
+  "Convert.ToString",
+  "Enum.Parse",
+  "Enum.TryParse",
+  "Enum.GetValues",
+  "File",
+  "File.Exists",
+  "File.ReadAllText",
+  "File.ReadAllLines",
+  "File.WriteAllText",
+  "File.WriteAllLines",
+  "File.AppendAllText",
+  "File.Copy",
+  "File.Move",
+  "File.Delete",
+  "Directory",
+  "Directory.Exists",
+  "Directory.CreateDirectory",
+  "Directory.GetFiles",
+  "Directory.GetDirectories",
+  "Path",
+  "Path.Combine",
+  "Path.GetFileName",
+  "Path.GetExtension",
+  "Path.GetDirectoryName",
+  "Stream",
+  "FileStream",
+  "MemoryStream",
+  "StreamReader",
+  "StreamWriter",
+  "HttpClient",
+  "HttpRequestMessage",
+  "HttpResponseMessage",
+  "HttpMethod",
+  "StringContent",
+  "Uri",
+  "UriBuilder",
+  "JsonSerializer",
+  "JsonDocument",
+  "JsonElement",
+  "Regex",
+  "Regex.Match",
+  "Regex.Matches",
+  "Regex.IsMatch",
+  "Regex.Replace",
+  "Regex.Split",
+  "Task",
+  "Task.Run",
+  "Task.Delay",
+  "Task.WhenAll",
+  "Task.WhenAny",
+  "Task.CompletedTask",
+  "CancellationToken",
+  "CancellationTokenSource",
+  "Thread",
+  "Thread.Sleep",
+  "Exception",
+  "ArgumentException",
+  "ArgumentNullException",
+  "InvalidOperationException",
+  "NullReferenceException",
+  "FormatException",
+  "IndexOutOfRangeException",
+  "IOException",
+  "FileNotFoundException",
+  "UnauthorizedAccessException",
+  "NotImplementedException",
+  "TimeoutException",
+  "Debug.WriteLine",
+  "Environment.NewLine",
+  "Environment.Exit",
+  "Environment.MachineName",
+  "Environment.UserName",
+  "Action",
+  "Action<T>",
+  "Func<TResult>",
+  "Func<T,TResult>",
+  "Predicate<T>",
+  "EventHandler",
+  "EventArgs",
+  "Parallel.For",
+  "Parallel.ForEach",
+  "Interlocked.Increment",
+  "ConcurrentDictionary<TKey,TValue>",
+  "Span<T>",
+  "ReadOnlySpan<T>",
+  "Memory<T>",
+  "Version",
+  "Version.Parse",
+  "decimal.Round",
+  "DateTime.AddDays",
+  "DateTime.AddHours",
+  "DateTime.AddMinutes",
+  "DateTime.AddMonths",
+  ".Length",
+  ".Trim",
+  ".TrimStart",
+  ".TrimEnd",
+  ".ToUpper",
+  ".ToLower",
+  ".StartsWith",
+  ".EndsWith",
+  ".Replace",
+  ".Substring",
+  ".Split",
+  ".PadLeft",
+  ".PadRight",
+  ".Equals",
+  ".ToString",
+  "System.Console",
+  "System.Math",
+  "System.IO.File",
+  "System.IO.Directory",
+  "System.IO.Path",
+  "System.Text.StringBuilder",
+  "System.Text.RegularExpressions.Regex",
+  "System.Text.Json.JsonSerializer",
+  "System.Net.Http.HttpClient",
+  "System.Collections.Generic.List<T>",
+  "System.Collections.Generic.Dictionary<TKey,TValue>",
+  "System.Threading.Tasks.Task",
+  "Main",
+  "static void Main",
+  "static async Task Main",
+  "Console.WriteLine()",
+  "Console.ReadLine()",
+  "new List<T>()",
+  "new Dictionary<TKey,TValue>()"
+];
+
+  function currentTokenInfo(){
+    const cur=editor.getCursor();
+    const line=editor.getLine(cur.line).slice(0,cur.ch);
+    const match=line.match(/[A-Za-z_][A-Za-z0-9_.]*$/);
+    const prefix=match?match[0]:'';
+    return {cur,prefix,start:{line:cur.line,ch:cur.ch-prefix.length}};
+  }
 
   function updateCodeSuggestion(){
-    const caret=editor.selectionStart;
-    if(caret!==editor.selectionEnd){activeCompletion=null;suggestionBox.classList.remove('show');return;}
-    const before=editor.value.slice(0,caret);
-    const match=before.match(/[A-Za-z_][A-Za-z0-9_.]*$/);
-    const prefix=match?match[0]:'';
+    const {cur,prefix,start}=currentTokenInfo();
     if(prefix.length<2){activeCompletion=null;suggestionBox.classList.remove('show');return;}
-
     const lower=prefix.toLowerCase();
     const found=csharpCompletions.find(item=>{
       const candidate=item.toLowerCase();
-      if(candidate.startsWith(lower) && candidate!==lower) return true;
-      if(!prefix.includes('.') && candidate.startsWith('.') && candidate.slice(1).startsWith(lower) && candidate.slice(1)!==lower) return true;
-      return false;
+      return candidate.startsWith(lower) && candidate!==lower;
     });
     if(!found){activeCompletion=null;suggestionBox.classList.remove('show');return;}
-
-    const insertValue=(!prefix.includes('.') && found.startsWith('.'))?found.slice(1):found;
-    activeCompletion={prefix,full:insertValue,start:caret-prefix.length,end:caret};
-    suggestionText.textContent=insertValue;
+    activeCompletion={start,end:cur,full:found};
+    suggestionText.textContent=found;
     suggestionBox.classList.add('show');
 
-    const textBefore=editor.value.slice(0,caret);
-    const lines=textBefore.split('\n');
-    const currentLine=lines[lines.length-1];
-    const lineIndex=lines.length-1;
-    const charWidth=8.4;
-    const lineHeight=23.8;
-    const maxLeft=Math.max(18,editor.clientWidth-270);
-    suggestionBox.style.left=Math.min(18+currentLine.length*charWidth,maxLeft)+'px';
-    suggestionBox.style.top=(58+lineIndex*lineHeight-editor.scrollTop)+'px';
+    const coords=editor.cursorCoords(cur,'local');
+    suggestionBox.style.left=Math.min(coords.left+48,Math.max(18,editor.getWrapperElement().clientWidth-260))+'px';
+    suggestionBox.style.top=(coords.bottom+45)+'px';
   }
 
-  editor.addEventListener('input',updateCodeSuggestion);
-  editor.addEventListener('click',updateCodeSuggestion);
-  editor.addEventListener('keyup',e=>{if(e.key!=='Tab')updateCodeSuggestion()});
-  editor.addEventListener('scroll',updateCodeSuggestion);
-  editor.addEventListener('blur',()=>suggestionBox.classList.remove('show'));
+  editor.on('change',updateCodeSuggestion);
+  editor.on('cursorActivity',updateCodeSuggestion);
+  editor.on('blur',()=>suggestionBox.classList.remove('show'));
 
-  editor.addEventListener('keydown',e=>{
-    if(e.key==='Tab' && activeCompletion){
-      e.preventDefault();
-      const {start,end,full}=activeCompletion;
-      editor.setRangeText(full,start,end,'end');
-      activeCompletion=null;
-      suggestionBox.classList.remove('show');
-      editor.dispatchEvent(new Event('input',{bubbles:true}));
-      return;
-    }
-
-    if(e.key==='Tab'){
-      e.preventDefault();
-      const start=editor.selectionStart,end=editor.selectionEnd;
-      editor.setRangeText('    ',start,end,'end');
-      activeCompletion=null;
-      suggestionBox.classList.remove('show');
+  editor.setOption('extraKeys',{
+    'Tab':cm=>{
+      if(activeCompletion){
+        cm.replaceRange(activeCompletion.full,activeCompletion.start,activeCompletion.end);
+        cm.setCursor({line:activeCompletion.start.line,ch:activeCompletion.start.ch+activeCompletion.full.length});
+        activeCompletion=null;
+        suggestionBox.classList.remove('show');
+      }else{
+        cm.replaceSelection('    ','end');
+      }
     }
   });
 
-  editor.value=localStorage.getItem(CODE_KEY)||editor.value;
-  document.getElementById('saveCode').addEventListener('click',()=>{localStorage.setItem(CODE_KEY,editor.value);document.getElementById('consoleOut').textContent='Projekt lokal gespeichert.'});
-  document.getElementById('clearCode').addEventListener('click',()=>{editor.value='';activeCompletion=null;suggestionBox.classList.remove('show');document.getElementById('consoleOut').textContent='Editor geleert.'});
+  const starterProjects=[
+    {
+      id:'hello',title:'1. Hello World+',level:'Einsteiger',
+      desc:'Baue dein erstes Konsolenprogramm mit Name, Alter und persönlicher Begrüssung.',
+      steps:['Console.ReadLine() verwenden','Variablen speichern','Text mit Interpolation ausgeben'],
+      code:`using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Wie heisst du? ");
+        string name = Console.ReadLine();
+
+        Console.WriteLine($"Hallo {name}! Willkommen in C#.");
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Console+ReadLine+WriteLine+Tutorial+Deutsch'
+    },
+    {
+      id:'calculator',title:'2. Taschenrechner',level:'Einsteiger',
+      desc:'Erstelle einen Rechner für Plus, Minus, Mal und Geteilt.',
+      steps:['Zahlen einlesen','switch verwenden','Fehler bei Division durch 0 abfangen'],
+      code:`using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Zahl 1: ");
+        double a = double.Parse(Console.ReadLine());
+
+        Console.Write("Operator (+ - * /): ");
+        string op = Console.ReadLine();
+
+        Console.Write("Zahl 2: ");
+        double b = double.Parse(Console.ReadLine());
+
+        double result = op switch
+        {
+            "+" => a + b,
+            "-" => a - b,
+            "*" => a * b,
+            "/" when b != 0 => a / b,
+            _ => double.NaN
+        };
+
+        Console.WriteLine($"Ergebnis: {result}");
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Taschenrechner+Tutorial+Deutsch'
+    },
+    {
+      id:'guess',title:'3. Zahlenraten',level:'Einsteiger',
+      desc:'Der Computer wählt eine Zahl und du musst sie erraten.',
+      steps:['Random einsetzen','while-Schleife verwenden','Hinweise höher/tiefer ausgeben'],
+      code:`using System;
+
+class Program
+{
+    static void Main()
+    {
+        int secret = Random.Shared.Next(1, 101);
+        int guess = 0;
+
+        while (guess != secret)
+        {
+            Console.Write("Dein Tipp: ");
+            guess = int.Parse(Console.ReadLine());
+
+            if (guess < secret) Console.WriteLine("Höher!");
+            else if (guess > secret) Console.WriteLine("Tiefer!");
+        }
+
+        Console.WriteLine("Richtig!");
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Zahlenraten+Random+while+Deutsch'
+    },
+    {
+      id:'password',title:'4. Passwort-Checker',level:'Einsteiger+',
+      desc:'Prüfe Länge, Grossbuchstaben, Zahlen und Sonderzeichen.',
+      steps:['Strings untersuchen','char-Methoden verwenden','mehrere Bedingungen kombinieren'],
+      code:`using System;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Passwort: ");
+        string password = Console.ReadLine();
+
+        bool longEnough = password.Length >= 8;
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasDigit = password.Any(char.IsDigit);
+
+        Console.WriteLine(longEnough && hasUpper && hasDigit
+            ? "Starkes Passwort"
+            : "Passwort verbessern");
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Passwort+Checker+Tutorial+Deutsch'
+    },
+    {
+      id:'atm',title:'5. Bankomat',level:'Mittel',
+      desc:'Simuliere Kontostand, Einzahlung und Auszahlung.',
+      steps:['Menü mit switch','Kontostand verändern','Eingaben validieren'],
+      code:`using System;
+
+class Program
+{
+    static void Main()
+    {
+        decimal balance = 1000m;
+
+        Console.WriteLine("1 Kontostand | 2 Einzahlen | 3 Abheben");
+        string choice = Console.ReadLine();
+
+        switch (choice)
+        {
+            case "1":
+                Console.WriteLine($"Kontostand: {balance} CHF");
+                break;
+            case "2":
+                Console.Write("Betrag: ");
+                balance += decimal.Parse(Console.ReadLine());
+                Console.WriteLine($"Neu: {balance} CHF");
+                break;
+            case "3":
+                Console.Write("Betrag: ");
+                decimal amount = decimal.Parse(Console.ReadLine());
+                if (amount <= balance) balance -= amount;
+                Console.WriteLine($"Neu: {balance} CHF");
+                break;
+        }
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Bankomat+Konsolenprogramm+Deutsch'
+    },
+    {
+      id:'quiz',title:'6. Quiz-App',level:'Mittel',
+      desc:'Baue ein Punktesystem mit mehreren Fragen.',
+      steps:['Fragen speichern','Antworten vergleichen','Punkte zählen'],
+      code:`using System;
+
+class Program
+{
+    static void Main()
+    {
+        int score = 0;
+
+        Console.Write("Hauptstadt der Schweiz? ");
+        if (Console.ReadLine().Trim().ToLower() == "bern") score++;
+
+        Console.Write("2 + 2 = ");
+        if (Console.ReadLine().Trim() == "4") score++;
+
+        Console.WriteLine($"Punkte: {score}/2");
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Quiz+App+Console+Tutorial+Deutsch'
+    },
+    {
+      id:'todo',title:'7. To-do-Liste',level:'Mittel',
+      desc:'Verwalte Aufgaben mit einer List<string>.',
+      steps:['List<string> verwenden','Aufgaben hinzufügen','Liste mit foreach ausgeben'],
+      code:`using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        var tasks = new List<string>();
+
+        tasks.Add("C# lernen");
+        tasks.Add("Projekt fertigstellen");
+
+        foreach (string task in tasks)
+        {
+            Console.WriteLine("- " + task);
+        }
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+List+ToDo+App+Tutorial+Deutsch'
+    },
+    {
+      id:'shop',title:'8. Mini-Shop',level:'Mittel+',
+      desc:'Baue einen Warenkorb mit Produkten, Preisen und Gesamtsumme.',
+      steps:['Dictionary nutzen','Produkte auswählen','Summe berechnen'],
+      code:`using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        var products = new Dictionary<string, decimal>
+        {
+            ["Maus"] = 29.90m,
+            ["Tastatur"] = 79.90m,
+            ["Headset"] = 59.90m
+        };
+
+        decimal total = 0m;
+
+        foreach (var product in products)
+        {
+            Console.WriteLine($"{product.Key}: {product.Value} CHF");
+            total += product.Value;
+        }
+
+        Console.WriteLine($"Gesamtwert: {total} CHF");
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Dictionary+Shop+Tutorial+Deutsch'
+    },
+    {
+      id:'instagram',title:'9. Mini-Instagram',level:'Fortgeschritten',
+      desc:'Modelliere Benutzer, Posts, Likes und einen einfachen Feed.',
+      steps:['eigene Klassen erstellen','Objekte in Listen speichern','Likes als Zustand verändern'],
+      code:`using System;
+using System.Collections.Generic;
+
+class Post
+{
+    public string Author { get; set; }
+    public string Text { get; set; }
+    public int Likes { get; set; }
+}
+
+class Program
+{
+    static void Main()
+    {
+        var feed = new List<Post>
+        {
+            new Post { Author = "Luis", Text = "Mein erster Post!", Likes = 3 },
+            new Post { Author = "Anna", Text = "C# macht Spass.", Likes = 5 }
+        };
+
+        foreach (var post in feed)
+        {
+            Console.WriteLine($"@{post.Author}: {post.Text} ❤️ {post.Likes}");
+        }
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Klassen+Objekte+Mini+Social+Media+Tutorial+Deutsch'
+    },
+    {
+      id:'flappy',title:'10. Flappy-Bird-Logik',level:'Fortgeschritten',
+      desc:'Programmiere die Kernlogik für Höhe, Gravitation, Sprung und Kollision.',
+      steps:['Game Loop verstehen','Position und Geschwindigkeit ändern','Kollision prüfen'],
+      code:`using System;
+
+class Program
+{
+    static void Main()
+    {
+        double y = 5;
+        double velocity = 0;
+        const double gravity = 0.8;
+
+        for (int frame = 0; frame < 10; frame++)
+        {
+            if (frame == 2)
+                velocity = -3;
+
+            velocity += gravity;
+            y += velocity;
+
+            bool crashed = y > 12 || y < 0;
+            Console.WriteLine($"Frame {frame}: y={y:0.0}");
+
+            if (crashed)
+            {
+                Console.WriteLine("Game Over");
+                break;
+            }
+        }
+    }
+}`,
+      video:'https://www.youtube.com/results?search_query=C%23+Flappy+Bird+Game+Logic+Tutorial'
+    }
+  ];
+
+  function renderStarters(){
+    const grid=document.getElementById('starterGrid');
+    grid.innerHTML=starterProjects.map(p=>`
+      <article class="card starter-card">
+        <span class="level">${p.level}</span>
+        <h4>${p.title}</h4>
+        <p>${p.desc}</p>
+        <ul class="starter-steps">${p.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+        <div class="starter-actions">
+          <button class="btn primary" onclick="loadStarter('${p.id}')">Projekt starten</button>
+          <a class="btn video-link" href="${p.video}" target="_blank" rel="noopener">▶ Erklärungsvideo</a>
+        </div>
+      </article>`
+    ).join('');
+  }
+
+  window.loadStarter=function(id){
+    const project=starterProjects.find(p=>p.id===id);
+    if(!project) return;
+    editor.setValue(project.code);
+    localStorage.setItem(CODE_KEY,project.code);
+    document.getElementById('consoleOut').textContent='Starter „'+project.title+'“ geladen. Lies die Aufgabe und ergänze oder verändere den Code.';
+    navigate('code');
+    setTimeout(()=>editor.focus(),100);
+  };
+
+  renderStarters();
+
+  const savedCode=localStorage.getItem(CODE_KEY);
+  if(savedCode) editor.setValue(savedCode);
+
+  document.getElementById('saveCode').addEventListener('click',()=>{
+    localStorage.setItem(CODE_KEY,editor.getValue());
+    document.getElementById('consoleOut').textContent='Projekt lokal gespeichert.';
+  });
+
+  document.getElementById('clearCode').addEventListener('click',()=>{
+    editor.setValue('');
+    activeCompletion=null;
+    suggestionBox.classList.remove('show');
+    document.getElementById('consoleOut').textContent='Editor geleert.';
+  });
+
   let cachedCSharpCompiler=null;
 
   async function getCSharpCompiler(){
@@ -1160,11 +1332,8 @@ class Program
     const runBtn=document.getElementById('runCode');
     const out=document.getElementById('consoleOut');
     const state=document.getElementById('runnerState');
-    const src=editor.value.trim();
-    if(!src){
-      out.textContent='Kein Code vorhanden.';
-      return;
-    }
+    const src=editor.getValue().trim();
+    if(!src){out.textContent='Kein Code vorhanden.';return;}
 
     runBtn.disabled=true;
     runBtn.textContent='⏳ Läuft…';
@@ -1175,7 +1344,6 @@ class Program
     try{
       const compiler=await getCSharpCompiler();
       document.getElementById('compilerLabel').textContent='C# · '+(compiler['display-name']||compiler.name);
-
       const controller=new AbortController();
       const timeout=setTimeout(()=>controller.abort(),15000);
       let res;
@@ -1185,26 +1353,22 @@ class Program
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify({
             compiler:compiler.name,
-            code:editor.value,
+            code:editor.getValue(),
             stdin:document.getElementById('stdinInput').value,
             options:''
           }),
           signal:controller.signal
         });
-      } finally {
-        clearTimeout(timeout);
-      }
+      } finally { clearTimeout(timeout); }
 
       if(!res.ok) throw new Error('Ausführungsdienst antwortet mit HTTP '+res.status+'.');
       const result=await res.json();
-
       const parts=[];
       if(result.compiler_message) parts.push('KOMPILIERUNG\n'+result.compiler_message.trim());
       if(result.program_message) parts.push('AUSGABE\n'+result.program_message.trim());
       if(result.program_error) parts.push('LAUFZEITFEHLER\n'+result.program_error.trim());
       if(result.compiler_error) parts.push('COMPILERFEHLER\n'+result.compiler_error.trim());
       if(!parts.length) parts.push('(Programm beendet ohne Ausgabe)');
-
       out.textContent=parts.join('\n\n');
       const failed=Boolean(result.compiler_error || result.program_error || (result.status && String(result.status)!=='0'));
       state.textContent=failed?'Fehler':'Erfolgreich';
