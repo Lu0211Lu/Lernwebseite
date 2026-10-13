@@ -157,9 +157,13 @@
     .test-row strong{display:block}
     .test-row small{color:var(--muted)}
     .code-shell{display:grid;grid-template-columns:1.4fr .8fr;gap:18px}
-    .editor{background:#0b1220;color:#e2e8f0;border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+    .editor{background:#0b1220;color:#e2e8f0;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);position:relative}
     .editor-head{padding:12px 16px;background:#101a2f;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;color:#94a3b8;font-size:12px}
     textarea.code{width:100%;height:420px;resize:vertical;border:0;outline:0;background:#0b1220;color:#dbeafe;padding:18px;font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;line-height:1.7}
+    .code-suggestion{position:absolute;display:none;z-index:5;left:18px;top:82px;background:#111827;border:1px solid #334155;border-radius:10px;padding:8px 10px;color:#e2e8f0;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;box-shadow:0 14px 35px rgba(0,0,0,.32);pointer-events:none}
+    .code-suggestion.show{display:flex;align-items:center;gap:12px}
+    .code-suggestion .completion{color:#fff;font-weight:700}
+    .code-suggestion .tab-key{color:#94a3b8;font-size:11px;border:1px solid #475569;border-radius:6px;padding:2px 6px;background:#0f172a}
     .console{background:#101827;color:#cbd5e1;border-radius:18px;padding:18px;min-height:170px;font-family:monospace;font-size:13px;white-space:pre-wrap}
     .games-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     .game-card{padding:22px;min-height:190px}
@@ -315,6 +319,7 @@ class Program
         Console.WriteLine("Hallo Lernwelt!");
     }
 }</textarea>
+            <div class="code-suggestion" id="codeSuggestion"><span class="completion" id="codeSuggestionText"></span><span class="tab-key">Tab ↹</span></div>
           </div>
           <div class="card panel">
             <h3 style="margin-top:0">Konsole</h3>
@@ -497,9 +502,89 @@ class Program
   renderSubjects();
 
   const editor=document.getElementById('codeEditor');
+  const suggestionBox=document.getElementById('codeSuggestion');
+  const suggestionText=document.getElementById('codeSuggestionText');
+  let activeCompletion=null;
+
+  const csharpCompletions=[
+    'Console.WriteLine',
+    'Console.Write',
+    'Console.ReadLine',
+    'Console.ReadKey',
+    'string',
+    'int',
+    'double',
+    'bool',
+    'if',
+    'else',
+    'for',
+    'foreach',
+    'while',
+    'switch',
+    'return',
+    'public',
+    'private',
+    'static',
+    'void',
+    'class',
+    'new'
+  ];
+
+  function updateCodeSuggestion(){
+    const caret=editor.selectionStart;
+    if(caret!==editor.selectionEnd){activeCompletion=null;suggestionBox.classList.remove('show');return;}
+    const before=editor.value.slice(0,caret);
+    const match=before.match(/[A-Za-z_][A-Za-z0-9_.]*$/);
+    const prefix=match?match[0]:'';
+    if(prefix.length<2){activeCompletion=null;suggestionBox.classList.remove('show');return;}
+
+    const found=csharpCompletions.find(item=>item.toLowerCase().startsWith(prefix.toLowerCase()) && item.toLowerCase()!==prefix.toLowerCase());
+    if(!found){activeCompletion=null;suggestionBox.classList.remove('show');return;}
+
+    activeCompletion={prefix,full:found,start:caret-prefix.length,end:caret};
+    suggestionText.textContent=prefix + found.slice(prefix.length);
+    suggestionBox.classList.add('show');
+
+    const textBefore=editor.value.slice(0,caret);
+    const lines=textBefore.split('\n');
+    const currentLine=lines[lines.length-1];
+    const lineIndex=lines.length-1;
+    const charWidth=8.4;
+    const lineHeight=23.8;
+    const maxLeft=Math.max(18,editor.clientWidth-270);
+    suggestionBox.style.left=Math.min(18+currentLine.length*charWidth,maxLeft)+'px';
+    suggestionBox.style.top=(58+lineIndex*lineHeight-editor.scrollTop)+'px';
+  }
+
+  editor.addEventListener('input',updateCodeSuggestion);
+  editor.addEventListener('click',updateCodeSuggestion);
+  editor.addEventListener('keyup',e=>{if(e.key!=='Tab')updateCodeSuggestion()});
+  editor.addEventListener('scroll',updateCodeSuggestion);
+  editor.addEventListener('blur',()=>suggestionBox.classList.remove('show'));
+
+  editor.addEventListener('keydown',e=>{
+    if(e.key==='Tab' && activeCompletion){
+      e.preventDefault();
+      const {start,end,full}=activeCompletion;
+      editor.setRangeText(full,start,end,'end');
+      activeCompletion=null;
+      suggestionBox.classList.remove('show');
+      editor.dispatchEvent(new Event('input',{bubbles:true}));
+      return;
+    }
+
+    if(e.key==='Tab'){
+      e.preventDefault();
+      const start=editor.selectionStart,end=editor.selectionEnd;
+      editor.setRangeText('    ',start,end,'end');
+      activeCompletion=null;
+      suggestionBox.classList.remove('show');
+    }
+  });
+
   editor.value=localStorage.getItem(CODE_KEY)||editor.value;
   document.getElementById('saveCode').addEventListener('click',()=>{localStorage.setItem(CODE_KEY,editor.value);document.getElementById('consoleOut').textContent='Projekt lokal gespeichert.'});
-  document.getElementById('clearCode').addEventListener('click',()=>{editor.value='';document.getElementById('consoleOut').textContent='Editor geleert.'});
+  document.getElementById('clearCode').addEventListener('click',()=>{editor.value='';activeCompletion=null;suggestionBox.classList.remove('show');document.getElementById('consoleOut').textContent='Editor geleert.'});
   document.getElementById('runCode').addEventListener('click',()=>{
     const src=editor.value;
     const matches=[...src.matchAll(/Console\.WriteLine\((["'])(.*?)\1\)\s*;/g)];
