@@ -454,20 +454,26 @@ class Program
           <div class="card ai-chat">
             <div class="ai-head">
               <div class="ai-title"><div class="ai-orb">✦</div><div><strong>BUILT AI</strong><div class="muted" style="font-size:11px">Lernen · C# · Fächer · Karteikarten · Tests</div></div></div>
-              <span class="runner-state" id="aiState">Bereit</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <button class="btn" id="aiNewChat" style="padding:7px 10px;font-size:11px">Neuer Chat</button>
+                <span class="runner-state" id="aiState">Bereit</span>
+              </div>
             </div>
             <div class="ai-messages" id="aiMessages">
               <div class="ai-message assistant">Hallo! Du kannst mich z. B. fragen: „Erkläre mir for-Schleifen“, „Hilf mir bei diesem C# Fehler“ oder „Erstelle aus diesem Stoff ein Fach mit Karteikarten und Test“.</div>
             </div>
             <div class="ai-compose">
-              <textarea id="aiInput" placeholder="Frage etwas oder füge Lernstoff ein …"></textarea>
+              <textarea id="aiInput" placeholder="Frag BUILT AI alles – z. B. Schule, C#, Allgemeinwissen oder lass Lernstoff verarbeiten …"></textarea>
               <div class="ai-compose-bottom">
                 <div class="ai-chips">
                   <button class="ai-chip" data-ai-prompt="Erkläre mir diesen C# Code und zeige mir die richtige Lösung: ">C# Hilfe</button>
                   <button class="ai-chip" data-ai-prompt="Erstelle aus folgendem Stoff ein neues Fach mit passenden Karteikarten: ">Fach erstellen</button>
                   <button class="ai-chip" data-ai-prompt="Erstelle für das aktuell ausgewählte Fach einen guten Test aus folgendem Stoff: ">Test erstellen</button>
                 </div>
-                <button class="btn primary" id="aiSend">Senden</button>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span class="muted" style="font-size:10px">Enter senden · Shift+Enter neue Zeile</span>
+                  <button class="btn primary" id="aiSend">Senden</button>
+                </div>
               </div>
             </div>
           </div>
@@ -528,6 +534,7 @@ class Program
   const ACTIVE_SUBJECT_KEY = 'lernwelt_active_subject_v1';
   const AI_FLASHCARDS_KEY = 'built_ai_flashcards_v1';
   const AI_TESTS_KEY = 'built_ai_tests_v1';
+  const AI_HISTORY_KEY = 'built_ai_history_v1';
   let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   let activeSubjectId = localStorage.getItem(ACTIVE_SUBJECT_KEY) || null;
 
@@ -1658,6 +1665,7 @@ class Program
 
   let aiFlashcards = JSON.parse(localStorage.getItem(AI_FLASHCARDS_KEY) || '[]');
   let aiTests = JSON.parse(localStorage.getItem(AI_TESTS_KEY) || '[]');
+  let aiHistory = JSON.parse(localStorage.getItem(AI_HISTORY_KEY) || '[]');
 
   function saveAiContent(){
     localStorage.setItem(AI_FLASHCARDS_KEY,JSON.stringify(aiFlashcards));
@@ -1762,13 +1770,32 @@ class Program
     return results;
   }
 
-  function addAiMessage(text,role='assistant'){
+  function addAiMessage(text,role='assistant',persist=true){
     const wrap=document.getElementById('aiMessages');
     const div=document.createElement('div');
     div.className='ai-message '+role;
     div.textContent=text;
     wrap.appendChild(div);
     wrap.scrollTop=wrap.scrollHeight;
+
+    if(persist && (role==='user' || role==='assistant')){
+      aiHistory.push({role,content:String(text)});
+      aiHistory=aiHistory.slice(-30);
+      localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(aiHistory));
+    }
+  }
+
+  function renderAiHistory(){
+    const wrap=document.getElementById('aiMessages');
+    wrap.innerHTML='';
+    if(!aiHistory.length){
+      const welcome=document.createElement('div');
+      welcome.className='ai-message assistant';
+      welcome.textContent='Hallo! Frag mich alles – von allgemeinen Fragen über Schule bis C#. Ich kann auch aus deinem Stoff Fächer, Karteikarten oder Tests erstellen.';
+      wrap.appendChild(welcome);
+      return;
+    }
+    aiHistory.forEach(item=>addAiMessage(item.content,item.role,false));
   }
 
   async function sendAiMessage(){
@@ -1790,9 +1817,11 @@ class Program
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
           message,
+          history:aiHistory.slice(0,-1),
           context:{
             activeSubject:getActiveSubject()?.name||null,
-            subjects:subjects.map(s=>({name:s.name,description:s.desc||''}))
+            subjects:subjects.map(s=>({name:s.name,description:s.desc||''})),
+            currentCode:(window.codeEditorCM && typeof window.codeEditorCM.getValue==='function') ? window.codeEditorCM.getValue() : ''
           }
         })
       });
@@ -1803,21 +1832,22 @@ class Program
       const results=applyAiActions(data.actions);
       if(results.length) addAiMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
     }catch(error){
-      addAiMessage(error?.message||String(error),'error');
+      addAiMessage(error?.message||String(error),'error',false);
       state.textContent='Fehler';
       state.className='runner-state error';
-      return;
     }finally{
       button.disabled=false;
     }
 
-    state.textContent='Bereit';
-    state.className='runner-state live';
+    if(state.textContent!=='Fehler'){
+      state.textContent='Bereit';
+      state.className='runner-state live';
+    }
   }
 
   document.getElementById('aiSend').addEventListener('click',sendAiMessage);
   document.getElementById('aiInput').addEventListener('keydown',e=>{
-    if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){
+    if(e.key==='Enter' && !e.shiftKey){
       e.preventDefault();
       sendAiMessage();
     }
@@ -1830,6 +1860,16 @@ class Program
     aiInput.focus();
   }));
 
+  document.getElementById('aiNewChat').addEventListener('click',()=>{
+    aiHistory=[];
+    localStorage.removeItem(AI_HISTORY_KEY);
+    renderAiHistory();
+    document.getElementById('aiInput').value='';
+    document.getElementById('aiInput').focus();
+    document.getElementById('aiState').textContent='Bereit';
+    document.getElementById('aiState').className='runner-state';
+  });
+
   const aiInputEl=document.getElementById('aiInput');
   aiInputEl.removeAttribute('disabled');
   aiInputEl.removeAttribute('readonly');
@@ -1841,6 +1881,7 @@ class Program
     aiInputEl.style.borderColor='';
   });
 
+  renderAiHistory();
   renderAiContent();
 
   let timerSeconds=25*60,timerId=null;
