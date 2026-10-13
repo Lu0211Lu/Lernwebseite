@@ -164,7 +164,11 @@
     .code-suggestion.show{display:flex;align-items:center;gap:12px}
     .code-suggestion .completion{color:#fff;font-weight:700}
     .code-suggestion .tab-key{color:#94a3b8;font-size:11px;border:1px solid #475569;border-radius:6px;padding:2px 6px;background:#0f172a}
-    .console{background:#101827;color:#cbd5e1;border-radius:18px;padding:18px;min-height:170px;font-family:monospace;font-size:13px;white-space:pre-wrap}
+    .console{background:#101827;color:#cbd5e1;border-radius:18px;padding:18px;min-height:170px;font-family:monospace;font-size:13px;white-space:pre-wrap;overflow:auto}
+    .stdin-box{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none;background:#fff;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px}
+    .runner-state{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;padding:5px 8px;border-radius:999px;background:#eef2ff;color:#4f46e5}
+    .runner-state.live{background:#ecfdf5;color:#047857}
+    .runner-state.error{background:#fef2f2;color:#b91c1c}
     .games-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     .game-card{padding:22px;min-height:190px}
     .focus-wrap{max-width:760px;margin:40px auto;text-align:center}
@@ -309,7 +313,7 @@
         <div class="page-title"><div><h2>Code-Labor</h2><p>Dein persönlicher Arbeitsbereich für C# und Programmierübungen.</p></div><button class="btn" id="saveCode">Projekt speichern</button></div>
         <div class="code-shell">
           <div class="editor">
-            <div class="editor-head"><span>Program.cs</span><span>Educational Runner</span></div>
+            <div class="editor-head"><span>Program.cs</span><span id="compilerLabel">C# Remote Sandbox</span></div>
             <textarea class="code" id="codeEditor">using System;
 
 class Program
@@ -322,13 +326,20 @@ class Program
             <div class="code-suggestion" id="codeSuggestion"><span class="completion" id="codeSuggestionText"></span><span class="tab-key">Tab ↹</span></div>
           </div>
           <div class="card panel">
-            <h3 style="margin-top:0">Konsole</h3>
-            <div class="console" id="consoleOut">Bereit.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px">
+              <h3 style="margin:0">Konsole</h3>
+              <span class="runner-state" id="runnerState">Bereit</span>
+            </div>
+            <div class="field" style="margin-bottom:14px">
+              <label>Programmeingabe (stdin)</label>
+              <textarea class="stdin-box" id="stdinInput" placeholder="Falls dein Programm Console.ReadLine() verwendet, Eingaben hier zeilenweise eintragen."></textarea>
+            </div>
+            <div class="console" id="consoleOut">Bereit. Klicke auf „Ausführen“, um echten C#-Code zu kompilieren und auszuführen.</div>
             <div style="display:flex;gap:10px;margin-top:14px">
               <button class="btn primary" id="runCode">▶ Ausführen</button>
               <button class="btn" id="clearCode">Leeren</button>
             </div>
-            <p class="muted" style="font-size:12px;line-height:1.6;margin-top:18px">Hinweis: Der aktuelle Browser-Runner ist für Lernübungen gedacht und ersetzt keine vollständige .NET-Laufzeit.</p>
+            <p class="muted" style="font-size:12px;line-height:1.6;margin-top:18px">Der Code wird für die Kompilierung in einer externen Sandbox ausgeführt. Keine Passwörter, Tokens oder vertraulichen Daten in den Code schreiben.</p>
           </div>
         </div>
       </section>
@@ -1128,10 +1139,87 @@ class Program
   editor.value=localStorage.getItem(CODE_KEY)||editor.value;
   document.getElementById('saveCode').addEventListener('click',()=>{localStorage.setItem(CODE_KEY,editor.value);document.getElementById('consoleOut').textContent='Projekt lokal gespeichert.'});
   document.getElementById('clearCode').addEventListener('click',()=>{editor.value='';activeCompletion=null;suggestionBox.classList.remove('show');document.getElementById('consoleOut').textContent='Editor geleert.'});
-  document.getElementById('runCode').addEventListener('click',()=>{
-    const src=editor.value;
-    const matches=[...src.matchAll(/Console\.WriteLine\((["'])(.*?)\1\)\s*;/g)];
-    document.getElementById('consoleOut').textContent=matches.length?matches.map(m=>m[2]).join('\n'):'Runner: Keine unterstützte Console.WriteLine-Ausgabe gefunden.';
+  let cachedCSharpCompiler=null;
+
+  async function getCSharpCompiler(){
+    if(cachedCSharpCompiler) return cachedCSharpCompiler;
+    const res=await fetch('https://wandbox.org/api/list.json');
+    if(!res.ok) throw new Error('Compiler-Liste konnte nicht geladen werden.');
+    const compilers=await res.json();
+    const csharp=compilers.filter(c=>String(c.language||'').toLowerCase()==='c#');
+    if(!csharp.length) throw new Error('Aktuell wurde kein C#-Compiler gefunden.');
+    cachedCSharpCompiler=
+      csharp.find(c=>/dotnet/i.test(c.name||'')) ||
+      csharp.find(c=>/mono-head/i.test(c.name||'')) ||
+      csharp.find(c=>/mono/i.test(c.name||'')) ||
+      csharp[0];
+    return cachedCSharpCompiler;
+  }
+
+  document.getElementById('runCode').addEventListener('click',async()=>{
+    const runBtn=document.getElementById('runCode');
+    const out=document.getElementById('consoleOut');
+    const state=document.getElementById('runnerState');
+    const src=editor.value.trim();
+    if(!src){
+      out.textContent='Kein Code vorhanden.';
+      return;
+    }
+
+    runBtn.disabled=true;
+    runBtn.textContent='⏳ Läuft…';
+    state.textContent='Kompiliert…';
+    state.className='runner-state';
+    out.textContent='C# wird kompiliert und ausgeführt…';
+
+    try{
+      const compiler=await getCSharpCompiler();
+      document.getElementById('compilerLabel').textContent='C# · '+(compiler['display-name']||compiler.name);
+
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),15000);
+      let res;
+      try{
+        res=await fetch('https://wandbox.org/api/compile.json',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            compiler:compiler.name,
+            code:editor.value,
+            stdin:document.getElementById('stdinInput').value,
+            options:''
+          }),
+          signal:controller.signal
+        });
+      } finally {
+        clearTimeout(timeout);
+      }
+
+      if(!res.ok) throw new Error('Ausführungsdienst antwortet mit HTTP '+res.status+'.');
+      const result=await res.json();
+
+      const parts=[];
+      if(result.compiler_message) parts.push('KOMPILIERUNG\n'+result.compiler_message.trim());
+      if(result.program_message) parts.push('AUSGABE\n'+result.program_message.trim());
+      if(result.program_error) parts.push('LAUFZEITFEHLER\n'+result.program_error.trim());
+      if(result.compiler_error) parts.push('COMPILERFEHLER\n'+result.compiler_error.trim());
+      if(!parts.length) parts.push('(Programm beendet ohne Ausgabe)');
+
+      out.textContent=parts.join('\n\n');
+      const failed=Boolean(result.compiler_error || result.program_error || (result.status && String(result.status)!=='0'));
+      state.textContent=failed?'Fehler':'Erfolgreich';
+      state.className='runner-state '+(failed?'error':'live');
+    }catch(err){
+      const msg=err && err.name==='AbortError'
+        ? 'Zeitüberschreitung: Das Programm wurde nach 15 Sekunden abgebrochen.'
+        : 'Ausführung nicht möglich: '+(err?.message||String(err));
+      out.textContent=msg;
+      state.textContent='Nicht verfügbar';
+      state.className='runner-state error';
+    }finally{
+      runBtn.disabled=false;
+      runBtn.textContent='▶ Ausführen';
+    }
   });
 
   let timerSeconds=25*60,timerId=null;
