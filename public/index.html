@@ -464,7 +464,7 @@ class Program
               <div class="ai-message assistant">Hallo! Du kannst mich z. B. fragen: „Erkläre mir for-Schleifen“, „Hilf mir bei diesem C# Fehler“ oder „Erstelle aus diesem Stoff ein Fach mit Karteikarten und Test“.</div>
             </div>
             <div class="ai-compose">
-              <textarea id="aiInput" placeholder="Frag BUILT AI alles – z. B. Schule, C#, Allgemeinwissen oder lass Lernstoff verarbeiten …" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMessage();}"></textarea>
+              <textarea id="aiInput" placeholder="Frag BUILT AI alles – z. B. Schule, C#, Allgemeinwissen oder lass Lernstoff verarbeiten …"></textarea>
               <div class="ai-compose-bottom">
                 <div class="ai-chips">
                   <button class="ai-chip" data-ai-prompt="Erkläre mir diesen C# Code und zeige mir die richtige Lösung: ">C# Hilfe</button>
@@ -1799,18 +1799,37 @@ class Program
     aiHistory.forEach(item=>addAiMessage(item.content,item.role,false));
   }
 
+  let aiRequestInFlight=false;
+
+  function addTransientAiMessage(text,role='assistant'){
+    const wrap=document.getElementById('aiMessages');
+    const div=document.createElement('div');
+    div.className='ai-message '+role;
+    div.textContent=text;
+    wrap.appendChild(div);
+    wrap.scrollTop=wrap.scrollHeight;
+    return div;
+  }
+
   async function sendAiMessage(){
+    if(aiRequestInFlight) return;
+
     const input=document.getElementById('aiInput');
     const button=document.getElementById('aiSend');
     const state=document.getElementById('aiState');
     const message=input.value.trim();
     if(!message) return;
 
+    aiRequestInFlight=true;
     addAiMessage(message,'user');
     input.value='';
     button.disabled=true;
     state.textContent='Denkt…';
     state.className='runner-state';
+
+    const thinking=addTransientAiMessage('BUILT AI denkt …','assistant');
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),35000);
 
     try{
       const response=await fetch('/api/assistant',{
@@ -1824,44 +1843,54 @@ class Program
             subjects:subjects.map(s=>({name:s.name,description:s.desc||''})),
             currentCode:(window.codeEditorCM && typeof window.codeEditorCM.getValue==='function') ? window.codeEditorCM.getValue() : ''
           }
-        })
+        }),
+        signal:controller.signal
       });
-      const data=await response.json();
-      if(!response.ok) throw new Error(data.error||'BUILT AI ist gerade nicht erreichbar.');
 
-      addAiMessage(data.answer||'Erledigt.','assistant');
+      const raw=await response.text();
+      let data;
+      try{ data=raw ? JSON.parse(raw) : {}; }
+      catch{ data={error:raw || 'Ungültige Serverantwort.'}; }
+
+      if(!response.ok){
+        throw new Error(data.error || ('BUILT AI Fehler '+response.status));
+      }
+
+      thinking.remove();
+      addAiMessage(data.answer || 'Erledigt.','assistant');
+
       const results=applyAiActions(data.actions);
-      if(results.length) addAiMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
+      if(results.length){
+        addAiMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
+      }
+
+      state.textContent='Bereit';
+      state.className='runner-state live';
     }catch(error){
-      addAiMessage(error?.message||String(error),'error',false);
+      thinking.remove();
+      const messageText=error?.name==='AbortError'
+        ? 'BUILT AI hat zu lange gebraucht. Bitte nochmals versuchen.'
+        : (error?.message || String(error));
+      addAiMessage(messageText,'error',false);
       state.textContent='Fehler';
       state.className='runner-state error';
     }finally{
+      clearTimeout(timeout);
+      aiRequestInFlight=false;
       button.disabled=false;
-    }
-
-    if(state.textContent!=='Fehler'){
-      state.textContent='Bereit';
-      state.className='runner-state live';
+      input.focus();
     }
   }
 
   document.getElementById('aiSend').addEventListener('click',sendAiMessage);
+
   document.getElementById('aiInput').addEventListener('keydown',e=>{
     if(e.key==='Enter' && !e.shiftKey){
       e.preventDefault();
-      e.stopPropagation();
       sendAiMessage();
     }
   });
 
-  document.addEventListener('keydown',e=>{
-    if(e.target && e.target.id==='aiInput' && e.key==='Enter' && !e.shiftKey){
-      e.preventDefault();
-      e.stopPropagation();
-      sendAiMessage();
-    }
-  },true);
   document.querySelectorAll('[data-ai-prompt]').forEach(btn=>btn.addEventListener('click',()=>{
     const aiInput=document.getElementById('aiInput');
     aiInput.value=btn.dataset.aiPrompt;
