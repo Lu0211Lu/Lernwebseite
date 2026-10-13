@@ -225,7 +225,8 @@
     .ai-compose{padding:14px;border-top:1px solid var(--line);background:#fff;position:relative;z-index:3}
     .ai-compose textarea{width:100%;min-height:110px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:12px;outline:none;background:#fff;color:var(--text);pointer-events:auto;user-select:text;position:relative;z-index:2}
     .ai-compose textarea:focus{border-color:#a5b4fc;box-shadow:0 0 0 4px #eef2ff}
-    .ai-compose-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px}
+    .ai-compose-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+    #aiSend{min-width:110px}
     .ai-chips{display:flex;gap:8px;flex-wrap:wrap}
     .ai-chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700;color:#475569}
     .ai-side .card{padding:18px;margin-bottom:14px}
@@ -463,7 +464,7 @@ class Program
               <div class="ai-message assistant">Hallo! Du kannst mich z. B. fragen: „Erkläre mir for-Schleifen“, „Hilf mir bei diesem C# Fehler“ oder „Erstelle aus diesem Stoff ein Fach mit Karteikarten und Test“.</div>
             </div>
             <div class="ai-compose">
-              <textarea id="aiInput" placeholder="Frag BUILT AI alles – z. B. Schule, C#, Allgemeinwissen oder lass Lernstoff verarbeiten …"></textarea>
+              <textarea id="aiInput" placeholder="Frag BUILT AI alles – z. B. Schule, C#, Allgemeinwissen oder lass Lernstoff verarbeiten …" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMessage();}"></textarea>
               <div class="ai-compose-bottom">
                 <div class="ai-chips">
                   <button class="ai-chip" data-ai-prompt="Erkläre mir diesen C# Code und zeige mir die richtige Lösung: ">C# Hilfe</button>
@@ -1849,9 +1850,18 @@ class Program
   document.getElementById('aiInput').addEventListener('keydown',e=>{
     if(e.key==='Enter' && !e.shiftKey){
       e.preventDefault();
+      e.stopPropagation();
       sendAiMessage();
     }
   });
+
+  document.addEventListener('keydown',e=>{
+    if(e.target && e.target.id==='aiInput' && e.key==='Enter' && !e.shiftKey){
+      e.preventDefault();
+      e.stopPropagation();
+      sendAiMessage();
+    }
+  },true);
   document.querySelectorAll('[data-ai-prompt]').forEach(btn=>btn.addEventListener('click',()=>{
     const aiInput=document.getElementById('aiInput');
     aiInput.value=btn.dataset.aiPrompt;
