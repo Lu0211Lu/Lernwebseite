@@ -2808,6 +2808,24 @@
 
     .focus-wrap .timer{color:#4f725f !important}
 
+
+    /* French vocabulary learning set */
+    .vocab-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+    .vocab-toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .vocab-count{font-size:12px;color:var(--muted);font-weight:800}
+    .vocab-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .vocab-card{min-height:155px;padding:17px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:.16s}
+    .vocab-card:hover{transform:translateY(-2px)}
+    .vocab-card .num{font-size:10px;color:var(--muted);font-weight:850}
+    .vocab-card .front{font-size:17px;font-weight:800;line-height:1.35;margin:16px 0 8px}
+    .vocab-card .back{font-size:13px;color:var(--muted);line-height:1.45}
+    .vocab-card .flip-hint{margin-top:14px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .vocab-card.revealed .front{color:var(--muted);font-size:12px}
+    .vocab-card.revealed .back{font-size:18px;color:var(--text);font-weight:800}
+    .vocab-empty{padding:30px;text-align:center}
+    @media(max-width:1100px){.vocab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:700px){.vocab-grid{grid-template-columns:1fr}}
+
   </style>
 
 <style>
@@ -2962,7 +2980,7 @@
         </div>
         <div id="flashcardsWorkspace" class="subject-workspace">
           <div class="page-title"><div><h2 id="flashcardsTitle">Karteikarten</h2><p>Hier erscheinen ausschliesslich die Karteikarten dieses Fachs.</p></div><button class="btn primary">+ Lernset erstellen</button></div>
-          <div class="empty card"><div class="emoji">◫</div><h4>Noch keine Karteikarten in diesem Fach</h4><p>Neue Karteikarten werden diesem ausgewählten Fach zugeordnet und nicht mit anderen Fächern vermischt.</p><button class="btn primary">Erstes Lernset erstellen</button></div>
+          <div id="flashcardsContent"></div>
         </div>
       </section>
 
@@ -3074,8 +3092,27 @@ class Program
   const STORAGE_KEY = 'lernwelt_subjects_v2';
   const CODE_KEY = 'lernwelt_code_v1';
   const ACTIVE_SUBJECT_KEY = 'lernwelt_active_subject_v1';
+  const VOCAB_KEY = 'built_vocab_sets_v1';
+  const FR_SUBJECT_ID = 'francais';
+  const FR_VOCAB_SEED_V1 = [{"id":"fr-125","front":"un ordinateur portable/portatif","back":"ein Laptop"},{"id":"fr-126","front":"léger, légère (adj.)","back":"leicht"},{"id":"fr-127","front":"attentif, attentive (adj.)","back":"aufmerksam"},{"id":"fr-128","front":"proche m,f (adj.)","back":"nahe"},{"id":"fr-129","front":"nager","back":"schwimmen"},{"id":"fr-130","front":"la qualité","back":"die Qualität"},{"id":"fr-131","front":"le travail - les travaux","back":"die Arbeit - die Arbeiten"},{"id":"fr-132","front":"travailler","back":"arbeiten"},{"id":"fr-133","front":"travailler à plein temps","back":"Vollzeit arbeiten"},{"id":"fr-134","front":"travailler à temps partiel","back":"Teilzeit arbeiten"},{"id":"fr-135","front":"travailler à 80 % (pour cent)","back":"80% arbeiten"},{"id":"fr-136","front":"le chômage","back":"die Arbeitslosigkeit"},{"id":"fr-137","front":"tomber au chômage","back":"arbeitslos werden"},{"id":"fr-138","front":"être chômeur/chômeuse","back":"arbeitslos sein"},{"id":"fr-139","front":"chercher un travail","back":"eine Arbeit suchen"},{"id":"fr-140","front":"chercher un poste de travail","back":"eine Arbeitsstelle suchen"},{"id":"fr-141","front":"un emploi","back":"eine Anstellung"},{"id":"fr-142","front":"employer qn","back":"jem. einstellen"},{"id":"fr-143","front":"un employeur","back":"ein Arbeitgeber"},{"id":"fr-144","front":"embaucher qn","back":"jem. einstellen/anstellen"},{"id":"fr-145","front":"un entretien d'embauche","back":"ein Vorstellungsgespräch"},{"id":"fr-146","front":"licencier qn","back":"jem. entlassen"},{"id":"fr-147","front":"la grève","back":"der Streik"},{"id":"fr-148","front":"faire grève","back":"streiken"},{"id":"fr-149","front":"faire un stage","back":"ein Praktikum machen"},{"id":"fr-150","front":"un travail manuel","back":"eine Handarbeit"},{"id":"fr-151","front":"travailler dans un bureau","back":"im Büro arbeiten"},{"id":"fr-152","front":"travailler sur le chantier","back":"auf der Baustelle arbeiten"},{"id":"fr-153","front":"le salaire","back":"der Lohn"},{"id":"fr-154","front":"gagner","back":"verdienen, gewinnen"},{"id":"fr-155","front":"être en congé","back":"im Urlaub sein"},{"id":"fr-156","front":"être en vacances","back":"in den Ferien sein"},{"id":"fr-157","front":"un ouvrier, une ouvrière","back":"ein Arbeiter - eine Arbeiterin"},{"id":"fr-158","front":"un employé, une employée","back":"ein Angestellter - eine Angestellte"},{"id":"fr-159","front":"la société","back":"die Gesellschaft"},{"id":"fr-160","front":"une entreprise","back":"ein Unternehmen"},{"id":"fr-161","front":"une usine","back":"eine Fabrik"},{"id":"fr-162","front":"un magasin","back":"ein Laden"},{"id":"fr-163","front":"les affaires (f.pl.)","back":"die Geschäfte"},{"id":"fr-164","front":"un outil","back":"ein Werkzeug"},{"id":"fr-165","front":"réparer","back":"reparieren, flicken"},{"id":"fr-166","front":"la profession","back":"der Beruf"},{"id":"fr-167","front":"le métier","back":"der Beruf, das Handwerk"},{"id":"fr-168","front":"le boulot","back":"der Job, die Arbeit"},{"id":"fr-169","front":"être électricien","back":"Elektriker sein"},{"id":"fr-170","front":"le cuisinier, la cuisinière","back":"der Koch, die Köchin"},{"id":"fr-171","front":"un enseignant, une enseignante","back":"ein Lehrer, eine Lehrerin"},{"id":"fr-172","front":"le facteur","back":"der Briefträger"},{"id":"fr-173","front":"le maçon","back":"der Maurer"},{"id":"fr-174","front":"le mécanicien","back":"der Mechaniker"},{"id":"fr-175","front":"le poly-mécanicien","back":"der Polymechaniker"},{"id":"fr-176","front":"le menuisier / l'ébéniste","back":"der Schreiner"},{"id":"fr-177","front":"le plombier","back":"der Spengler/Installateur"},{"id":"fr-178","front":"le pompier","back":"der Feuerwehrmann"},{"id":"fr-179","front":"le/la secrétaire","back":"der Sekretär/die Sekretärin"},{"id":"fr-180","front":"l'homme (m.) au foyer","back":"der Hausmann"},{"id":"fr-181","front":"la femme au foyer","back":"die Hausfrau"},{"id":"fr-182","front":"être en retard","back":"Verspätung haben"}];
+
   let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   let activeSubjectId = localStorage.getItem(ACTIVE_SUBJECT_KEY) || null;
+  let vocabSets = JSON.parse(localStorage.getItem(VOCAB_KEY) || '{}');
+
+  if(!subjects.some(s=>s.id===FR_SUBJECT_ID)){
+    subjects.unshift({
+      id:FR_SUBJECT_ID,
+      name:'Französisch',
+      desc:'Vokabeltraining · Arbeit, Berufe und Alltag',
+      icon:'🇫🇷'
+    });
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(subjects));
+  }
+  if(!Array.isArray(vocabSets[FR_SUBJECT_ID]) || vocabSets[FR_SUBJECT_ID].length===0){
+    vocabSets[FR_SUBJECT_ID]=FR_VOCAB_SEED_V1;
+    localStorage.setItem(VOCAB_KEY,JSON.stringify(vocabSets));
+  }
 
   const pages = document.querySelectorAll('.page');
   const navButtons = document.querySelectorAll('.nav button[data-page]');
@@ -3111,8 +3148,8 @@ class Program
     return `<article class="card subject-card${selected}" onclick="selectSubject('${s.id}')">
       <div class="top"><div class="subject-badge">${escapeHtml(s.icon||'📘')}</div><button class="icon-btn" onclick="event.stopPropagation();deleteSubject('${s.id}')" title="Löschen">⋯</button></div>
       <h4>${escapeHtml(s.name)}</h4><p>${escapeHtml(s.desc||'Noch keine Beschreibung hinterlegt.')}</p>
-      <div class="progress"><span style="width:0%"></span></div>
-      <div class="subject-meta"><span>Fach öffnen</span><span>→</span></div>
+      <div class="progress"><span style="width:${s.id===FR_SUBJECT_ID?100:0}%"></span></div>
+      <div class="subject-meta"><span>${s.id===FR_SUBJECT_ID?((vocabSets[FR_SUBJECT_ID]||[]).length+" Vokabeln"):"Fach öffnen"}</span><span>→</span></div>
     </article>`;
   }
   function getActiveSubject(){
@@ -3137,6 +3174,40 @@ class Program
       document.getElementById('flashcardsTitle').textContent='Karteikarten · '+subject.name;
       document.getElementById('testsTitle').textContent='Tests · '+subject.name;
     }
+    renderFlashcards();
+  }
+
+  function renderFlashcards(){
+    const host=document.getElementById('flashcardsContent');
+    if(!host) return;
+    const subject=getActiveSubject();
+    if(!subject){host.innerHTML='';return;}
+    const cards=Array.isArray(vocabSets[subject.id])?vocabSets[subject.id]:[];
+    if(cards.length===0){
+      host.innerHTML='<div class="empty card vocab-empty"><div class="emoji">◫</div><h4>Noch keine Karteikarten</h4><p>Für dieses Fach sind noch keine Vokabeln oder Lernkarten hinterlegt.</p></div>';
+      return;
+    }
+    const startNumber=subject.id===FR_SUBJECT_ID?125:1;
+    host.innerHTML=`
+      <div class="vocab-toolbar">
+        <div class="vocab-toolbar-left">
+          <span class="tag">Vokabelset</span>
+          <span class="vocab-count">${cards.length} Karten</span>
+        </div>
+        <span class="muted" style="font-size:11px">Karte anklicken, um die Übersetzung hervorzuheben.</span>
+      </div>
+      <div class="vocab-grid">
+        ${cards.map((card,i)=>`
+          <article class="card vocab-card" onclick="this.classList.toggle('revealed')">
+            <div>
+              <div class="num">${startNumber+i}</div>
+              <div class="front">${escapeHtml(card.front)}</div>
+              <div class="back">${escapeHtml(card.back)}</div>
+            </div>
+            <div class="flip-hint">Übersetzung anzeigen</div>
+          </article>
+        `).join('')}
+      </div>`;
   }
   window.selectSubject=function(id){
     activeSubjectId=id;
