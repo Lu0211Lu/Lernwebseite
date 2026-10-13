@@ -2,10 +2,16 @@ module.exports = async function handler(req, res) {
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (req.method === 'GET') {
+    const openAIEnvNames = Object.keys(process.env).filter(k => k.toUpperCase().includes('OPENAI'));
     return res.status(200).json({
       status: 'ok',
       service: 'BUILT AI',
       keyConfigured: Boolean(apiKey),
+      keyLooksValid: Boolean(apiKey && /^sk-/.test(apiKey)),
+      keyLength: apiKey ? apiKey.length : 0,
+      openAIEnvNames,
+      vercelEnv: process.env.VERCEL_ENV || null,
+      deployment: process.env.VERCEL_URL || null,
       model: 'gpt-6.1-sol'
     });
   }
