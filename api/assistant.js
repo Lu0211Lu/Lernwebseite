@@ -3,6 +3,67 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'GET') {
     const openAIEnvNames = Object.keys(process.env).filter(k => k.toUpperCase().includes('OPENAI'));
+
+    if (req.query && req.query.test === '1') {
+      if (!apiKey) {
+        return res.status(503).json({ status: 'error', step: 'env', error: 'OPENAI_API_KEY fehlt.' });
+      }
+
+      try {
+        const testResponse = await fetch('https://api.openai.com/v1/responses', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'gpt-6.1-sol',
+            input: 'Antworte nur mit: BUILT AI funktioniert.',
+            max_output_tokens: 40
+          })
+        });
+
+        const testData = await testResponse.json();
+
+        if (!testResponse.ok) {
+          return res.status(testResponse.status).json({
+            status: 'error',
+            step: 'openai',
+            httpStatus: testResponse.status,
+            error: testData?.error?.message || 'OpenAI API Fehler',
+            code: testData?.error?.code || null,
+            type: testData?.error?.type || null
+          });
+        }
+
+        let outputText = '';
+        if (typeof testData.output_text === 'string') {
+          outputText = testData.output_text;
+        } else if (Array.isArray(testData.output)) {
+          for (const item of testData.output) {
+            if (item?.type === 'message' && Array.isArray(item.content)) {
+              for (const part of item.content) {
+                if (part?.type === 'output_text' && typeof part.text === 'string') outputText += part.text;
+              }
+            }
+          }
+        }
+
+        return res.status(200).json({
+          status: 'ok',
+          step: 'openai',
+          model: 'gpt-6.1-sol',
+          response: outputText || 'OpenAI hat erfolgreich geantwortet.'
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: 'error',
+          step: 'request',
+          error: error?.message || String(error)
+        });
+      }
+    }
+
     return res.status(200).json({
       status: 'ok',
       service: 'BUILT AI',
