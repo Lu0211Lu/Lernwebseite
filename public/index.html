@@ -3698,6 +3698,40 @@
       .nature-strip{grid-template-columns:1fr !important}
     }
 
+
+    /* Alpine Minimal – smaller hero image */
+    .clean-hero{
+      grid-template-columns:minmax(0,1.05fr) minmax(360px,.72fr) !important;
+      align-items:center !important;
+    }
+    .clean-hero-copy{
+      min-height:390px !important;
+    }
+    .clean-hero-media{
+      min-height:390px !important;
+      max-height:390px !important;
+    }
+    .clean-hero-media img{
+      min-height:390px !important;
+      height:390px !important;
+    }
+
+    @media(max-width:1180px){
+      .clean-hero-media,
+      .clean-hero-media img{
+        min-height:320px !important;
+        height:320px !important;
+      }
+    }
+
+    @media(max-width:760px){
+      .clean-hero-media,
+      .clean-hero-media img{
+        min-height:230px !important;
+        height:230px !important;
+      }
+    }
+
   </style>
 </head>
 <body>
