@@ -2808,6 +2808,187 @@
 
     .focus-wrap .timer{color:#4f725f !important}
 
+
+    /* ===== BUILT – Clean Nature foreground layout ===== */
+    html,body,.main,.content,.page{background:#f6f4ee !important}
+    .main{
+      background:
+        radial-gradient(circle at 90% 0%,rgba(78,105,87,.055),transparent 25%),
+        #f6f4ee !important;
+    }
+
+    .clean-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(360px,.78fr);
+      gap:18px;
+      padding:18px;
+      background:#fff;
+      border:1px solid #e3ded4;
+      border-radius:24px;
+      box-shadow:0 18px 44px rgba(48,58,51,.06);
+      margin-bottom:16px;
+    }
+    .clean-hero-copy{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-height:340px;
+      padding:26px 24px;
+    }
+    .clean-hero .home-kicker{
+      color:#5a7862 !important;
+      margin-bottom:18px;
+      font-size:9px;
+      letter-spacing:.2em;
+    }
+    .clean-hero h2{
+      margin:0 0 14px;
+      max-width:700px;
+      color:#24312b;
+      font-size:46px;
+      line-height:1.02;
+      letter-spacing:-.055em;
+    }
+    .clean-hero p{
+      margin:0;
+      max-width:620px;
+      color:#737a75;
+      line-height:1.7;
+      font-size:13px;
+    }
+    .clean-hero .hero-actions{margin-top:24px}
+
+    .clean-hero-media{
+      position:relative;
+      margin:0;
+      min-height:340px;
+      overflow:hidden;
+      border-radius:18px;
+      background:#dfe7df;
+    }
+    .clean-hero-media img{
+      width:100%;
+      height:100%;
+      min-height:340px;
+      display:block;
+      object-fit:cover;
+    }
+    .clean-hero-media figcaption{
+      position:absolute;
+      left:16px;
+      bottom:16px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.88);
+      color:#2c4033;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.04em;
+      backdrop-filter:blur(10px);
+    }
+
+    .nature-strip{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .nature-card{
+      display:grid;
+      grid-template-columns:118px minmax(0,1fr);
+      gap:0;
+      min-height:138px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid #e3ded4;
+      border-radius:17px;
+      box-shadow:0 10px 26px rgba(48,58,51,.045);
+    }
+    .nature-card img{
+      width:100%;
+      height:100%;
+      min-height:138px;
+      object-fit:cover;
+      display:block;
+    }
+    .nature-card-copy{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:16px;
+    }
+    .nature-card-copy span{
+      color:#6d8b76;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:8px;
+      font-weight:850;
+      margin-bottom:6px;
+    }
+    .nature-card-copy strong{
+      color:#26332c;
+      font-size:13px;
+      margin-bottom:5px;
+    }
+    .nature-card-copy p{
+      margin:0;
+      color:#818883;
+      font-size:10px;
+      line-height:1.5;
+    }
+
+    .home-subject-panel,
+    .home-side-card,
+    .starter-carousel,
+    .home-quick .tool-card,
+    .page-title{
+      background:#fff !important;
+      background-image:none !important;
+    }
+
+    .home-subject-panel:before,
+    .home-side-card:before,
+    .starter-carousel:before{
+      display:none !important;
+    }
+
+    .page-title{
+      padding:20px 22px !important;
+      border-radius:18px !important;
+    }
+
+    .home-content-grid{
+      grid-template-columns:minmax(0,1.65fr) minmax(260px,.45fr) !important;
+      gap:14px !important;
+    }
+
+    .home-side-stack{display:block !important}
+    .home-side-card{height:100%}
+
+    .home-stat,
+    .subject-card,
+    .starter-card,
+    .home-quick .tool-card{
+      box-shadow:none !important;
+    }
+
+    @media(max-width:1100px){
+      .clean-hero{grid-template-columns:1fr}
+      .clean-hero-copy{min-height:auto}
+      .clean-hero-media,.clean-hero-media img{min-height:300px}
+      .nature-strip{grid-template-columns:1fr}
+      .nature-card{grid-template-columns:160px 1fr}
+      .home-content-grid{grid-template-columns:1fr !important}
+    }
+
+    @media(max-width:620px){
+      .clean-hero{padding:10px;border-radius:18px}
+      .clean-hero-copy{padding:20px 14px}
+      .clean-hero h2{font-size:36px}
+      .clean-hero-media,.clean-hero-media img{min-height:235px}
+      .nature-card{grid-template-columns:110px 1fr}
+    }
+
   </style>
 </head>
 <body>
@@ -2850,33 +3031,36 @@
 
     <div class="content">
       <section class="page active" id="page-home">
-        <div class="home-hero">
-          <div class="home-welcome">
-            <div class="home-welcome-content">
-              <div class="home-kicker"><span>●</span> BUILT · Dein Lernzentrum</div>
-              <h2>Lernen, ohne den Überblick zu verlieren.</h2>
-              <p>Fächer, Karteikarten, Tests, C# und Fokuszeit sind klar getrennt und trotzdem an einem Ort. Wähle ein Fach oder starte direkt mit einem Werkzeug.</p>
-              <div class="hero-actions">
-                <button class="btn primary" data-go="subjects">Fächer öffnen</button>
-                <button class="btn secondary" data-go="code">Code-Labor starten</button>
-              </div>
+        <section class="clean-hero">
+          <div class="clean-hero-copy">
+            <div class="home-kicker"><span>●</span> BUILT · Dein Lernzentrum</div>
+            <h2>Lernen mit Ruhe, Struktur und Fokus.</h2>
+            <p>Fächer, Karteikarten, Tests, C# und Fokuszeit an einem Ort. Klar aufgebaut, damit du schnell findest, was du gerade brauchst.</p>
+            <div class="hero-actions">
+              <button class="btn primary" data-go="subjects">Fächer öffnen</button>
+              <button class="btn" data-go="code">Code-Labor starten</button>
             </div>
           </div>
+          <figure class="clean-hero-media">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=88" alt="Berglandschaft in der Natur">
+            <figcaption>Raum zum Denken.</figcaption>
+          </figure>
+        </section>
 
-          <div class="home-focus card">
-            <div>
-              <div class="home-focus-top">
-                <div>
-                  <div class="home-focus-label">Heute</div>
-                  <h3>Fokusmodus</h3>
-                </div>
-                <div class="focus-ring-mini"><span>25m</span></div>
-              </div>
-              <p class="home-focus-copy">Eine Aufgabe, keine Ablenkung. Starte einen konzentrierten Lernblock und gönn dir danach eine kurze Pause.</p>
-            </div>
-            <button class="btn primary" data-go="focus">Fokus starten</button>
-          </div>
-        </div>
+        <section class="nature-strip" aria-label="Natur und Lernen">
+          <article class="nature-card">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=84" alt="Ruhiger Wald">
+            <div class="nature-card-copy"><span>Fokus</span><strong>Ruhe finden</strong><p>Konzentriert an einer Sache arbeiten.</p></div>
+          </article>
+          <article class="nature-card">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=84" alt="Weite Naturlandschaft">
+            <div class="nature-card-copy"><span>Fortschritt</span><strong>Schritt für Schritt</strong><p>Kleine Einheiten, sichtbarer Fortschritt.</p></div>
+          </article>
+          <article class="nature-card">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=84" alt="See in den Bergen">
+            <div class="nature-card-copy"><span>Pause</span><strong>Kopf frei bekommen</strong><p>Kurz abschalten und danach weiterlernen.</p></div>
+          </article>
+        </section>
 
         <div class="home-metrics">
           <div class="home-stat"><div class="home-stat-icon">▦</div><div><div class="home-stat-value" id="metricSubjects">0</div><div class="home-stat-label">aktive Fächer</div></div></div>
@@ -2897,24 +3081,21 @@
           <aside class="home-side-stack">
             <div class="home-side-card">
               <h4>Schnell starten</h4>
-              <p>Direkt zum Werkzeug, ohne durch mehrere Seiten zu gehen.</p>
+              <p>Direkt zum Werkzeug, ohne Umwege.</p>
               <div class="home-shortcut-list">
                 <div class="home-shortcut" data-go="flashcards"><div class="home-shortcut-left"><div class="home-shortcut-icon">◫</div><strong>Karteikarten</strong></div><span>→</span></div>
                 <div class="home-shortcut" data-go="tests"><div class="home-shortcut-left"><div class="home-shortcut-icon">✓</div><strong>Tests</strong></div><span>→</span></div>
                 <div class="home-shortcut" data-go="code"><div class="home-shortcut-left"><div class="home-shortcut-icon">&lt;/&gt;</div><strong>Code-Labor</strong></div><span>→</span></div>
+                <div class="home-shortcut" data-go="focus"><div class="home-shortcut-left"><div class="home-shortcut-icon">◷</div><strong>Fokusmodus</strong></div><span>→</span></div>
                 <a class="home-shortcut poly-link" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener"><div class="home-shortcut-left"><div class="home-shortcut-icon">◇</div><strong>PolyTrack Pause</strong></div><span>↗</span></a>
               </div>
-            </div>
-            <div class="home-side-card">
-              <h4>So ist BUILT aufgebaut</h4>
-              <p>Fach auswählen → nur dessen Karteikarten und Tests sehen. C# Übungen, Code-Labor, Lernspiele und Fokus bleiben immer unabhängig verfügbar.</p>
             </div>
           </aside>
         </div>
 
         <section class="home-section">
           <div class="home-section-head">
-            <div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben. Aufgabe ansehen, selbst programmieren, bei Bedarf Video öffnen.</p></div>
+            <div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben. Aufgabe ansehen, selbst programmieren und üben.</p></div>
             <div style="display:flex;align-items:center;gap:10px">
               <span class="starter-counter" id="starterCounter">1–4 von 10</span>
               <div class="starter-nav">
@@ -2927,7 +3108,7 @@
         </section>
 
         <section class="home-section">
-          <div class="home-section-head"><div><h3>Werkzeuge</h3><p>Alles Wichtige, ohne doppelte Inhalte auf der Startseite.</p></div></div>
+          <div class="home-section-head"><div><h3>Werkzeuge</h3><p>Die wichtigsten Bereiche von BUILT.</p></div></div>
           <div class="home-quick">
             <div class="card tool-card" data-go="flashcards"><div class="tool-icon">◫</div><h4>Karteikarten</h4><p>Wissen gezielt wiederholen.</p></div>
             <div class="card tool-card" data-go="tests"><div class="tool-icon">✓</div><h4>Tests</h4><p>Wissen prüfen und üben.</p></div>
