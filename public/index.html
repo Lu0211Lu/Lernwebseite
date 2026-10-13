@@ -1933,5 +1933,107 @@ class Program
   });
   document.getElementById('timerReset').addEventListener('click',()=>{if(timerId)clearInterval(timerId);timerId=null;timerSeconds=25*60;drawTimer();document.getElementById('timerStart').textContent='Start';document.getElementById('timerSub').textContent='Bereit für deine nächste Fokusphase.'});
 </script>
+
+<script>
+(function(){
+  function bootBuiltAI(){
+    const input=document.getElementById('aiInput');
+    const send=document.getElementById('aiSend');
+    const messages=document.getElementById('aiMessages');
+    const state=document.getElementById('aiState');
+    if(!input||!send||!messages||!state) return;
+
+    let sending=false;
+
+    function addMessage(text,role){
+      const div=document.createElement('div');
+      div.className='ai-message '+role;
+      div.textContent=text;
+      messages.appendChild(div);
+      messages.scrollTop=messages.scrollHeight;
+      return div;
+    }
+
+    async function submitBuiltAI(){
+      if(sending) return;
+      const text=input.value.trim();
+      if(!text) return;
+
+      sending=true;
+      input.value='';
+      send.disabled=true;
+      state.textContent='Denkt…';
+      state.className='runner-state';
+      addMessage(text,'user');
+      const thinking=addMessage('BUILT AI denkt …','assistant');
+
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),35000);
+
+      try{
+        const response=await fetch('/api/assistant',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({message:text,history:[],context:{}}),
+          signal:controller.signal
+        });
+
+        const raw=await response.text();
+        let data={};
+        try{ data=raw?JSON.parse(raw):{}; }catch(_){ data={error:raw||'Ungültige Serverantwort.'}; }
+
+        if(!response.ok) throw new Error(data.error||('Fehler '+response.status));
+
+        thinking.remove();
+        addMessage(data.answer||'Erledigt.','assistant');
+
+        if(Array.isArray(data.actions) && data.actions.length && typeof window.applyAiActions==='function'){
+          const results=window.applyAiActions(data.actions);
+          if(Array.isArray(results)&&results.length) addMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
+        }
+
+        state.textContent='Bereit';
+        state.className='runner-state live';
+      }catch(err){
+        thinking.remove();
+        const msg=err && err.name==='AbortError'
+          ? 'BUILT AI hat zu lange gebraucht. Bitte nochmals versuchen.'
+          : (err?.message||String(err));
+        addMessage(msg,'error');
+        state.textContent='Fehler';
+        state.className='runner-state error';
+      }finally{
+        clearTimeout(timer);
+        sending=false;
+        send.disabled=false;
+        input.focus();
+      }
+    }
+
+    // Capture phase: this becomes the single authoritative send path.
+    input.addEventListener('keydown',function(e){
+      if(e.key==='Enter' && !e.shiftKey){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        submitBuiltAI();
+      }
+    },true);
+
+    send.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      submitBuiltAI();
+    },true);
+
+    input.disabled=false;
+    input.readOnly=false;
+    window.submitBuiltAI=submitBuiltAI;
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bootBuiltAI);
+  else bootBuiltAI();
+})();
+</script>
+
 </body>
 </html>
