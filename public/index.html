@@ -2808,6 +2808,480 @@
 
     .focus-wrap .timer{color:#4f725f !important}
 
+
+    /* ===== BUILT – Paper Studio ===== */
+    :root{
+      --bg:#f3efe4;
+      --panel:#fffdf6;
+      --panel-2:#f8f3e8;
+      --text:#171717;
+      --muted:#66635c;
+      --line:#252525;
+      --accent:#1f4eff;
+      --accent-2:#ff8a3d;
+      --accent-soft:#eaf0ff;
+      --success:#1b8f5d;
+      --warning:#ffcc52;
+      --shadow:4px 4px 0 #171717;
+      --radius:0px;
+    }
+
+    html,body,.main,.content,.page{background:#f3efe4 !important;color:#171717 !important}
+    body{
+      background-color:#f3efe4 !important;
+      background-image:
+        linear-gradient(rgba(30,30,30,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(30,30,30,.035) 1px,transparent 1px) !important;
+      background-size:28px 28px !important;
+    }
+
+    .app{grid-template-columns:84px minmax(0,1fr) !important}
+
+    .sidebar{
+      width:84px !important;
+      padding:16px 10px !important;
+      background:#1f4eff !important;
+      border-right:3px solid #171717 !important;
+      color:#fff !important;
+      align-items:center !important;
+    }
+
+    .brand{
+      padding:0 0 22px !important;
+      display:grid !important;
+      place-items:center !important;
+    }
+
+    .brand-mark{
+      width:46px !important;height:46px !important;
+      border-radius:0 !important;
+      background:#ffcc52 !important;
+      color:#171717 !important;
+      border:2px solid #171717 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+    }
+
+    .brand>div:last-child{display:none !important}
+
+    .nav{
+      gap:8px !important;
+      width:100% !important;
+    }
+
+    .nav button{
+      width:100% !important;
+      height:48px !important;
+      padding:0 !important;
+      display:grid !important;
+      place-items:center !important;
+      border:2px solid transparent !important;
+      border-radius:0 !important;
+      color:#fff !important;
+      background:transparent !important;
+      font-size:0 !important;
+    }
+
+    .nav .ico{
+      width:auto !important;
+      font-size:18px !important;
+    }
+
+    .nav button:hover{
+      background:rgba(255,255,255,.12) !important;
+      border-color:#171717 !important;
+    }
+
+    .nav button.active{
+      background:#fffdf6 !important;
+      color:#171717 !important;
+      border:2px solid #171717 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+    }
+
+    .sidebar-footer{margin-top:auto !important}
+    .profile{
+      width:48px !important;height:48px !important;
+      padding:0 !important;
+      border:2px solid #171717 !important;
+      background:#fffdf6 !important;
+      border-radius:0 !important;
+      display:grid !important;
+      place-items:center !important;
+    }
+    .profile .avatar{
+      width:100% !important;height:100% !important;
+      border-radius:0 !important;
+      background:#ff8a3d !important;
+      color:#171717 !important;
+    }
+    .profile>div:last-child{display:none !important}
+
+    .topbar{
+      height:58px !important;
+      background:#fffdf6 !important;
+      border-bottom:3px solid #171717 !important;
+      backdrop-filter:none !important;
+      padding:0 24px !important;
+    }
+
+    .topbar h1{
+      font-family:"Courier New",monospace !important;
+      font-size:13px !important;
+      text-transform:uppercase !important;
+      letter-spacing:.12em !important;
+      color:#171717 !important;
+    }
+
+    .content{
+      padding:28px 30px 54px !important;
+      max-width:1480px !important;
+    }
+
+    .btn,.icon-btn{
+      border:2px solid #171717 !important;
+      border-radius:0 !important;
+      background:#fffdf6 !important;
+      color:#171717 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+      font-weight:850 !important;
+    }
+
+    .btn:hover,.icon-btn:hover{
+      transform:translate(2px,2px) !important;
+      box-shadow:1px 1px 0 #171717 !important;
+      background:#fffdf6 !important;
+    }
+
+    .btn.primary{
+      background:#1f4eff !important;
+      color:#fff !important;
+      border-color:#171717 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+    }
+
+    .paper-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .paper-hero-copy{
+      min-height:340px;
+      padding:34px;
+      background:#fffdf6;
+      border:2px solid #171717;
+      box-shadow:var(--shadow);
+      position:relative;
+    }
+
+    .paper-hero-copy:before{
+      content:"";
+      position:absolute;
+      left:18px;top:-10px;
+      width:110px;height:20px;
+      background:rgba(255,204,82,.72);
+      transform:rotate(-2deg);
+    }
+
+    .paper-label{
+      font-family:"Courier New",monospace;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.14em;
+      margin-bottom:24px;
+    }
+
+    .paper-hero h2{
+      margin:0 0 16px;
+      font-size:56px;
+      line-height:.94;
+      letter-spacing:-.055em;
+      max-width:760px;
+    }
+
+    .paper-hero p{
+      margin:0;
+      max-width:640px;
+      color:#59564f;
+      line-height:1.65;
+      font-size:13px;
+    }
+
+    .paper-actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+
+    .paper-board{
+      min-height:340px;
+      background:#d7c6a4;
+      border:2px solid #171717;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .paper-board:before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 20% 20%,rgba(255,255,255,.18),transparent 22%),
+        radial-gradient(circle at 70% 80%,rgba(0,0,0,.06),transparent 24%);
+    }
+
+    .paper-note{
+      position:absolute;
+      width:170px;
+      min-height:120px;
+      padding:18px;
+      border:2px solid #171717;
+      box-shadow:4px 4px 0 #171717;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .paper-note span{
+      font-family:"Courier New",monospace;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.12em;
+    }
+    .paper-note strong{font-size:23px;line-height:1}
+    .paper-note small{font-size:10px}
+    .note-a{background:#ffcc52;left:28px;top:34px;transform:rotate(-3deg)}
+    .note-b{background:#cbd8ff;right:30px;top:78px;transform:rotate(2deg)}
+    .note-c{background:#bdeccf;left:100px;bottom:26px;transform:rotate(1deg)}
+    .paper-pin{
+      position:absolute;right:22px;bottom:18px;
+      width:20px;height:20px;border-radius:50%;
+      background:#ff6b55;border:2px solid #171717;
+      box-shadow:2px 2px 0 #171717;
+    }
+
+    .paper-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:0;
+      margin-bottom:18px;
+      border:2px solid #171717;
+      box-shadow:var(--shadow);
+      background:#fffdf6;
+    }
+
+    .paper-stats>div{
+      min-height:90px;
+      padding:16px 18px;
+      border-right:2px solid #171717;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .paper-stats>div:last-child{border-right:none}
+    .paper-stats span{
+      font-family:"Courier New",monospace;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.12em;
+    }
+    .paper-stats strong{
+      font-size:30px;
+      line-height:1;
+    }
+
+    .paper-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.55fr) minmax(280px,.45fr);
+      gap:18px;
+      margin-bottom:20px;
+    }
+
+    .paper-main,.paper-side,.paper-challenges,.paper-callout{
+      background:#fffdf6;
+      border:2px solid #171717;
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .paper-section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+      border-bottom:2px solid #171717;
+      padding-bottom:10px;
+    }
+    .paper-section-title>span{
+      width:28px;height:28px;
+      display:grid;place-items:center;
+      background:#171717;color:#fff;
+      font-family:"Courier New",monospace;
+      font-size:9px;font-weight:900;
+    }
+    .paper-section-title h3{
+      margin:0 auto 0 0;
+      font-size:18px;
+      text-transform:uppercase;
+      letter-spacing:-.02em;
+    }
+
+    #homeSubjects.subject-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:10px !important;
+    }
+    #homeSubjects .subject-card{
+      background:#fff !important;
+      border:2px solid #171717 !important;
+      border-radius:0 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+      min-height:145px !important;
+      padding:15px !important;
+    }
+    #homeSubjects .subject-card:nth-child(4n+1){background:#fff5bd !important}
+    #homeSubjects .subject-card:nth-child(4n+2){background:#e6edff !important}
+    #homeSubjects .subject-card:nth-child(4n+3){background:#ffe3d8 !important}
+    #homeSubjects .subject-card:nth-child(4n+4){background:#e3f4e9 !important}
+    #homeSubjects .subject-card:hover{
+      transform:translate(2px,2px) !important;
+      box-shadow:1px 1px 0 #171717 !important;
+    }
+    #homeSubjects .subject-badge{
+      background:#171717 !important;color:#fff !important;border-radius:0 !important
+    }
+    #homeSubjects .progress{
+      background:#fff !important;border:1px solid #171717 !important;height:6px !important
+    }
+    #homeSubjects .progress span{background:#171717 !important}
+
+    .paper-shortcuts{display:grid;gap:8px}
+    .paper-shortcuts button{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 13px;
+      background:#fff;
+      border:2px solid #171717;
+      box-shadow:2px 2px 0 #171717;
+      font:inherit;
+      font-size:11px;
+      font-weight:850;
+      cursor:pointer;
+    }
+    .paper-shortcuts button:hover{
+      transform:translate(1px,1px);
+      box-shadow:1px 1px 0 #171717;
+    }
+
+    .paper-challenges{margin-bottom:20px}
+    .starter-controls{display:flex;align-items:center;gap:8px}
+    .starter-carousel{
+      background:transparent !important;
+      border:none !important;
+      border-radius:0 !important;
+      box-shadow:none !important;
+      padding:0 !important;
+    }
+    .starter-grid{gap:10px !important}
+    .starter-card{
+      background:#fff !important;
+      border:2px solid #171717 !important;
+      border-radius:0 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+      min-height:210px !important;
+      padding:15px !important;
+    }
+    .starter-card:nth-child(4n+1){background:#fff5bd !important}
+    .starter-card:nth-child(4n+2){background:#e6edff !important}
+    .starter-card:nth-child(4n+3){background:#ffe3d8 !important}
+    .starter-card:nth-child(4n+4){background:#e3f4e9 !important}
+    .starter-card:hover{
+      transform:translate(2px,2px) !important;
+      box-shadow:1px 1px 0 #171717 !important;
+    }
+    .starter-card .level{
+      background:#171717 !important;color:#fff !important;border-radius:0 !important
+    }
+
+    .paper-footer-cards{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+    .paper-callout{min-height:180px}
+    .yellow-note{background:#ffcc52}
+    .blue-note{background:#cbd8ff}
+    .paper-callout span{
+      font-family:"Courier New",monospace;
+      font-size:9px;font-weight:900;letter-spacing:.12em
+    }
+    .paper-callout h3{
+      font-size:30px;line-height:1.05;letter-spacing:-.035em;margin:18px 0 8px
+    }
+    .paper-callout p{font-size:12px;margin:0 0 16px}
+
+    .page-title,.card,.panel,.flash-card,.test-row,.game-card,.empty,.modal-card{
+      border-radius:0 !important;
+    }
+    .page-title{
+      background:#fffdf6 !important;
+      border:2px solid #171717 !important;
+      box-shadow:4px 4px 0 #171717 !important;
+    }
+    .card,.panel,.flash-card,.test-row,.game-card{
+      background:#fffdf6 !important;
+      border:2px solid #171717 !important;
+      box-shadow:3px 3px 0 #171717 !important;
+    }
+    .tag,.status{
+      background:#171717 !important;color:#fff !important;border-radius:0 !important
+    }
+    .modal{background:rgba(23,23,23,.52) !important}
+    .modal-card{
+      background:#fffdf6 !important;
+      border:2px solid #171717 !important;
+      box-shadow:7px 7px 0 #171717 !important;
+    }
+    .field input,.field textarea,.field select,.stdin-box{
+      border:2px solid #171717 !important;
+      border-radius:0 !important;
+      background:#fff !important;
+      box-shadow:none !important;
+    }
+    .field input:focus,.field textarea:focus,.field select:focus,.stdin-box:focus{
+      border-color:#1f4eff !important;
+      box-shadow:3px 3px 0 #1f4eff !important;
+    }
+
+    @media(max-width:1050px){
+      .paper-hero,.paper-grid{grid-template-columns:1fr}
+      .paper-stats{grid-template-columns:repeat(2,1fr)}
+      .paper-stats>div:nth-child(2){border-right:none}
+      .paper-stats>div:nth-child(-n+2){border-bottom:2px solid #171717}
+    }
+    @media(max-width:700px){
+      .app{display:block !important}
+      .sidebar{
+        position:sticky !important;
+        top:0 !important;
+        width:100% !important;
+        height:auto !important;
+        min-height:0 !important;
+        flex-direction:row !important;
+        overflow-x:auto !important;
+        border-right:none !important;
+        border-bottom:3px solid #171717 !important;
+      }
+      .brand{padding:0 !important}
+      .nav{display:flex !important;width:auto !important}
+      .nav button{width:44px !important;min-width:44px !important}
+      .sidebar-footer{display:none !important}
+      .content{padding:18px 12px 36px !important}
+      .paper-hero h2{font-size:40px}
+      .paper-stats,.paper-footer-cards{grid-template-columns:1fr}
+      .paper-stats>div{border-right:none !important;border-bottom:2px solid #171717}
+      .paper-stats>div:last-child{border-bottom:none}
+      #homeSubjects.subject-grid{grid-template-columns:1fr !important}
+    }
+
   </style>
 
 <style>
@@ -2864,89 +3338,84 @@
 
     <div class="content">
       <section class="page active" id="page-home">
-        <div class="home-hero">
-          <div class="home-welcome">
-            <div class="home-welcome-content">
-              <div class="home-kicker"><span>●</span> BUILT · Dein Lernzentrum</div>
-              <h2>Lernen, ohne den Überblick zu verlieren.</h2>
-              <p>Fächer, Karteikarten, Tests, C# und Fokuszeit sind klar getrennt und trotzdem an einem Ort. Wähle ein Fach oder starte direkt mit einem Werkzeug.</p>
-              <div class="hero-actions">
-                <button class="btn primary" data-go="subjects">Fächer öffnen</button>
-                <button class="btn secondary" data-go="code">Code-Labor starten</button>
-              </div>
+        <section class="paper-hero">
+          <div class="paper-hero-copy">
+            <div class="paper-label">BUILT / LEARNING DESK</div>
+            <h2>Dein Lernplatz.<br>Alles griffbereit.</h2>
+            <p>Kein klassisches Dashboard: BUILT wird zu deinem digitalen Schreibtisch mit Fächern, Übungen, Tests und Fokusblöcken.</p>
+            <div class="paper-actions">
+              <button class="btn primary" data-go="subjects">Fächer öffnen</button>
+              <button class="btn" data-go="code">Code-Labor</button>
             </div>
           </div>
-
-          <div class="home-focus card">
-            <div>
-              <div class="home-focus-top">
-                <div>
-                  <div class="home-focus-label">Heute</div>
-                  <h3>Fokusmodus</h3>
-                </div>
-                <div class="focus-ring-mini"><span>25m</span></div>
-              </div>
-              <p class="home-focus-copy">Eine Aufgabe, keine Ablenkung. Starte einen konzentrierten Lernblock und gönn dir danach eine kurze Pause.</p>
+          <div class="paper-board">
+            <div class="paper-note note-a">
+              <span>HEUTE</span>
+              <strong>25 Min</strong>
+              <small>Fokusblock</small>
             </div>
-            <button class="btn primary" data-go="focus">Fokus starten</button>
+            <div class="paper-note note-b">
+              <span>TO-DO</span>
+              <strong>C# Übung</strong>
+              <small>selbst schreiben</small>
+            </div>
+            <div class="paper-note note-c">
+              <span>PAUSE</span>
+              <strong>5 Min</strong>
+              <small>kurz abschalten</small>
+            </div>
+            <div class="paper-pin"></div>
           </div>
-        </div>
+        </section>
 
-        <div class="home-metrics">
-          <div class="home-stat"><div class="home-stat-icon">▦</div><div><div class="home-stat-value" id="metricSubjects">0</div><div class="home-stat-label">aktive Fächer</div></div></div>
-          <div class="home-stat"><div class="home-stat-icon">◫</div><div><div class="home-stat-value">0</div><div class="home-stat-label">Karteikarten</div></div></div>
-          <div class="home-stat"><div class="home-stat-icon">✓</div><div><div class="home-stat-value">0</div><div class="home-stat-label">Tests abgeschlossen</div></div></div>
-          <div class="home-stat"><div class="home-stat-icon">◷</div><div><div class="home-stat-value">0m</div><div class="home-stat-label">Fokuszeit heute</div></div></div>
-        </div>
+        <section class="paper-stats">
+          <div><span>FÄCHER</span><strong id="metricSubjects">0</strong></div>
+          <div><span>KARTEIKARTEN</span><strong>0</strong></div>
+          <div><span>TESTS</span><strong>0</strong></div>
+          <div><span>FOKUS HEUTE</span><strong>0m</strong></div>
+        </section>
 
-        <div class="home-content-grid">
-          <section class="home-subject-panel">
-            <div class="home-section-head">
-              <div><h3>Deine Fächer</h3><p>Ein Fach auswählen und nur dessen Inhalte sehen.</p></div>
-              <button class="btn" id="addSubjectHome">+ Neues Fach</button>
-            </div>
+        <section class="paper-grid">
+          <div class="paper-main">
+            <div class="paper-section-title"><span>01</span><h3>Fächer</h3><button class="btn" id="addSubjectHome">+ Neues Fach</button></div>
             <div class="grid subject-grid" id="homeSubjects"></div>
-          </section>
+          </div>
 
-          <aside class="home-side-stack">
-            <div class="home-side-card">
-              <h4>Schnell starten</h4>
-              <p>Direkt zum Werkzeug, ohne durch mehrere Seiten zu gehen.</p>
-              <div class="home-shortcut-list">
-                <div class="home-shortcut" data-go="flashcards"><div class="home-shortcut-left"><div class="home-shortcut-icon">◫</div><strong>Karteikarten</strong></div><span>→</span></div>
-                <div class="home-shortcut" data-go="tests"><div class="home-shortcut-left"><div class="home-shortcut-icon">✓</div><strong>Tests</strong></div><span>→</span></div>
-                <div class="home-shortcut" data-go="code"><div class="home-shortcut-left"><div class="home-shortcut-icon">&lt;/&gt;</div><strong>Code-Labor</strong></div><span>→</span></div>
-                <a class="home-shortcut poly-link" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener"><div class="home-shortcut-left"><div class="home-shortcut-icon">◇</div><strong>PolyTrack Pause</strong></div><span>↗</span></a>
-              </div>
-            </div>
-            <div class="home-side-card">
-              <h4>So ist BUILT aufgebaut</h4>
-              <p>Fach auswählen → nur dessen Karteikarten und Tests sehen. C# Übungen, Code-Labor, Lernspiele und Fokus bleiben immer unabhängig verfügbar.</p>
+          <aside class="paper-side">
+            <div class="paper-section-title"><span>02</span><h3>Schnellstart</h3></div>
+            <div class="paper-shortcuts">
+              <button data-go="flashcards">Karteikarten <b>→</b></button>
+              <button data-go="tests">Tests <b>→</b></button>
+              <button data-go="code">Code-Labor <b>→</b></button>
+              <button data-go="games">Lernspiele <b>→</b></button>
+              <button data-go="focus">Fokus & Pausen <b>→</b></button>
             </div>
           </aside>
-        </div>
+        </section>
 
-        <section class="home-section">
-          <div class="home-section-head">
-            <div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben. Aufgabe ansehen, selbst programmieren, bei Bedarf Video öffnen.</p></div>
-            <div style="display:flex;align-items:center;gap:10px">
+        <section class="paper-challenges">
+          <div class="paper-section-title">
+            <span>03</span><h3>C# Übungen</h3>
+            <div class="starter-controls">
               <span class="starter-counter" id="starterCounter">1–4 von 10</span>
-              <div class="starter-nav">
-                <button class="icon-btn" id="starterPrev" title="Vorherige Übungen">←</button>
-                <button class="icon-btn" id="starterNext" title="Weitere Übungen">→</button>
-              </div>
+              <button class="icon-btn" id="starterPrev">←</button>
+              <button class="icon-btn" id="starterNext">→</button>
             </div>
           </div>
           <div class="starter-carousel"><div class="starter-grid" id="starterGrid"></div></div>
         </section>
 
-        <section class="home-section">
-          <div class="home-section-head"><div><h3>Werkzeuge</h3><p>Alles Wichtige, ohne doppelte Inhalte auf der Startseite.</p></div></div>
-          <div class="home-quick">
-            <div class="card tool-card" data-go="flashcards"><div class="tool-icon">◫</div><h4>Karteikarten</h4><p>Wissen gezielt wiederholen.</p></div>
-            <div class="card tool-card" data-go="tests"><div class="tool-icon">✓</div><h4>Tests</h4><p>Wissen prüfen und üben.</p></div>
-            <div class="card tool-card" data-go="games"><div class="tool-icon">◇</div><h4>Lernspiele</h4><p>Abwechslung beim Lernen.</p></div>
-            <div class="card tool-card" data-go="focus"><div class="tool-icon">◷</div><h4>Fokus & Pausen</h4><p>Konzentriert in Lernblöcken arbeiten.</p></div>
+        <section class="paper-footer-cards">
+          <div class="paper-callout yellow-note">
+            <span>MERKSATZ</span>
+            <h3>Kleine Schritte schlagen Chaos.</h3>
+            <p>Eine Aufgabe starten, fertig machen, dann die nächste.</p>
+          </div>
+          <div class="paper-callout blue-note">
+            <span>PAUSE</span>
+            <h3>Kopf frei?</h3>
+            <p>Wenn nicht: kurz raus aus dem Lernmodus.</p>
+            <a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener">PolyTrack ↗</a>
           </div>
         </section>
       </section>
