@@ -1819,6 +1819,199 @@
 
     .page-title > *{position:relative;z-index:1}
 
+
+    /* ===== BUILT – Stellify Farbwelt ===== */
+    :root{
+      --bg:#FDFCFB;
+      --panel:#FFFFFF;
+      --panel-2:#F7F8F6;
+      --sidebar:#111111;
+      --sidebar-2:#161616;
+      --text:#111111;
+      --muted:#6F756F;
+      --line:#E4E7E3;
+      --accent:#00A854;
+      --accent-2:#004225;
+      --accent-soft:#EAF7F0;
+      --success:#00A854;
+      --warning:#B7791F;
+      --danger:#B42318;
+      --shadow:0 16px 42px rgba(17,17,17,.07);
+      --radius:18px;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at 85% 0%,rgba(0,168,84,.07),transparent 27%),
+        linear-gradient(180deg,#FDFCFB,#F8F8F6 48%,#FDFCFB);
+      color:#111111;
+    }
+
+    .sidebar{
+      background:
+        radial-gradient(circle at top left,rgba(0,168,84,.16),transparent 28%),
+        linear-gradient(180deg,#111111,#0B0B0B 100%);
+      color:#fff;
+      border-right:1px solid #1D1D1D;
+    }
+
+    .brand-mark{
+      background:linear-gradient(145deg,#00A854,#004225);
+      color:#fff;
+      box-shadow:0 10px 28px rgba(0,168,84,.22);
+    }
+    .brand strong{color:#FDFCFB}
+    .brand span{color:#8E948F}
+
+    .nav button{color:#A4AAA5}
+    .nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+    .nav button.active{
+      background:rgba(0,168,84,.14);
+      color:#fff;
+      box-shadow:inset 0 0 0 1px rgba(0,168,84,.24);
+    }
+    .nav button.active .ico{color:#00A854}
+
+    .profile{
+      background:rgba(255,255,255,.05);
+      border-color:rgba(255,255,255,.09);
+    }
+    .profile .avatar{
+      background:#00A854;
+      color:#fff;
+    }
+    .profile strong{color:#fff}
+    .profile small{color:#8E948F}
+
+    .topbar{
+      background:rgba(253,252,251,.92);
+      border-bottom:1px solid #E4E7E3;
+    }
+    .topbar h1{color:#111111}
+
+    .icon-btn,.btn{
+      background:#fff;
+      color:#111111;
+      border-color:#E0E3DF;
+    }
+    .icon-btn:hover,.btn:hover{background:#F6F8F6}
+    .btn.primary{
+      background:#00A854;
+      color:#fff;
+      border-color:#00A854;
+      box-shadow:0 10px 24px rgba(0,168,84,.16);
+    }
+    .btn.primary:hover{background:#008E47}
+
+    .home-welcome{
+      background:
+        linear-gradient(90deg,rgba(0,66,37,.90),rgba(0,66,37,.63) 58%,rgba(0,66,37,.30)),
+        url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1800&q=85') center/cover no-repeat;
+      border:none;
+    }
+    .home-kicker{color:#CBEEDC}
+    .home-welcome .btn.primary{
+      background:#FDFCFB;
+      color:#004225;
+      border-color:#FDFCFB;
+    }
+    .home-welcome .btn.secondary{
+      background:rgba(17,17,17,.22);
+      color:#fff;
+      border-color:rgba(255,255,255,.24);
+    }
+
+    .home-focus{
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.89),rgba(248,250,248,.96)),
+        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;
+      border-color:#DCE8E1;
+    }
+    .focus-ring-mini{
+      background:conic-gradient(#00A854 0 72%,#DFE8E2 72%);
+      color:#004225;
+    }
+
+    .home-stat-icon{
+      background:#EAF7F0 !important;
+      color:#00A854 !important;
+      border-color:#D5EDDF !important;
+    }
+    .home-stat:nth-child(2) .home-stat-icon,
+    .home-stat:nth-child(3) .home-stat-icon,
+    .home-stat:nth-child(4) .home-stat-icon{
+      background:#EAF7F0 !important;
+      color:#00A854 !important;
+      border-color:#D5EDDF !important;
+    }
+
+    #homeSubjects .subject-card.selected,
+    .subject-card.selected{
+      border-color:#00A854;
+      box-shadow:0 0 0 3px #EAF7F0;
+    }
+
+    #homeSubjects .subject-badge,
+    .subject-badge,
+    .home-shortcut-icon,
+    .starter-card .level,
+    .tag{
+      background:#EAF7F0;
+      color:#00A854;
+    }
+
+    #homeSubjects .progress span,
+    .progress span{
+      background:linear-gradient(90deg,#00A854,#004225);
+    }
+
+    .home-shortcut:hover,
+    #homeSubjects .subject-card:hover,
+    .subject-card:hover,
+    .starter-card:hover,
+    .home-quick .tool-card:hover{
+      border-color:#B8DCC8;
+    }
+
+    .poly-link .home-shortcut-icon{
+      background:#EDF5EF;
+      color:#004225;
+    }
+
+    .home-quick .tool-icon{color:#00A854}
+    .status{background:#EAF7F0;color:#007D3E}
+
+    .page-title h2,
+    .home-section-head h3,
+    .home-side-card h4,
+    #homeSubjects .subject-card h4,
+    .subject-card h4,
+    .starter-card h4{
+      color:#111111;
+    }
+
+    .empty{
+      background:#FBFCFA;
+      border-color:#DCE2DD;
+      color:#111111;
+    }
+
+    .modal-card{
+      background:#FDFCFB;
+      color:#111111;
+    }
+    .field input,.field textarea,.field select{
+      background:#fff;
+      color:#111111;
+      border-color:#DDE2DE;
+    }
+    .field input:focus,.field textarea:focus,.field select:focus{
+      border-color:#00A854;
+      box-shadow:0 0 0 3px #EAF7F0;
+    }
+
+    .focus-wrap .timer{color:#004225}
+
   </style>
 </head>
 <body>
