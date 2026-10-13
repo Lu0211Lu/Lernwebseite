@@ -212,6 +212,30 @@
     .timer{font-size:84px;font-weight:900;letter-spacing:-.07em;margin:26px 0 8px}
     .timer-sub{color:var(--muted)}
     .timer-actions{display:flex;gap:10px;justify-content:center;margin-top:24px}
+    .ai-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.7fr);gap:18px}
+    .ai-chat{min-height:640px;display:flex;flex-direction:column;overflow:hidden}
+    .ai-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .ai-title{display:flex;align-items:center;gap:11px}
+    .ai-orb{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#5b5cf0,#7c3aed);color:#fff;font-weight:900}
+    .ai-messages{padding:20px;display:flex;flex-direction:column;gap:14px;min-height:430px;max-height:520px;overflow-y:auto;background:linear-gradient(180deg,#fff,#fafbff)}
+    .ai-message{max-width:82%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.65;white-space:pre-wrap}
+    .ai-message.user{align-self:flex-end;background:#111827;color:#fff;border-bottom-right-radius:5px}
+    .ai-message.assistant{align-self:flex-start;background:#eef2ff;color:#1e293b;border-bottom-left-radius:5px}
+    .ai-message.error{background:#fef2f2;color:#991b1b}
+    .ai-compose{padding:14px;border-top:1px solid var(--line);background:#fff}
+    .ai-compose textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:12px;outline:none}
+    .ai-compose textarea:focus{border-color:#a5b4fc;box-shadow:0 0 0 4px #eef2ff}
+    .ai-compose-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px}
+    .ai-chips{display:flex;gap:8px;flex-wrap:wrap}
+    .ai-chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700;color:#475569}
+    .ai-side .card{padding:18px;margin-bottom:14px}
+    .ai-side h4{margin:0 0 8px}
+    .ai-side p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+    .ai-action-result{margin-top:8px;padding:8px 10px;border-radius:10px;background:#ecfdf5;color:#047857;font-size:11px;font-weight:800}
+    .generated-list{display:grid;gap:10px;margin-top:14px}
+    .generated-item{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .generated-item strong{display:block;margin-bottom:5px}
+    .generated-item small{color:var(--muted)}
     .admin-grid{grid-template-columns:1fr 1fr}
     .table{width:100%;border-collapse:collapse}
     .table th,.table td{text-align:left;padding:13px 12px;border-bottom:1px solid var(--line);font-size:13px}
@@ -234,7 +258,7 @@
       .grid.metrics,.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .subject-grid,.library-grid,.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .starter-card{flex-basis:calc((100% - 16px)/2)}
-      .two-col,.code-shell{grid-template-columns:1fr}
+      .two-col,.code-shell,.ai-layout{grid-template-columns:1fr}
     }
     @media(max-width:800px){
       .app{grid-template-columns:1fr}
@@ -266,6 +290,7 @@
       <button data-page="code"><span class="ico">&lt;/&gt;</span>Code-Labor</button>
       <button data-page="games"><span class="ico">◇</span>Lernspiele</button>
       <button data-page="focus"><span class="ico">◷</span>Fokus & Pausen</button>
+      <button data-page="ai"><span class="ico">✦</span>BUILT AI</button>
       <button data-page="admin"><span class="ico">⚙</span>Admin</button>
     </nav>
     <div class="sidebar-footer">
@@ -346,7 +371,7 @@
         </div>
         <div id="flashcardsWorkspace" class="subject-workspace">
           <div class="page-title"><div><h2 id="flashcardsTitle">Karteikarten</h2><p>Hier erscheinen ausschliesslich die Karteikarten dieses Fachs.</p></div><button class="btn primary">+ Lernset erstellen</button></div>
-          <div class="empty card"><div class="emoji">◫</div><h4>Noch keine Karteikarten in diesem Fach</h4><p>Neue Karteikarten werden diesem ausgewählten Fach zugeordnet und nicht mit anderen Fächern vermischt.</p><button class="btn primary">Erstes Lernset erstellen</button></div>
+          <div id="generatedFlashcards"></div>
         </div>
       </section>
 
@@ -356,7 +381,7 @@
         </div>
         <div id="testsWorkspace" class="subject-workspace">
           <div class="page-title"><div><h2 id="testsTitle">Tests</h2><p>Hier erscheinen ausschliesslich die Tests dieses Fachs.</p></div><button class="btn primary">+ Test erstellen</button></div>
-          <div class="card panel"><div class="empty"><div class="emoji">✓</div><h4>Noch keine Tests in diesem Fach</h4><p>Neue Tests werden automatisch diesem ausgewählten Fach zugeordnet.</p><button class="btn primary">Test erstellen</button></div></div>
+          <div id="generatedTests"></div>
         </div>
       </section>
 
@@ -420,6 +445,49 @@ class Program
         </div>
       </section>
 
+      <section class="page" id="page-ai">
+        <div class="page-title">
+          <div><h2>BUILT AI</h2><p>Frag nach Hilfe oder lass Lerninhalte schneller erstellen.</p></div>
+          <span class="status">Keine Adminrechte</span>
+        </div>
+        <div class="ai-layout">
+          <div class="card ai-chat">
+            <div class="ai-head">
+              <div class="ai-title"><div class="ai-orb">✦</div><div><strong>BUILT AI</strong><div class="muted" style="font-size:11px">Lernen · C# · Fächer · Karteikarten · Tests</div></div></div>
+              <span class="runner-state" id="aiState">Bereit</span>
+            </div>
+            <div class="ai-messages" id="aiMessages">
+              <div class="ai-message assistant">Hallo! Du kannst mich z. B. fragen: „Erkläre mir for-Schleifen“, „Hilf mir bei diesem C# Fehler“ oder „Erstelle aus diesem Stoff ein Fach mit Karteikarten und Test“.</div>
+            </div>
+            <div class="ai-compose">
+              <textarea id="aiInput" placeholder="Frage etwas oder füge Lernstoff ein …"></textarea>
+              <div class="ai-compose-bottom">
+                <div class="ai-chips">
+                  <button class="ai-chip" data-ai-prompt="Erkläre mir diesen C# Code und zeige mir die richtige Lösung: ">C# Hilfe</button>
+                  <button class="ai-chip" data-ai-prompt="Erstelle aus folgendem Stoff ein neues Fach mit passenden Karteikarten: ">Fach erstellen</button>
+                  <button class="ai-chip" data-ai-prompt="Erstelle für das aktuell ausgewählte Fach einen guten Test aus folgendem Stoff: ">Test erstellen</button>
+                </div>
+                <button class="btn primary" id="aiSend">Senden</button>
+              </div>
+            </div>
+          </div>
+          <aside class="ai-side">
+            <div class="card">
+              <h4>Was BUILT AI darf</h4>
+              <p>Fragen beantworten, C# erklären und Lösungen liefern sowie Fächer, Karteikarten und Tests als Lerninhalte erstellen.</p>
+            </div>
+            <div class="card">
+              <h4>Was BUILT AI nicht darf</h4>
+              <p>Keine Website-Dateien ändern, keine Deployments auslösen, keine Benutzer verwalten und keine Adminrechte verwenden.</p>
+            </div>
+            <div class="card">
+              <h4>Erstellte Inhalte</h4>
+              <p id="aiContentSummary">Noch keine KI-Inhalte erstellt.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
       <section class="page" id="page-admin">
         <div class="page-title"><div><h2>Admin Center</h2><p>Verwalte Inhalte, Rollen und später auch Benutzerkonten.</p></div><span class="status">Admin aktiv</span></div>
         <div class="grid admin-grid">
@@ -458,12 +526,14 @@ class Program
   const STORAGE_KEY = 'lernwelt_subjects_v2';
   const CODE_KEY = 'lernwelt_code_v1';
   const ACTIVE_SUBJECT_KEY = 'lernwelt_active_subject_v1';
+  const AI_FLASHCARDS_KEY = 'built_ai_flashcards_v1';
+  const AI_TESTS_KEY = 'built_ai_tests_v1';
   let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   let activeSubjectId = localStorage.getItem(ACTIVE_SUBJECT_KEY) || null;
 
   const pages = document.querySelectorAll('.page');
   const navButtons = document.querySelectorAll('.nav button[data-page]');
-  const titleMap = {home:'Startseite',subjects:'Fächer',flashcards:'Karteikarten',tests:'Tests',code:'Code-Labor',games:'Lernspiele',focus:'Fokus & Pausen',admin:'Admin Center'};
+  const titleMap = {home:'Startseite',subjects:'Fächer',flashcards:'Karteikarten',tests:'Tests',code:'Code-Labor',games:'Lernspiele',focus:'Fokus & Pausen',ai:'BUILT AI',admin:'Admin Center'};
 
   function navigate(page){
     pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
@@ -521,6 +591,7 @@ class Program
       document.getElementById('flashcardsTitle').textContent='Karteikarten · '+subject.name;
       document.getElementById('testsTitle').textContent='Tests · '+subject.name;
     }
+    if(typeof renderAiContent==='function') renderAiContent();
   }
   window.selectSubject=function(id){
     activeSubjectId=id;
@@ -1583,6 +1654,179 @@ class Program
       runBtn.textContent='▶ Ausführen';
     }
   });
+
+
+  let aiFlashcards = JSON.parse(localStorage.getItem(AI_FLASHCARDS_KEY) || '[]');
+  let aiTests = JSON.parse(localStorage.getItem(AI_TESTS_KEY) || '[]');
+
+  function saveAiContent(){
+    localStorage.setItem(AI_FLASHCARDS_KEY,JSON.stringify(aiFlashcards));
+    localStorage.setItem(AI_TESTS_KEY,JSON.stringify(aiTests));
+  }
+
+  function renderAiContent(){
+    const subject=getActiveSubject();
+    const flashWrap=document.getElementById('generatedFlashcards');
+    const testWrap=document.getElementById('generatedTests');
+    const subjectName=subject?.name||'';
+
+    if(flashWrap){
+      const cards=aiFlashcards.filter(x=>x.subjectName===subjectName);
+      flashWrap.innerHTML=cards.length
+        ? '<div class="generated-list">'+cards.map(set=>
+            '<div class="card panel"><strong>'+escapeHtml(set.title||('Karteikarten · '+subjectName))+'</strong>'+
+            '<small>'+set.cards.length+' Karten</small>'+
+            '<div class="generated-list">'+set.cards.slice(0,8).map(card=>
+              '<div class="generated-item"><strong>'+escapeHtml(card.front)+'</strong><small>'+escapeHtml(card.back)+'</small></div>'
+            ).join('')+'</div></div>'
+          ).join('')+'</div>'
+        : '<div class="empty card"><div class="emoji">◫</div><h4>Noch keine Karteikarten in diesem Fach</h4><p>Du kannst sie selbst erstellen oder BUILT AI aus deinem Lernstoff erzeugen lassen.</p><button class="btn primary" data-go="ai">Mit BUILT AI erstellen</button></div>';
+    }
+
+    if(testWrap){
+      const tests=aiTests.filter(x=>x.subjectName===subjectName);
+      testWrap.innerHTML=tests.length
+        ? '<div class="generated-list">'+tests.map(test=>
+            '<div class="card panel"><strong>'+escapeHtml(test.title||('Test · '+subjectName))+'</strong>'+
+            '<small>'+test.questions.length+' Fragen</small>'+
+            '<div class="generated-list">'+test.questions.slice(0,6).map((q,i)=>
+              '<div class="generated-item"><strong>'+(i+1)+'. '+escapeHtml(q.question)+'</strong><small>'+escapeHtml(q.explanation||'')+'</small></div>'
+            ).join('')+'</div></div>'
+          ).join('')+'</div>'
+        : '<div class="card panel"><div class="empty"><div class="emoji">✓</div><h4>Noch keine Tests in diesem Fach</h4><p>Du kannst einen Test selbst erstellen oder BUILT AI aus deinem Stoff erzeugen lassen.</p><button class="btn primary" data-go="ai">Mit BUILT AI erstellen</button></div></div>';
+    }
+
+    const summary=document.getElementById('aiContentSummary');
+    if(summary){
+      const cardCount=aiFlashcards.reduce((n,x)=>n+(x.cards?.length||0),0);
+      const questionCount=aiTests.reduce((n,x)=>n+(x.questions?.length||0),0);
+      summary.textContent=(cardCount||questionCount)
+        ? cardCount+' Karteikarten · '+questionCount+' Testfragen erstellt'
+        : 'Noch keine KI-Inhalte erstellt.';
+    }
+  }
+
+  function ensureSubjectByName(name,description='',icon='📘'){
+    const clean=String(name||'').trim();
+    if(!clean) return null;
+    let subject=subjects.find(s=>s.name.toLowerCase()===clean.toLowerCase());
+    if(!subject){
+      subject={id:'s'+Date.now()+Math.random().toString(16).slice(2),name:clean,desc:description||'Mit BUILT AI erstellt.',icon:icon||'📘'};
+      subjects.push(subject);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(subjects));
+      renderSubjects();
+    }
+    return subject;
+  }
+
+  function applyAiActions(actions){
+    const results=[];
+    for(const action of (Array.isArray(actions)?actions:[])){
+      if(action.type==='create_subject'){
+        const s=ensureSubjectByName(action.name,action.description,action.icon);
+        if(s) results.push('Fach „'+s.name+'“ erstellt');
+      }
+
+      if(action.type==='create_flashcards' && Array.isArray(action.cards)){
+        const subjectName=String(action.subjectName||getActiveSubject()?.name||'').trim();
+        if(!subjectName) continue;
+        ensureSubjectByName(subjectName);
+        const cards=action.cards
+          .filter(x=>x && x.front && x.back)
+          .slice(0,30)
+          .map(x=>({front:String(x.front),back:String(x.back)}));
+        if(cards.length){
+          aiFlashcards.push({id:'fc'+Date.now()+Math.random(),subjectName,title:'KI-Lernset',cards});
+          results.push(cards.length+' Karteikarten für „'+subjectName+'“ erstellt');
+        }
+      }
+
+      if(action.type==='create_test' && Array.isArray(action.questions)){
+        const subjectName=String(action.subjectName||getActiveSubject()?.name||'').trim();
+        if(!subjectName) continue;
+        ensureSubjectByName(subjectName);
+        const questions=action.questions.slice(0,20).map(q=>({
+          question:String(q.question||''),
+          options:Array.isArray(q.options)?q.options.map(String).slice(0,6):[],
+          correctIndex:Number.isInteger(q.correctIndex)?q.correctIndex:0,
+          explanation:String(q.explanation||'')
+        })).filter(q=>q.question);
+        if(questions.length){
+          aiTests.push({id:'test'+Date.now()+Math.random(),subjectName,title:String(action.title||'KI-Test'),questions});
+          results.push('Test „'+String(action.title||'KI-Test')+'“ für „'+subjectName+'“ erstellt');
+        }
+      }
+    }
+    saveAiContent();
+    renderAiContent();
+    return results;
+  }
+
+  function addAiMessage(text,role='assistant'){
+    const wrap=document.getElementById('aiMessages');
+    const div=document.createElement('div');
+    div.className='ai-message '+role;
+    div.textContent=text;
+    wrap.appendChild(div);
+    wrap.scrollTop=wrap.scrollHeight;
+  }
+
+  async function sendAiMessage(){
+    const input=document.getElementById('aiInput');
+    const button=document.getElementById('aiSend');
+    const state=document.getElementById('aiState');
+    const message=input.value.trim();
+    if(!message) return;
+
+    addAiMessage(message,'user');
+    input.value='';
+    button.disabled=true;
+    state.textContent='Denkt…';
+    state.className='runner-state';
+
+    try{
+      const response=await fetch('/api/assistant',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          message,
+          context:{
+            activeSubject:getActiveSubject()?.name||null,
+            subjects:subjects.map(s=>({name:s.name,description:s.desc||''}))
+          }
+        })
+      });
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.error||'BUILT AI ist gerade nicht erreichbar.');
+
+      addAiMessage(data.answer||'Erledigt.','assistant');
+      const results=applyAiActions(data.actions);
+      if(results.length) addAiMessage('Erstellt:\n• '+results.join('\n• '),'assistant');
+    }catch(error){
+      addAiMessage(error?.message||String(error),'error');
+      state.textContent='Fehler';
+      state.className='runner-state error';
+      return;
+    }finally{
+      button.disabled=false;
+    }
+
+    state.textContent='Bereit';
+    state.className='runner-state live';
+  }
+
+  document.getElementById('aiSend').addEventListener('click',sendAiMessage);
+  document.getElementById('aiInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){
+      e.preventDefault();
+      sendAiMessage();
+    }
+  });
+  document.querySelectorAll('[data-ai-prompt]').forEach(btn=>btn.addEventListener('click',()=>{
+    document.getElementById('aiInput').value=btn.dataset.aiPrompt;
+    document.getElementById('aiInput').focus();
+  }));
+  renderAiContent();
 
   let timerSeconds=25*60,timerId=null;
   function drawTimer(){const m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('timer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
