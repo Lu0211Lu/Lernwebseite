@@ -307,7 +307,7 @@
         <div class="section-head"><div><h3>Deine Fächer</h3><p>Starte mit einem Fach oder erstelle ein neues.</p></div><button class="btn" id="addSubjectHome">+ Neues Fach</button></div>
         <div class="grid subject-grid" id="homeSubjects"></div>
 
-        <div class="section-head"><div><h3>C# Starter-Projekte</h3><p>10 Projekte zum Üben – unabhängig vom ausgewählten Fach und jederzeit verfügbar.</p></div><button class="btn" data-go="code">Zum Code-Labor</button></div>
+        <div class="section-head"><div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben – mit Aufgabe, Lernzielen und Erklärungsvideo. Keine fertige Lösung wird eingesetzt.</p></div><button class="btn" data-go="code">Zum Code-Labor</button></div>
         <div class="grid starter-grid" id="starterGrid"></div>
 
         <div class="section-head"><div><h3>Schnellzugriff</h3><p>Die wichtigsten Lernwerkzeuge direkt erreichbar.</p></div></div>
@@ -1416,20 +1416,30 @@ class Program
         <h4>${p.title}</h4>
         <p>${p.desc}</p>
         <ul class="starter-steps">${p.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+        <p style="font-size:12px"><strong>Wichtig:</strong> Du bekommst keine fertige Lösung. Du programmierst das Projekt selbst.</p>
         <div class="starter-actions">
-          <button class="btn primary" onclick="loadStarter('${p.id}')">Projekt starten</button>
+          <button class="btn primary" onclick="startChallenge('${p.id}')">Aufgabe starten</button>
           <a class="btn video-link" href="${p.video}" target="_blank" rel="noopener">▶ Erklärungsvideo</a>
         </div>
       </article>`
     ).join('');
   }
 
-  window.loadStarter=function(id){
+  window.startChallenge=function(id){
     const project=starterProjects.find(p=>p.id===id);
     if(!project) return;
-    editor.setValue(project.code);
-    localStorage.setItem(CODE_KEY,project.code);
-    document.getElementById('consoleOut').textContent='Starter „'+project.title+'“ geladen. Lies die Aufgabe und ergänze oder verändere den Code.';
+
+    const taskText =
+      'AUFGABE: '+project.title+'\n\n'+
+      project.desc+'\n\n'+
+      'Du sollst den Code selbst schreiben.\n\n'+
+      'Das solltest du dabei üben:\n- '+project.steps.join('\n- ')+
+      '\n\nWenn du Hilfe brauchst, öffne das Erklärungsvideo auf der Startseite.';
+
+    editor.setValue('');
+    localStorage.setItem(CODE_KEY,'');
+    document.getElementById('consoleOut').textContent=taskText;
+    document.getElementById('stdinInput').value='';
     navigate('code');
     setTimeout(()=>editor.focus(),100);
   };
