@@ -578,17 +578,17 @@ class Program
   window.addEventListener('resize',()=>editor.refresh());
 
   const csharpCompletions=[
-  "Console.WriteLine",
-  "Console.Write",
-  "Console.ReadLine",
-  "Console.ReadKey",
-  "Console.Read",
-  "Console.Clear",
-  "Console.Beep",
+  "Console.WriteLine();",
+  "Console.Write();",
+  "Console.ReadLine();",
+  "Console.ReadKey();",
+  "Console.Read();",
+  "Console.Clear();",
+  "Console.Beep();",
   "Console.Title",
   "Console.ForegroundColor",
   "Console.BackgroundColor",
-  "Console.ResetColor",
+  "Console.ResetColor();",
   "Console.CursorLeft",
   "Console.CursorTop",
   "Console.SetCursorPosition",
@@ -834,25 +834,25 @@ class Program
   "Console.Title = \"Mein Programm\";",
   "Console.CursorVisible = false;",
   "Console.CursorVisible = true;",
-  "Math.Abs",
-  "Math.Max",
-  "Math.Min",
-  "Math.Round",
-  "Math.Floor",
-  "Math.Ceiling",
-  "Math.Sqrt",
-  "Math.Pow",
-  "Math.Sin",
-  "Math.Cos",
-  "Math.Tan",
+  "Math.Abs()",
+  "Math.Max()",
+  "Math.Min()",
+  "Math.Round()",
+  "Math.Floor()",
+  "Math.Ceiling()",
+  "Math.Sqrt()",
+  "Math.Pow()",
+  "Math.Sin()",
+  "Math.Cos()",
+  "Math.Tan()",
   "Math.Log",
   "Math.Exp",
   "Math.Clamp",
   "Math.PI",
   "Math.E",
   "Random",
-  "Random.Next",
-  "Random.NextDouble",
+  "Random.Next()",
+  "Random.NextDouble()",
   "Random.NextBytes",
   "Random.Shared",
   "DateTime",
@@ -869,7 +869,7 @@ class Program
   "Stopwatch",
   "Stopwatch.StartNew",
   "Guid",
-  "Guid.NewGuid",
+  "Guid.NewGuid()",
   "Guid.Empty",
   "Guid.Parse",
   "Guid.TryParse",
@@ -883,22 +883,22 @@ class Program
   "Enum.TryParse",
   "Enum.GetValues",
   "File",
-  "File.Exists",
-  "File.ReadAllText",
-  "File.ReadAllLines",
-  "File.WriteAllText",
+  "File.Exists()",
+  "File.ReadAllText()",
+  "File.ReadAllLines()",
+  "File.WriteAllText()",
   "File.WriteAllLines",
   "File.AppendAllText",
   "File.Copy",
   "File.Move",
   "File.Delete",
   "Directory",
-  "Directory.Exists",
-  "Directory.CreateDirectory",
+  "Directory.Exists()",
+  "Directory.CreateDirectory()",
   "Directory.GetFiles",
   "Directory.GetDirectories",
   "Path",
-  "Path.Combine",
+  "Path.Combine()",
   "Path.GetFileName",
   "Path.GetExtension",
   "Path.GetDirectoryName",
@@ -920,12 +920,12 @@ class Program
   "Regex",
   "Regex.Match",
   "Regex.Matches",
-  "Regex.IsMatch",
-  "Regex.Replace",
+  "Regex.IsMatch()",
+  "Regex.Replace()",
   "Regex.Split",
   "Task",
-  "Task.Run",
-  "Task.Delay",
+  "Task.Run()",
+  "Task.Delay()",
   "Task.WhenAll",
   "Task.WhenAny",
   "Task.CompletedTask",
@@ -1017,8 +1017,8 @@ class Program
 
   function completionKind(item){
     if(item.includes('ConsoleColor') || item.includes('ForegroundColor') || item.includes('BackgroundColor')) return 'Farbe';
-    if(item.startsWith('Console.')) return 'Console';
     if(item.includes('(')) return 'Methode';
+    if(item.startsWith('Console.')) return 'Console';
     if(item.includes('<')) return 'Typ';
     if(/^(if|else|for|foreach|while|switch|try|catch|class|public|private|static|return)$/.test(item)) return 'Keyword';
     return 'C#';
@@ -1098,7 +1098,10 @@ class Program
       if(activeCompletion && completionMatches.length && suggestionBox.classList.contains('show')){
         const chosen=completionMatches[completionIndex];
         cm.replaceRange(chosen,activeCompletion.start,activeCompletion.end);
-        cm.setCursor({line:activeCompletion.start.line,ch:activeCompletion.start.ch+chosen.length});
+        let cursorCh=activeCompletion.start.ch+chosen.length;
+        if(chosen.endsWith('();')) cursorCh-=2;
+        else if(chosen.endsWith('()')) cursorCh-=1;
+        cm.setCursor({line:activeCompletion.start.line,ch:cursorCh});
         activeCompletion=null;
         completionMatches=[];
         suggestionBox.classList.remove('show');
