@@ -2826,6 +2826,44 @@
     @media(max-width:1100px){.vocab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:700px){.vocab-grid{grid-template-columns:1fr}}
 
+
+    /* BUILT_FLASH_PRACTICE_V2 */
+    .flash-practice-shell{max-width:920px;margin:0 auto}
+    .flash-practice-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+    .flash-practice-meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+    .flash-practice-pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-size:11px;font-weight:800;color:var(--muted)}
+    .flash-practice-pill strong{color:var(--text)}
+    .flash-stage{display:grid;grid-template-columns:140px minmax(0,1fr) 140px;gap:18px;align-items:center}
+    .flash-side-pile{min-height:250px;border:1px dashed var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:rgba(255,255,255,.35)}
+    .flash-side-pile .pile-count{font-size:34px;font-weight:900;line-height:1}
+    .flash-side-pile .pile-label{font-size:11px;color:var(--muted);margin-top:8px}
+    .flash-side-pile.known{border-color:rgba(37,143,93,.35)}
+    .flash-side-pile.unknown{border-color:rgba(191,97,73,.35)}
+    .flash-big-card{min-height:430px;padding:36px;border:1px solid var(--line);border-radius:28px;background:var(--panel);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;user-select:none;position:relative}
+    .flash-big-card .flash-number{position:absolute;top:18px;left:20px;font-size:11px;font-weight:850;color:var(--muted)}
+    .flash-big-card .flash-side-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:850;margin-bottom:18px}
+    .flash-big-card .flash-main{font-size:34px;line-height:1.28;font-weight:850;max-width:720px}
+    .flash-big-card.revealed .flash-main{font-size:30px}
+    .flash-answer{display:none;margin-top:26px;padding-top:24px;border-top:1px solid var(--line);width:100%;font-size:28px;font-weight:800;line-height:1.3}
+    .flash-big-card.revealed .flash-answer{display:block}
+    .flash-hint{margin-top:22px;color:var(--muted);font-size:11px}
+    .flash-controls{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:18px}
+    .flash-choice{min-height:58px;font-weight:850;font-size:13px}
+    .flash-choice.known-btn{background:#e9f6ef !important;color:#176a45 !important}
+    .flash-choice.unknown-btn{background:#fff0ec !important;color:#9a432f !important}
+    .flash-middle-actions{display:flex;gap:8px}
+    .flash-complete{padding:34px;text-align:center;border:1px solid var(--line);border-radius:22px;background:var(--panel)}
+    .flash-complete h3{font-size:26px;margin:0 0 10px}
+    .flash-complete p{color:var(--muted);margin-bottom:20px}
+    @media(max-width:900px){
+      .flash-stage{grid-template-columns:1fr}
+      .flash-side-pile{min-height:auto;display:none}
+      .flash-big-card{min-height:360px;padding:28px 20px}
+      .flash-big-card .flash-main{font-size:28px}
+      .flash-controls{grid-template-columns:1fr 1fr}
+      .flash-middle-actions{grid-column:1/-1;justify-content:center;order:-1}
+    }
+  
   </style>
 
 <style>
@@ -3179,6 +3217,23 @@ class Program
     renderFlashcards();
   }
 
+  const flashPracticeState={subjectId:null,queue:[],known:[],unknown:[],index:0,revealed:false,round:1};
+
+  function resetFlashPractice(subjectId){
+    const cards=Array.isArray(vocabSets[subjectId])?vocabSets[subjectId]:[];
+    flashPracticeState.subjectId=subjectId;
+    flashPracticeState.queue=[...cards];
+    flashPracticeState.known=[];
+    flashPracticeState.unknown=[];
+    flashPracticeState.index=0;
+    flashPracticeState.revealed=false;
+    flashPracticeState.round=1;
+  }
+
+  function currentFlashCard(){
+    return flashPracticeState.queue[flashPracticeState.index]||null;
+  }
+
   function renderFlashcards(){
     const host=document.getElementById('flashcardsContent');
     if(!host) return;
@@ -3189,28 +3244,126 @@ class Program
       host.innerHTML='<div class="empty card vocab-empty"><div class="emoji">◫</div><h4>Noch keine Karteikarten</h4><p>Für dieses Fach sind noch keine Vokabeln oder Lernkarten hinterlegt.</p></div>';
       return;
     }
-    const startNumber=1;
+    if(flashPracticeState.subjectId!==subject.id || flashPracticeState.queue.length===0 && flashPracticeState.known.length===0 && flashPracticeState.unknown.length===0){
+      resetFlashPractice(subject.id);
+    }
+
+    const card=currentFlashCard();
+    if(!card){
+      const unknownCount=flashPracticeState.unknown.length;
+      host.innerHTML=`
+        <div class="flash-practice-shell">
+          <div class="flash-complete">
+            <h3>Runde ${flashPracticeState.round} abgeschlossen</h3>
+            <p><strong>${flashPracticeState.known.length}</strong> richtig · <strong>${unknownCount}</strong> noch unsicher</p>
+            ${unknownCount>0
+              ? '<button class="btn primary" onclick="practiceUnknownAgain()">Unsichere nochmals üben</button>'
+              : '<button class="btn primary" onclick="restartFlashPractice()">Alle nochmals üben</button>'}
+          </div>
+        </div>`;
+      return;
+    }
+
+    const total=flashPracticeState.queue.length;
+    const pos=flashPracticeState.index+1;
     host.innerHTML=`
-      <div class="vocab-toolbar">
-        <div class="vocab-toolbar-left">
-          <span class="tag">${subject.id===FR_SUBJECT_ID?'BM_Luzern Reprise étape 2 (apprentis) (2026)':'Vokabelset'}</span>
-          <span class="vocab-count">${cards.length} Karten</span>
+      <div class="flash-practice-shell">
+        <div class="flash-practice-head">
+          <div class="flash-practice-meta">
+            <span class="flash-practice-pill"><strong>${pos}</strong> / ${total}</span>
+            <span class="flash-practice-pill">Richtig: <strong>${flashPracticeState.known.length}</strong></span>
+            <span class="flash-practice-pill">Neuer Stapel: <strong>${flashPracticeState.unknown.length}</strong></span>
+          </div>
+          <button class="btn" onclick="restartFlashPractice()">Neu starten</button>
         </div>
-        <span class="muted" style="font-size:11px">Karte anklicken, um die Übersetzung hervorzuheben.</span>
-      </div>
-      <div class="vocab-grid">
-        ${cards.map((card,i)=>`
-          <article class="card vocab-card" onclick="this.classList.toggle('revealed')">
-            <div>
-              <div class="num">${card.num || (startNumber+i)}</div>
-              <div class="front">${escapeHtml(card.front)}</div>
-              <div class="back">${escapeHtml(card.back)}</div>
-            </div>
-            <div class="flip-hint">Übersetzung anzeigen</div>
+
+        <div class="flash-stage">
+          <div class="flash-side-pile known">
+            <div class="pile-count">${flashPracticeState.known.length}</div>
+            <div class="pile-label">← richtig</div>
+          </div>
+
+          <article class="flash-big-card ${flashPracticeState.revealed?'revealed':''}" onclick="toggleFlashAnswer()">
+            <div class="flash-number">Nr. ${card.num||pos}</div>
+            <div class="flash-side-label">Französisch</div>
+            <div class="flash-main">${escapeHtml(card.front)}</div>
+            <div class="flash-answer">${escapeHtml(card.back)}</div>
+            <div class="flash-hint">${flashPracticeState.revealed?'Jetzt mit ← oder → bewerten':'Klicken oder Leertaste: Lösung anzeigen'}</div>
           </article>
-        `).join('')}
+
+          <div class="flash-side-pile unknown">
+            <div class="pile-count">${flashPracticeState.unknown.length}</div>
+            <div class="pile-label">nicht gewusst →</div>
+          </div>
+        </div>
+
+        <div class="flash-controls">
+          <button class="btn flash-choice known-btn" onclick="markFlashKnown()">← Gewusst</button>
+          <div class="flash-middle-actions"><button class="btn" onclick="toggleFlashAnswer()">Lösung</button></div>
+          <button class="btn flash-choice unknown-btn" onclick="markFlashUnknown()">Nicht gewusst →</button>
+        </div>
       </div>`;
   }
+
+  window.toggleFlashAnswer=function(){
+    if(!currentFlashCard()) return;
+    flashPracticeState.revealed=!flashPracticeState.revealed;
+    renderFlashcards();
+  };
+
+  function advanceFlash(){
+    flashPracticeState.index++;
+    flashPracticeState.revealed=false;
+    renderFlashcards();
+  }
+
+  window.markFlashKnown=function(){
+    const card=currentFlashCard();
+    if(!card) return;
+    flashPracticeState.known.push(card);
+    advanceFlash();
+  };
+
+  window.markFlashUnknown=function(){
+    const card=currentFlashCard();
+    if(!card) return;
+    flashPracticeState.unknown.push(card);
+    advanceFlash();
+  };
+
+  window.practiceUnknownAgain=function(){
+    flashPracticeState.queue=[...flashPracticeState.unknown];
+    flashPracticeState.unknown=[];
+    flashPracticeState.known=[];
+    flashPracticeState.index=0;
+    flashPracticeState.revealed=false;
+    flashPracticeState.round++;
+    renderFlashcards();
+  };
+
+  window.restartFlashPractice=function(){
+    const subject=getActiveSubject();
+    if(!subject) return;
+    resetFlashPractice(subject.id);
+    renderFlashcards();
+  };
+
+  document.addEventListener('keydown',function(e){
+    if(!document.getElementById('page-flashcards')?.classList.contains('active')) return;
+    if(!currentFlashCard()) return;
+    if(e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    if(e.code==='Space'){
+      e.preventDefault();
+      toggleFlashAnswer();
+    } else if(e.key==='ArrowLeft'){
+      e.preventDefault();
+      markFlashKnown();
+    } else if(e.key==='ArrowRight'){
+      e.preventDefault();
+      markFlashUnknown();
+    }
+  });
+
   window.selectSubject=function(id){
     activeSubjectId=id;
     localStorage.setItem(ACTIVE_SUBJECT_KEY,id);
