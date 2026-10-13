@@ -178,8 +178,10 @@
     .cm-s-material-darker .cm-variable-2{color:#82aaff}
     .cm-s-material-darker .cm-def{color:#82aaff}
     .cm-s-material-darker .cm-type{color:#ffcb6b}
-    .starter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .starter-card{padding:22px;display:flex;flex-direction:column;gap:12px;min-height:245px;transition:.2s}
+    .starter-carousel{position:relative}
+    .starter-grid{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:2px 2px 10px;scrollbar-width:none}
+    .starter-grid::-webkit-scrollbar{display:none}
+    .starter-card{flex:0 0 calc((100% - 32px)/3);scroll-snap-align:start;padding:20px;display:flex;flex-direction:column;gap:10px;min-height:250px;transition:.2s}
     .starter-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
     .starter-card .level{display:inline-flex;width:max-content;padding:5px 9px;border-radius:999px;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:800}
     .starter-card h4{font-size:18px;margin:2px 0 0}
@@ -187,6 +189,9 @@
     .starter-steps{margin:0;padding-left:18px;color:#475569;font-size:13px;line-height:1.65}
     .starter-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
     .video-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+    .starter-nav{display:flex;gap:8px}
+    .starter-nav .icon-btn{width:38px;height:38px}
+    .starter-counter{font-size:12px;color:var(--muted);font-weight:700}
     .code-suggestion{position:absolute;display:none;z-index:20;left:18px;top:82px;width:auto;min-width:230px;max-width:330px;background:#111827;border:1px solid #334155;border-radius:9px;color:#e2e8f0;font-family:"SFMono-Regular",Consolas,monospace;font-size:12px;box-shadow:0 12px 28px rgba(0,0,0,.34);overflow:hidden}
     .code-suggestion.show{display:block}
     .suggestion-list{padding:4px}
@@ -227,7 +232,8 @@
     .mobile-menu{display:none}
     @media(max-width:1100px){
       .grid.metrics,.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .subject-grid,.library-grid,.games-grid,.starter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .subject-grid,.library-grid,.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .starter-card{flex-basis:calc((100% - 16px)/2)}
       .two-col,.code-shell{grid-template-columns:1fr}
     }
     @media(max-width:800px){
@@ -239,7 +245,8 @@
       .topbar{padding:0 16px}
       .hero{padding:26px 22px}
       .hero h2{font-size:31px}
-      .grid.metrics,.subject-grid,.library-grid,.quick-grid,.games-grid,.starter-grid,.admin-grid{grid-template-columns:1fr}
+      .grid.metrics,.subject-grid,.library-grid,.quick-grid,.games-grid,.admin-grid{grid-template-columns:1fr}
+      .starter-card{flex-basis:88%}
       .timer{font-size:64px}
     }
   </style>
@@ -307,8 +314,17 @@
         <div class="section-head"><div><h3>Deine Fächer</h3><p>Starte mit einem Fach oder erstelle ein neues.</p></div><button class="btn" id="addSubjectHome">+ Neues Fach</button></div>
         <div class="grid subject-grid" id="homeSubjects"></div>
 
-        <div class="section-head"><div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben – mit Aufgabe, Lernzielen und Erklärungsvideo. Keine fertige Lösung wird eingesetzt.</p></div><button class="btn" data-go="code">Zum Code-Labor</button></div>
-        <div class="grid starter-grid" id="starterGrid"></div>
+        <div class="section-head">
+          <div><h3>C# Übungen</h3><p>10 Projekte zum Selberschreiben – kompakt nebeneinander statt als lange Liste.</p></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="starter-counter" id="starterCounter">1–3 von 10</span>
+            <div class="starter-nav">
+              <button class="icon-btn" id="starterPrev" title="Vorherige Übungen">←</button>
+              <button class="icon-btn" id="starterNext" title="Weitere Übungen">→</button>
+            </div>
+          </div>
+        </div>
+        <div class="starter-carousel"><div class="starter-grid" id="starterGrid"></div></div>
 
         <div class="section-head"><div><h3>Schnellzugriff</h3><p>Die wichtigsten Lernwerkzeuge direkt erreichbar.</p></div></div>
         <div class="grid quick-grid">
@@ -1446,6 +1462,34 @@ class Program
 
   renderStarters();
 
+  const starterGridEl=document.getElementById('starterGrid');
+  const starterCounter=document.getElementById('starterCounter');
+  function starterVisibleCount(){
+    if(window.innerWidth<=800) return 1;
+    if(window.innerWidth<=1100) return 2;
+    return 3;
+  }
+  function updateStarterCounter(){
+    const cards=[...starterGridEl.querySelectorAll('.starter-card')];
+    if(!cards.length) return;
+    const cardWidth=cards[0].getBoundingClientRect().width+16;
+    const start=Math.min(cards.length-1,Math.max(0,Math.round(starterGridEl.scrollLeft/cardWidth)));
+    const count=starterVisibleCount();
+    starterCounter.textContent=(start+1)+'–'+Math.min(cards.length,start+count)+' von '+cards.length;
+  }
+  function moveStarters(direction){
+    const card=starterGridEl.querySelector('.starter-card');
+    if(!card) return;
+    const step=(card.getBoundingClientRect().width+16)*starterVisibleCount();
+    starterGridEl.scrollBy({left:direction*step,behavior:'smooth'});
+    setTimeout(updateStarterCounter,320);
+  }
+  document.getElementById('starterPrev').addEventListener('click',()=>moveStarters(-1));
+  document.getElementById('starterNext').addEventListener('click',()=>moveStarters(1));
+  starterGridEl.addEventListener('scroll',()=>requestAnimationFrame(updateStarterCounter));
+  window.addEventListener('resize',updateStarterCounter);
+  updateStarterCounter();
+
   const savedCode=localStorage.getItem(CODE_KEY);
   if(savedCode) editor.setValue(savedCode);
 
@@ -1468,12 +1512,16 @@ class Program
     const res=await fetch('https://wandbox.org/api/list.json');
     if(!res.ok) throw new Error('Compiler-Liste konnte nicht geladen werden.');
     const compilers=await res.json();
-    const csharp=compilers.filter(c=>String(c.language||'').toLowerCase()==='c#');
+    const csharp=compilers.filter(c=>{
+      const language=String(c.language||'').toLowerCase();
+      const name=String(c.name||'').toLowerCase();
+      return language==='c#' || language==='csharp' || name.includes('mono') || name.includes('csharp');
+    });
     if(!csharp.length) throw new Error('Aktuell wurde kein C#-Compiler gefunden.');
     cachedCSharpCompiler=
-      csharp.find(c=>/dotnet/i.test(c.name||'')) ||
       csharp.find(c=>/mono-head/i.test(c.name||'')) ||
       csharp.find(c=>/mono/i.test(c.name||'')) ||
+      csharp.find(c=>/dotnet/i.test(c.name||'')) ||
       csharp[0];
     return cachedCSharpCompiler;
   }
