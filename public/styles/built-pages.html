@@ -3311,6 +3311,7 @@ class Program
   const STORAGE_KEY = 'lernwelt_subjects_v2';
   const CODE_KEY = 'lernwelt_code_v1';
   const ACTIVE_SUBJECT_KEY = 'lernwelt_active_subject_v1';
+  const FLASH_PRACTICE_STATE_KEY = 'built_flash_practice_state_v1';
   const VOCAB_KEY = 'built_vocab_sets_v1';
   const FR_SUBJECT_ID = 'francais';
   const FR_VOCAB_VERSION_KEY = 'built_fr_vocab_version';
@@ -3398,7 +3399,18 @@ class Program
     renderFlashcards();
   }
 
-  const flashPracticeState={subjectId:null,queue:[],known:[],unknown:[],index:0,revealed:false,round:1};
+  const savedFlashPracticeState=JSON.parse(localStorage.getItem(FLASH_PRACTICE_STATE_KEY)||'null');
+  const flashPracticeState=savedFlashPracticeState && typeof savedFlashPracticeState==='object'
+    ? savedFlashPracticeState
+    : {subjectId:null,queue:[],known:[],unknown:[],index:0,revealed:false,round:1};
+
+  function saveFlashPracticeState(){
+    localStorage.setItem(FLASH_PRACTICE_STATE_KEY,JSON.stringify(flashPracticeState));
+  }
+
+  function clearFlashPracticeState(){
+    localStorage.removeItem(FLASH_PRACTICE_STATE_KEY);
+  }
 
   function resetFlashPractice(subjectId){
     const cards=Array.isArray(vocabSets[subjectId])?vocabSets[subjectId]:[];
@@ -3409,6 +3421,7 @@ class Program
     flashPracticeState.index=0;
     flashPracticeState.revealed=false;
     flashPracticeState.round=1;
+    saveFlashPracticeState();
   }
 
   function currentFlashCard(){
@@ -3425,7 +3438,14 @@ class Program
       host.innerHTML='<div class="empty card vocab-empty"><div class="emoji">◫</div><h4>Noch keine Karteikarten</h4><p>Für dieses Fach sind noch keine Vokabeln oder Lernkarten hinterlegt.</p></div>';
       return;
     }
-    if(flashPracticeState.subjectId!==subject.id || flashPracticeState.queue.length===0 && flashPracticeState.known.length===0 && flashPracticeState.unknown.length===0){
+    const stateMatchesSubject=flashPracticeState.subjectId===subject.id;
+    const stateHasProgress=
+      Array.isArray(flashPracticeState.queue) &&
+      Array.isArray(flashPracticeState.known) &&
+      Array.isArray(flashPracticeState.unknown) &&
+      Number.isInteger(flashPracticeState.index);
+
+    if(!stateMatchesSubject || !stateHasProgress){
       resetFlashPractice(subject.id);
     }
 
@@ -3489,12 +3509,14 @@ class Program
   window.toggleFlashAnswer=function(){
     if(!currentFlashCard()) return;
     flashPracticeState.revealed=!flashPracticeState.revealed;
+    saveFlashPracticeState();
     renderFlashcards();
   };
 
   function advanceFlash(){
     flashPracticeState.index++;
     flashPracticeState.revealed=false;
+    saveFlashPracticeState();
     renderFlashcards();
   }
 
@@ -3519,12 +3541,14 @@ class Program
     flashPracticeState.index=0;
     flashPracticeState.revealed=false;
     flashPracticeState.round++;
+    saveFlashPracticeState();
     renderFlashcards();
   };
 
   window.restartFlashPractice=function(){
     const subject=getActiveSubject();
     if(!subject) return;
+    clearFlashPracticeState();
     resetFlashPractice(subject.id);
     renderFlashcards();
   };
