@@ -5255,6 +5255,96 @@
   .casino-note{margin-top:14px;color:var(--muted);font-size:11px;line-height:1.55;text-align:center}
   @media(max-width:950px){.casino-grid{grid-template-columns:1fr}}
   @media(max-width:600px){.roulette-bets{grid-template-columns:repeat(2,1fr)}.casino-wallet{width:100%;justify-content:space-between}.page-title{flex-wrap:wrap}}
+
+  /* Real spinning roulette wheel */
+  .roulette-card .casino-card-head{align-items:center}
+  .roulette-wheel-wrap{
+    position:relative;
+    width:168px;
+    height:168px;
+    flex:0 0 168px;
+    margin-left:auto;
+  }
+  .roulette-wheel{
+    position:absolute;
+    inset:9px;
+    border-radius:50%;
+    border:5px solid #d8c6a0;
+    box-shadow:
+      0 0 0 2px rgba(0,0,0,.25),
+      0 10px 26px rgba(0,0,0,.18),
+      inset 0 0 0 10px rgba(255,255,255,.08);
+    transition:transform 4.2s cubic-bezier(.12,.68,.18,1);
+    overflow:hidden;
+    will-change:transform;
+  }
+  .roulette-wheel:after{
+    content:"";
+    position:absolute;
+    inset:23%;
+    border-radius:50%;
+    background:radial-gradient(circle at 40% 35%,#f2ead8,#c9b17e 58%,#887247 100%);
+    border:3px solid rgba(255,255,255,.45);
+    box-shadow:0 3px 14px rgba(0,0,0,.28);
+    z-index:3;
+  }
+  .roulette-wheel-center{
+    position:absolute;
+    inset:38%;
+    z-index:5;
+    border-radius:50%;
+    background:#16181d;
+    border:2px solid #e3d3ad;
+    display:grid;
+    place-items:center;
+    color:#f5ead3;
+    font-size:7px;
+    font-weight:900;
+    letter-spacing:.12em;
+  }
+  .roulette-pointer{
+    position:absolute;
+    z-index:8;
+    top:-1px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-top:0;
+    border-bottom:20px solid #f0dcae;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));
+  }
+  .roulette-wheel-number{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:18px;
+    height:18px;
+    margin:-9px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:6.5px;
+    font-weight:900;
+    line-height:1;
+    z-index:2;
+    transform-origin:50% 50%;
+    text-shadow:0 1px 2px rgba(0,0,0,.8);
+    pointer-events:none;
+  }
+  .roulette-wheel.spinning{
+    filter:saturate(1.06);
+  }
+  .roulette-result{margin-top:16px}
+  @media(max-width:620px){
+    .roulette-card .casino-card-head{align-items:flex-start}
+    .roulette-wheel-wrap{width:126px;height:126px;flex-basis:126px}
+    .roulette-wheel{inset:7px;border-width:4px}
+    .roulette-pointer{border-left-width:8px;border-right-width:8px;border-bottom-width:16px}
+    .roulette-wheel-number{font-size:5.5px}
+  }
+
 </style>
 
 </head>
@@ -5491,7 +5581,12 @@ class Program
           <section class="casino-card roulette-card">
             <div class="casino-card-head">
               <div><span class="casino-kicker">ROULETTE</span><h3>European</h3></div>
-              <div class="roulette-mini-wheel"><span id="rouletteBall">•</span></div>
+              <div class="roulette-wheel-wrap" aria-label="Roulette-Rad">
+                <div class="roulette-pointer"></div>
+                <div class="roulette-wheel" id="rouletteWheel">
+                  <div class="roulette-wheel-center"><span>BUILT</span></div>
+                </div>
+              </div>
             </div>
             <p class="muted">Setze auf Rot, Schwarz, Gerade, Ungerade oder eine einzelne Zahl.</p>
 
@@ -7040,7 +7135,32 @@ try { history.replaceState({ builtStylePreview: true }, '', '/'); } catch (e) {}
   document.getElementById('bjStand')?.addEventListener('click',()=>{if(bjLive)finishDealer()});
 
   const reds=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+  const rouletteOrder=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+  const rouletteWheel=document.getElementById('rouletteWheel');
+  let rouletteRotation=0;
+  let rouletteSpinning=false;
   let rouletteType='red';
+
+  function buildRouletteWheel(){
+    if(!rouletteWheel)return;
+    const step=360/rouletteOrder.length;
+    const stops=[];
+    rouletteOrder.forEach((n,i)=>{
+      const start=i*step;
+      const end=(i+1)*step;
+      const colour=n===0?'#198754':(reds.has(n)?'#b83f4a':'#181a1f');
+      stops.push(colour+' '+start+'deg '+end+'deg');
+
+      const label=document.createElement('span');
+      label.className='roulette-wheel-number';
+      label.textContent=n;
+      const angle=(i+.5)*step;
+      label.style.transform='rotate('+angle+'deg) translateY(-62px) rotate('+(-angle)+'deg)';
+      rouletteWheel.appendChild(label);
+    });
+    rouletteWheel.style.background='conic-gradient(from -90deg,'+stops.join(',')+')';
+  }
+  buildRouletteWheel();
   document.querySelectorAll('.roulette-choice').forEach(btn=>{
     btn.addEventListener('click',()=>{
       document.querySelectorAll('.roulette-choice').forEach(b=>b.classList.remove('active'));
@@ -7050,27 +7170,54 @@ try { history.replaceState({ builtStylePreview: true }, '', '/'); } catch (e) {}
   });
   function rouletteColour(n){return n===0?'Grün':reds.has(n)?'Rot':'Schwarz'}
   document.getElementById('rouletteSpin')?.addEventListener('click',()=>{
+    if(rouletteSpinning)return;
     const status=document.getElementById('rouletteStatus'),input=document.getElementById('rouletteBet'),v=validBet(input);
     if(!v.ok){if(status)status.textContent=v.msg;return}
     let pick=Number(document.getElementById('roulettePick')?.value);
     if(rouletteType==='number'&&(!Number.isInteger(pick)||pick<0||pick>36)){if(status)status.textContent='Wähle eine Zahl zwischen 0 und 36.';return}
-    const bet=v.bet;coins-=bet;saveCoins();
-    const n=rng(37),colour=rouletteColour(n);
-    document.getElementById('rouletteNumber').textContent=n;
-    document.getElementById('rouletteColour').textContent=colour;
-    const ball=document.getElementById('rouletteBall');if(ball)ball.textContent=n;
-    let win=false,multiplier=0;
-    if(rouletteType==='red'){win=reds.has(n);multiplier=2}
-    if(rouletteType==='black'){win=n!==0&&!reds.has(n);multiplier=2}
-    if(rouletteType==='even'){win=n!==0&&n%2===0;multiplier=2}
-    if(rouletteType==='odd'){win=n!==0&&n%2===1;multiplier=2}
-    if(rouletteType==='number'){win=n===pick;multiplier=36}
-    if(win){
-      const award=bet*multiplier;coins+=award;saveCoins();
-      if(status)status.textContent='Gewonnen! +'+money(award-bet)+' Coins.';
-    }else if(status){
-      status.textContent='Nicht getroffen. -'+money(bet)+' Coins.';
+
+    const spinBtn=document.getElementById('rouletteSpin');
+    const bet=v.bet;
+    coins-=bet;saveCoins();
+    rouletteSpinning=true;
+    if(spinBtn){spinBtn.disabled=true;spinBtn.textContent='Dreht …'}
+    if(status)status.textContent='Das Rad dreht …';
+
+    const n=rng(37);
+    const colour=rouletteColour(n);
+    const idx=rouletteOrder.indexOf(n);
+    const step=360/rouletteOrder.length;
+    const target=360-(idx+.5)*step;
+    rouletteRotation += 360*6 + ((target-(rouletteRotation%360)+360)%360);
+
+    if(rouletteWheel){
+      rouletteWheel.classList.add('spinning');
+      rouletteWheel.style.transform='rotate('+rouletteRotation+'deg)';
     }
+
+    setTimeout(()=>{
+      document.getElementById('rouletteNumber').textContent=n;
+      document.getElementById('rouletteColour').textContent=colour;
+
+      let win=false,multiplier=0;
+      if(rouletteType==='red'){win=reds.has(n);multiplier=2}
+      if(rouletteType==='black'){win=n!==0&&!reds.has(n);multiplier=2}
+      if(rouletteType==='even'){win=n!==0&&n%2===0;multiplier=2}
+      if(rouletteType==='odd'){win=n!==0&&n%2===1;multiplier=2}
+      if(rouletteType==='number'){win=n===pick;multiplier=36}
+
+      if(win){
+        const award=bet*multiplier;
+        coins+=award;saveCoins();
+        if(status)status.textContent='Gewonnen! +'+money(award-bet)+' Coins.';
+      }else if(status){
+        status.textContent='Nicht getroffen. -'+money(bet)+' Coins.';
+      }
+
+      rouletteSpinning=false;
+      rouletteWheel?.classList.remove('spinning');
+      if(spinBtn){spinBtn.disabled=false;spinBtn.textContent='Drehen'}
+    },4300);
   });
 })();
 </script>
