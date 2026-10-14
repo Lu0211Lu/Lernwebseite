@@ -5034,6 +5034,566 @@
       .ember-footer{align-items:flex-start;flex-direction:column}
     }
 
+
+    /* ===== BUILT – Orbit Console ===== */
+    :root{
+      --bg:#08090b;
+      --panel:#101216;
+      --panel-2:#0d0f12;
+      --text:#f4f4f2;
+      --muted:#8b9098;
+      --line:#242832;
+      --accent:#ff4f7b;
+      --accent-2:#3dd6c0;
+      --accent-soft:#2a121b;
+      --success:#65c98f;
+      --warning:#e0b75f;
+      --danger:#ff657f;
+      --shadow:0 20px 70px rgba(0,0,0,.42);
+      --radius:12px;
+    }
+
+    html,body,.main,.content,.page{background:#08090b !important;color:#f4f4f2 !important}
+    body{
+      background:
+        radial-gradient(circle at 12% 8%,rgba(255,79,123,.11),transparent 20%),
+        radial-gradient(circle at 88% 18%,rgba(61,214,192,.08),transparent 22%),
+        #08090b !important;
+    }
+
+    .app{
+      display:block !important;
+    }
+
+    .sidebar{
+      position:fixed !important;
+      left:18px !important;
+      top:18px !important;
+      bottom:18px !important;
+      width:72px !important;
+      height:auto !important;
+      min-height:0 !important;
+      padding:12px 8px !important;
+      background:#0d0f12 !important;
+      border:1px solid #232731 !important;
+      border-radius:18px !important;
+      box-shadow:0 24px 60px rgba(0,0,0,.35) !important;
+      z-index:40 !important;
+    }
+
+    .brand{
+      display:block !important;
+      padding:0 0 16px !important;
+      text-align:center !important;
+    }
+
+    .brand-mark{
+      width:42px !important;
+      height:42px !important;
+      margin:0 auto !important;
+      border-radius:12px !important;
+      background:#ff4f7b !important;
+      color:#111 !important;
+      box-shadow:none !important;
+    }
+
+    .brand>div:last-child{display:none !important}
+
+    .nav{
+      display:grid !important;
+      gap:8px !important;
+    }
+
+    .nav button{
+      width:54px !important;
+      height:48px !important;
+      padding:0 !important;
+      margin:0 auto !important;
+      display:grid !important;
+      place-items:center !important;
+      font-size:0 !important;
+      color:#767d87 !important;
+      border-radius:12px !important;
+      background:transparent !important;
+    }
+
+    .nav .ico{
+      width:auto !important;
+      font-size:17px !important;
+    }
+
+    .nav button:hover{
+      background:#161920 !important;
+      color:#fff !important;
+    }
+
+    .nav button.active{
+      background:#f2f2ef !important;
+      color:#0d0f12 !important;
+      box-shadow:none !important;
+    }
+
+    .nav button.active .ico{color:#ff4f7b !important}
+
+    .sidebar-footer{
+      margin-top:auto !important;
+    }
+
+    .profile{
+      width:50px !important;
+      height:50px !important;
+      padding:0 !important;
+      margin:0 auto !important;
+      display:grid !important;
+      place-items:center !important;
+      border-radius:14px !important;
+      background:#15181e !important;
+      border:1px solid #282d36 !important;
+    }
+
+    .profile .avatar{
+      width:100% !important;height:100% !important;
+      border-radius:14px !important;
+      background:#172821 !important;
+      color:#6dd7bd !important;
+    }
+
+    .profile>div:last-child{display:none !important}
+
+    .main{
+      margin-left:102px !important;
+    }
+
+    .topbar{
+      position:static !important;
+      height:auto !important;
+      padding:24px 30px 0 !important;
+      background:transparent !important;
+      border:0 !important;
+      backdrop-filter:none !important;
+    }
+
+    .topbar h1{
+      color:#8d939d !important;
+      font-size:11px !important;
+      letter-spacing:.18em !important;
+      text-transform:uppercase !important;
+      font-weight:850 !important;
+    }
+
+    .content{
+      max-width:1500px !important;
+      padding:22px 30px 50px !important;
+    }
+
+    .btn,.icon-btn{
+      background:#13161b !important;
+      color:#eef1f2 !important;
+      border:1px solid #2b3038 !important;
+      border-radius:10px !important;
+      box-shadow:none !important;
+    }
+
+    .btn:hover,.icon-btn:hover{
+      background:#1b1f26 !important;
+    }
+
+    .btn.primary{
+      background:#ff4f7b !important;
+      color:#110b0e !important;
+      border-color:#ff4f7b !important;
+    }
+
+    .orbit-shell{
+      display:grid;
+      grid-template-columns:minmax(0,1.65fr) minmax(300px,.5fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .orbit-main{
+      background:#0d0f12;
+      border:1px solid #232731;
+      border-radius:20px;
+      padding:28px;
+      min-height:610px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .orbit-main:after{
+      content:"";
+      position:absolute;
+      width:420px;height:420px;
+      right:-180px;top:-180px;
+      border:1px solid rgba(61,214,192,.12);
+      border-radius:50%;
+      box-shadow:0 0 0 50px rgba(61,214,192,.018),0 0 0 100px rgba(255,79,123,.012);
+      pointer-events:none;
+    }
+
+    .orbit-topline{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      color:#6f7680;
+      font-size:8px;
+      letter-spacing:.16em;
+      font-weight:900;
+      margin-bottom:58px;
+    }
+
+    .orbit-title-wrap{
+      max-width:760px;
+    }
+
+    .orbit-title-wrap h2{
+      margin:0;
+      font-size:74px;
+      line-height:.88;
+      letter-spacing:-.075em;
+      font-weight:850;
+      color:#f4f4f2;
+    }
+
+    .orbit-title-wrap h2 em{
+      color:#ff4f7b;
+      font-style:normal;
+      font-weight:850;
+    }
+
+    .orbit-title-wrap p{
+      margin:20px 0 0;
+      max-width:620px;
+      color:#8c929a;
+      line-height:1.7;
+      font-size:13px;
+    }
+
+    .orbit-primary-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin:34px 0 34px;
+    }
+
+    .orbit-action{
+      min-height:106px;
+      padding:16px;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      text-align:left;
+      background:#12151a;
+      color:#f3f4f4;
+      border:1px solid #282d35;
+      border-radius:12px;
+      cursor:pointer;
+    }
+
+    .orbit-action:hover{
+      background:#181c22;
+      border-color:#343b45;
+    }
+
+    .orbit-action.primary{
+      background:#171216;
+      border-color:#5b2939;
+    }
+
+    .orbit-action-no{
+      width:28px;height:28px;
+      display:grid;place-items:center;
+      border-radius:50%;
+      background:#20242b;
+      color:#9ca2aa;
+      font-size:9px;font-weight:900;
+    }
+
+    .orbit-action.primary .orbit-action-no{
+      background:#ff4f7b;
+      color:#10090d;
+    }
+
+    .orbit-action b{
+      display:block;
+      font-size:13px;
+      margin-bottom:4px;
+    }
+
+    .orbit-action small{
+      color:#747b84;
+      font-size:10px;
+    }
+
+    .orbit-action i{
+      font-style:normal;
+      color:#ff4f7b;
+      font-size:18px;
+    }
+
+    .orbit-section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    .orbit-section-head>div{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .orbit-section-head span,
+    .orbit-section-head small{
+      color:#46c9b7;
+      font-size:8px;
+      letter-spacing:.12em;
+      font-weight:900;
+    }
+
+    .orbit-section-head h3{
+      margin:0;
+      font-size:17px;
+      color:#eef1f2;
+    }
+
+    #homeSubjects.subject-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:10px !important;
+    }
+
+    #homeSubjects .subject-card{
+      min-height:138px !important;
+      padding:15px !important;
+      background:#111419 !important;
+      border:1px solid #262b33 !important;
+      border-radius:10px !important;
+      box-shadow:none !important;
+    }
+
+    #homeSubjects .subject-card:hover{
+      transform:none !important;
+      background:#171b21 !important;
+      border-color:#343a44 !important;
+    }
+
+    #homeSubjects .subject-badge{
+      background:#19261f !important;
+      color:#58d0bb !important;
+      border-radius:7px !important;
+    }
+
+    #homeSubjects .subject-card h4{color:#eef1f2 !important}
+    #homeSubjects .subject-card p{color:#7e858e !important}
+    #homeSubjects .progress{background:#232830 !important}
+    #homeSubjects .progress span{background:#3dd6c0 !important}
+
+    .orbit-rail{
+      display:grid;
+      gap:14px;
+      align-content:start;
+    }
+
+    .orbit-focus{
+      min-height:290px;
+      padding:24px;
+      background:#f0efe9;
+      color:#111317;
+      border-radius:20px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .orbit-eyebrow{
+      font-size:8px;
+      letter-spacing:.16em;
+      font-weight:900;
+      color:#6f7378;
+    }
+
+    .orbit-clock{
+      margin-top:auto;
+      font-size:100px;
+      line-height:.8;
+      letter-spacing:-.09em;
+      font-weight:900;
+    }
+
+    .orbit-focus p{
+      margin:12px 0 22px;
+      color:#777a7f;
+      font-size:12px;
+    }
+
+    .orbit-focus .btn{
+      background:#111317 !important;
+      color:#fff !important;
+      border-color:#111317 !important;
+    }
+
+    .orbit-stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1px;
+      background:#292e36;
+      border:1px solid #292e36;
+      border-radius:14px;
+      overflow:hidden;
+    }
+
+    .orbit-stats>div{
+      background:#111419;
+      padding:16px;
+      min-height:86px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .orbit-stats span{
+      font-size:8px;
+      color:#747b84;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+
+    .orbit-stats strong{
+      color:#f1f3f3;
+      font-size:24px;
+    }
+
+    .orbit-links{
+      background:#0d0f12;
+      border:1px solid #242932;
+      border-radius:14px;
+      padding:8px 14px;
+    }
+
+    .orbit-links button{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      padding:12px 0;
+      color:#c8cdd2;
+      background:transparent;
+      border:0;
+      border-bottom:1px solid #242932;
+      font:inherit;
+      font-size:11px;
+      cursor:pointer;
+    }
+
+    .orbit-links button:last-child{border-bottom:0}
+    .orbit-links b{color:#3dd6c0}
+
+    .orbit-challenges{
+      background:#0d0f12;
+      border:1px solid #232731;
+      border-radius:18px;
+      padding:20px;
+    }
+
+    .starter-controls{display:flex;align-items:center;gap:8px}
+    .starter-carousel{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+      padding:0 !important;
+    }
+
+    .starter-grid{gap:10px !important}
+    .starter-card{
+      background:#111419 !important;
+      border:1px solid #282d35 !important;
+      border-radius:10px !important;
+      box-shadow:none !important;
+      min-height:210px !important;
+    }
+
+    .starter-card:nth-child(n){background:#111419 !important}
+    .starter-card:hover{background:#171b21 !important;transform:none !important}
+    .starter-card .level{
+      background:#26171d !important;
+      color:#ff7293 !important;
+      border:1px solid #4a2631 !important;
+    }
+    .starter-card h4{color:#eef1f2 !important}
+    .starter-card p,.starter-steps{color:#7e858e !important}
+
+    .page-title,.card,.panel,.flash-card,.test-row,.game-card,.empty,.modal-card{
+      background:#101318 !important;
+      border-color:#292f37 !important;
+      color:#eef1f2 !important;
+    }
+
+    .page-title{border-radius:14px !important;box-shadow:none !important}
+    .page-title h2{color:#f2f3f3 !important}
+    .page-title p,.muted{color:#858c95 !important}
+
+    .flash-practice-pill{
+      background:#111419 !important;border-color:#292f37 !important;color:#7d848d !important
+    }
+    .flash-practice-pill strong{color:#f0f2f2 !important}
+    .flash-side-pile{background:#0d1014 !important;border-color:#2b3139 !important}
+    .flash-big-card{
+      background:
+        radial-gradient(circle at 88% 0%,rgba(255,79,123,.07),transparent 26%),
+        #111419 !important;
+      border-color:#303640 !important;
+      color:#f4f4f2 !important;
+      box-shadow:0 26px 80px rgba(0,0,0,.35) !important;
+    }
+    .flash-answer{border-top-color:#31363e !important;color:#55d7c1 !important}
+    .flash-choice.known-btn{background:#162820 !important;color:#72d2a3 !important;border-color:#31513e !important}
+    .flash-choice.unknown-btn{background:#2a151d !important;color:#ff849e !important;border-color:#542b39 !important}
+
+    .modal{background:rgba(4,5,7,.78) !important}
+    .modal-card{background:#101318 !important;border:1px solid #303640 !important}
+    .field label{color:#9ba1a8 !important}
+    .field input,.field textarea,.field select,.stdin-box{
+      background:#090b0e !important;color:#f0f2f3 !important;border-color:#2c323a !important
+    }
+    .field input:focus,.field textarea:focus,.field select:focus,.stdin-box:focus{
+      border-color:#ff4f7b !important;box-shadow:0 0 0 3px rgba(255,79,123,.08) !important
+    }
+
+    #builtStyleToggle{
+      background:#ff4f7b !important;color:#110a0d !important;border-color:#ff4f7b !important
+    }
+    #builtStyleMenu{background:rgba(13,15,18,.98) !important;border-color:#2b3038 !important}
+    #builtStyleMenu a{color:#e8ebed !important}
+    #builtStyleMenu a:hover{background:#181c22 !important}
+    #builtStyleMenu a.active{background:#ff4f7b !important;color:#11090d !important}
+
+    @media(max-width:1050px){
+      .orbit-shell{grid-template-columns:1fr}
+      .orbit-rail{grid-template-columns:1fr 1fr}
+      .orbit-focus{grid-row:span 2}
+    }
+
+    @media(max-width:760px){
+      .main{margin-left:0 !important}
+      .sidebar{
+        left:10px !important;right:10px !important;top:10px !important;bottom:auto !important;
+        width:auto !important;height:64px !important;
+        flex-direction:row !important;
+      }
+      .brand{padding:0 !important}
+      .nav{display:flex !important;overflow-x:auto !important}
+      .nav button{min-width:44px !important;width:44px !important}
+      .sidebar-footer{display:none !important}
+      .topbar{padding-top:88px !important}
+      .orbit-title-wrap h2{font-size:50px}
+      .orbit-primary-row{grid-template-columns:1fr}
+      .orbit-rail{grid-template-columns:1fr}
+      .orbit-focus{grid-row:auto}
+      #homeSubjects.subject-grid{grid-template-columns:1fr !important}
+    }
+
   </style>
 
 <style>
@@ -5090,54 +5650,71 @@
 
     <div class="content">
       <section class="page active" id="page-home">
-        <section class="ember-hero">
-          <div class="ember-copy">
-            <span class="ember-kicker">BUILT / STUDY SPACE</span>
-            <h2>Dein Lernen.<br>Dein Rhythmus.</h2>
-            <p>Fächer, Karteikarten, Tests und C# in einem ruhigen, fokussierten Arbeitsbereich.</p>
-            <div class="ember-actions">
-              <button class="btn primary" data-go="subjects">Fächer öffnen</button>
-              <button class="btn" data-go="flashcards">Karteikarten</button>
+        <section class="orbit-shell">
+          <div class="orbit-main">
+            <div class="orbit-topline">
+              <span>BUILT / STUDY CONTROL</span>
+              <span>FRANZÖSISCH AKTIV</span>
+            </div>
+
+            <div class="orbit-title-wrap">
+              <h2>Lernen.<br><em>Konzentriert.</em></h2>
+              <p>Dein Lernbereich ist jetzt wie ein Kontrollzentrum aufgebaut: eine Hauptaufgabe, klare Module und direkte Wege zu allem Wichtigen.</p>
+            </div>
+
+            <div class="orbit-primary-row">
+              <button class="orbit-action primary" data-go="flashcards">
+                <span class="orbit-action-no">01</span>
+                <span><b>Karteikarten</b><small>Direkt weiterlernen</small></span>
+                <i>↗</i>
+              </button>
+              <button class="orbit-action" data-go="subjects">
+                <span class="orbit-action-no">02</span>
+                <span><b>Fächer</b><small>Inhalte verwalten</small></span>
+                <i>↗</i>
+              </button>
+              <button class="orbit-action" data-go="code">
+                <span class="orbit-action-no">03</span>
+                <span><b>Code-Labor</b><small>C# öffnen</small></span>
+                <i>↗</i>
+              </button>
+            </div>
+
+            <div class="orbit-subjects">
+              <div class="orbit-section-head">
+                <div><span>AKTIV</span><h3>Deine Fächer</h3></div>
+                <button class="btn" id="addSubjectHome">+ Neues Fach</button>
+              </div>
+              <div class="grid subject-grid" id="homeSubjects"></div>
             </div>
           </div>
-          <div class="ember-today">
-            <div class="ember-today-head"><span>HEUTE</span><b>01</b></div>
-            <div class="ember-focus-number">25</div>
-            <div class="ember-focus-label">Minuten Fokus</div>
-            <div class="ember-focus-line"><span></span></div>
-            <button class="btn" data-go="focus">Fokus starten</button>
-          </div>
-        </section>
 
-        <section class="ember-metrics">
-          <div><span>FÄCHER</span><strong id="metricSubjects">0</strong></div>
-          <div><span>KARTEIKARTEN</span><strong>0</strong></div>
-          <div><span>TESTS</span><strong>0</strong></div>
-          <div><span>FOKUS</span><strong>0m</strong></div>
-        </section>
-
-        <section class="ember-layout">
-          <div class="ember-subjects">
-            <div class="ember-section-head">
-              <div><small>01</small><h3>Deine Fächer</h3></div>
-              <button class="btn" id="addSubjectHome">+ Neues Fach</button>
+          <aside class="orbit-rail">
+            <div class="orbit-focus">
+              <span class="orbit-eyebrow">FOKUS</span>
+              <div class="orbit-clock">25</div>
+              <p>Minuten</p>
+              <button class="btn primary" data-go="focus">Starten</button>
             </div>
-            <div class="grid subject-grid" id="homeSubjects"></div>
-          </div>
 
-          <aside class="ember-quick">
-            <div class="ember-section-head"><div><small>02</small><h3>Schnellstart</h3></div></div>
-            <button data-go="flashcards"><span>Karteikarten</span><b>→</b></button>
-            <button data-go="tests"><span>Tests</span><b>→</b></button>
-            <button data-go="code"><span>Code-Labor</span><b>→</b></button>
-            <button data-go="games"><span>Lernspiele</span><b>→</b></button>
-            <button data-go="focus"><span>Fokus & Pausen</span><b>→</b></button>
+            <div class="orbit-stats">
+              <div><span>Fächer</span><strong id="metricSubjects">0</strong></div>
+              <div><span>Karten</span><strong>0</strong></div>
+              <div><span>Tests</span><strong>0</strong></div>
+              <div><span>Fokus</span><strong>0m</strong></div>
+            </div>
+
+            <div class="orbit-links">
+              <button data-go="tests"><span>Tests</span><b>→</b></button>
+              <button data-go="games"><span>Lernspiele</span><b>→</b></button>
+              <button data-go="focus"><span>Fokus & Pausen</span><b>→</b></button>
+            </div>
           </aside>
         </section>
 
-        <section class="ember-challenges">
-          <div class="ember-section-head">
-            <div><small>03</small><h3>C# Übungen</h3></div>
+        <section class="orbit-challenges">
+          <div class="orbit-section-head">
+            <div><span>TRAINING</span><h3>C# Challenges</h3></div>
             <div class="starter-controls">
               <span class="starter-counter" id="starterCounter">1–4 von 10</span>
               <button class="icon-btn" id="starterPrev">←</button>
@@ -5145,15 +5722,6 @@
             </div>
           </div>
           <div class="starter-carousel"><div class="starter-grid" id="starterGrid"></div></div>
-        </section>
-
-        <section class="ember-footer">
-          <div>
-            <span>PAUSE</span>
-            <h3>Kurz abschalten.</h3>
-            <p>Ein paar Minuten raus, dann wieder mit klarem Kopf weiter.</p>
-          </div>
-          <a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener">PolyTrack öffnen ↗</a>
         </section>
       </section>
 
