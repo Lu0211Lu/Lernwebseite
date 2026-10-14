@@ -3046,6 +3046,22 @@
   @media(max-width:650px){.trading-module{grid-template-columns:42px 1fr}.trading-module label{grid-column:2}.trading-form-grid,.trading-glossary,.paper-price-row{grid-template-columns:1fr}.trading-cheat-grid{grid-template-columns:1fr}.paper-sim-top{flex-direction:column}.paper-balance{text-align:left}}
 </style>
 
+<style id="registrationLabStyles">
+.registration-lab{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.registration-lab-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.registration-lab-head strong{display:block}.registration-lab-head small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
+.registration-terminal{min-height:170px;max-height:320px;overflow:auto;background:#0b1220;color:#dbeafe;border-radius:14px;padding:16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:12px;line-height:1.7;white-space:pre-wrap}
+.registration-terminal .muted-console{color:#8291a8}
+.registration-menu{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.registration-form{margin-top:12px;padding:14px;background:var(--panel-2);border:1px solid var(--line);border-radius:14px}
+.registration-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.registration-form-grid label{display:grid;gap:6px;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.registration-form-grid label.full{grid-column:1/-1}
+.registration-form-grid input{padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);outline:none}
+.registration-form-grid input:focus{border-color:var(--accent)}
+.registration-form-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+@media(max-width:650px){.registration-form-grid{grid-template-columns:1fr}.registration-form-grid label.full{grid-column:auto}.registration-lab-head{flex-direction:column}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -3234,6 +3250,28 @@ class Program
               <button class="btn" id="clearCode">Leeren</button>
             </div>
             <p class="muted" style="font-size:12px;line-height:1.6;margin-top:18px">Der Code wird für die Kompilierung in einer externen Sandbox ausgeführt. Keine Passwörter, Tokens oder vertraulichen Daten in den Code schreiben.</p>
+            <div class="registration-lab" id="registrationLab" style="display:none">
+              <div class="registration-lab-head">
+                <div><strong>Interaktive Konsolen-App</strong><small>Hier kannst du die Aufgabe wie in einer echten Konsole bedienen. Die Anmeldungen werden im Browser gespeichert.</small></div>
+                <button class="btn" id="registrationReset">Daten löschen</button>
+              </div>
+              <div class="registration-terminal" id="registrationTerminal"><div>*** Anmeldungen verwalten ***</div><div class="muted-console">Wähle eine Funktion:</div></div>
+              <div class="registration-menu">
+                <button class="btn" id="registrationShow">a · Anmeldungen anzeigen</button>
+                <button class="btn primary" id="registrationNew">n · Neue Anmeldung</button>
+                <button class="btn" id="registrationLectures">g · Gebuchte Vorlesungen</button>
+              </div>
+              <div class="registration-form" id="registrationForm" style="display:none">
+                <div class="registration-form-grid">
+                  <label>Vorname<input id="regFirst" autocomplete="off"></label>
+                  <label>Nachname<input id="regLast" autocomplete="off"></label>
+                  <label>Telefon<input id="regPhone" autocomplete="off"></label>
+                  <label>Geburtsdatum<input id="regBirth" type="date"></label>
+                  <label class="full">Vorlesung<input id="regLecture" autocomplete="off" placeholder="z. B. Physik"></label>
+                </div>
+                <div class="registration-form-actions"><button class="btn primary" id="registrationSave">Anmeldung speichern</button><button class="btn" id="registrationCancel">Abbrechen</button></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -4710,6 +4748,15 @@ class Program
     }
 }`,
       video:'https://www.youtube.com/results?search_query=C%23+Flappy+Bird+Game+Logic+Tutorial'
+    },
+    {
+      id:'registrations',title:'11. Anmeldungen verwalten',level:'Fortgeschritten',
+      desc:'Baue eine echte Konsolenapplikation mit Menü, neuen Anmeldungen und einer Auswertung der gebuchten Vorlesungen.',
+      steps:['Menü mit while und switch','Daten in einer Liste speichern','Neue Anmeldung erfassen','Vorlesungen gruppieren und zählen'],
+      runnable:true,
+      stdinExample:'n\\nUrs\\nNussbaumer\\n078 401 94 45\\n19.09.1971\\nPhysik\\na\\ng\\nx',
+      code:"using System;\\nusing System.Collections.Generic;\\nusing System.Linq;\\n\\nclass Anmeldung\\n{\\n    public string Vorname { get; set; }\\n    public string Nachname { get; set; }\\n    public string Telefon { get; set; }\\n    public DateTime Geburtsdatum { get; set; }\\n    public string Vorlesung { get; set; }\\n}\\n\\nclass Program\\n{\\n    static List<Anmeldung> anmeldungen = new List<Anmeldung>();\\n\\n    static void Main()\\n    {\\n        bool laeuft = true;\\n\\n        while (laeuft)\\n        {\\n            Console.WriteLine();\\n            Console.WriteLine(\"*** Anmeldungen verwalten ***\");\\n            Console.WriteLine();\\n            Console.WriteLine(\"a = Anmeldungen anzeigen\");\\n            Console.WriteLine(\"n = Neue Anmeldung\");\\n            Console.WriteLine(\"g = Gebuchte Vorlesungen\");\\n            Console.WriteLine(\"x = Beenden\");\\n            Console.Write(\"Auswahl: \");\\n\\n            string auswahl = Console.ReadLine();\\n            if (auswahl == null) break;\\n\\n            switch (auswahl.ToLower())\\n            {\\n                case \"a\": AnmeldungenAnzeigen(); break;\\n                case \"n\": NeueAnmeldung(); break;\\n                case \"g\": GebuchteVorlesungenAnzeigen(); break;\\n                case \"x\": laeuft = false; break;\\n                default: Console.WriteLine(\"Ungültige Eingabe.\"); break;\\n            }\\n        }\\n    }\\n\\n    static void AnmeldungenAnzeigen()\\n    {\\n        Console.WriteLine();\\n        Console.WriteLine(\"*** Alle Anmeldungen ***\");\\n        if (anmeldungen.Count == 0)\\n        {\\n            Console.WriteLine(\"Keine Anmeldungen vorhanden.\");\\n            return;\\n        }\\n\\n        foreach (Anmeldung a in anmeldungen)\\n        {\\n            Console.WriteLine();\\n            Console.WriteLine(\"Vorname:      \" + a.Vorname);\\n            Console.WriteLine(\"Nachname:     \" + a.Nachname);\\n            Console.WriteLine(\"Telefon:      \" + a.Telefon);\\n            Console.WriteLine(\"Geburtsdatum: \" + a.Geburtsdatum.ToString(\"dd.MM.yyyy\"));\\n            Console.WriteLine(\"Vorlesung:    \" + a.Vorlesung);\\n        }\\n    }\\n\\n    static void NeueAnmeldung()\\n    {\\n        Console.WriteLine();\\n        Console.WriteLine(\"*** Neue Anmeldung ***\");\\n        Anmeldung neu = new Anmeldung();\\n\\n        Console.Write(\"Vorname: \");\\n        neu.Vorname = Console.ReadLine();\\n        Console.Write(\"Nachname: \");\\n        neu.Nachname = Console.ReadLine();\\n        Console.Write(\"Telefon: \");\\n        neu.Telefon = Console.ReadLine();\\n\\n        DateTime datum;\\n        while (true)\\n        {\\n            Console.Write(\"Geburtsdatum (TT.MM.JJJJ): \");\\n            string eingabe = Console.ReadLine();\\n            if (DateTime.TryParse(eingabe, out datum)) break;\\n            Console.WriteLine(\"Ungültiges Datum.\");\\n        }\\n        neu.Geburtsdatum = datum;\\n\\n        Console.Write(\"Vorlesung: \");\\n        neu.Vorlesung = Console.ReadLine();\\n        anmeldungen.Add(neu);\\n        Console.WriteLine(\"Anmeldung gespeichert.\");\\n    }\\n\\n    static void GebuchteVorlesungenAnzeigen()\\n    {\\n        Console.WriteLine();\\n        Console.WriteLine(\"*** Gebuchte Vorlesungen ***\");\\n        if (anmeldungen.Count == 0)\\n        {\\n            Console.WriteLine(\"Noch keine Vorlesungen gebucht.\");\\n            return;\\n        }\\n\\n        var gruppen = anmeldungen.GroupBy(a => a.Vorlesung).OrderBy(g => g.Key);\\n        foreach (var gruppe in gruppen)\\n            Console.WriteLine(gruppe.Key + \": \" + gruppe.Count() + \" Student(en)\");\\n    }\\n}",
+      video:''
     }
   ];
 
@@ -4741,12 +4788,20 @@ class Program
       'Das solltest du dabei üben:\n- '+project.steps.join('\n- ')+
       '\n\nWenn du Hilfe brauchst, öffne das Erklärungsvideo auf der Startseite.';
 
-    editor.setValue('');
-    localStorage.setItem(CODE_KEY,'');
-    document.getElementById('consoleOut').textContent=taskText;
-    document.getElementById('stdinInput').value='';
+    if(project.runnable){
+      editor.setValue(project.code||'');
+      localStorage.setItem(CODE_KEY,project.code||'');
+      document.getElementById('stdinInput').value=project.stdinExample||'';
+      document.getElementById('consoleOut').textContent=taskText+'\n\nBeispiel-Eingaben sind bereits unter Programmeingabe (stdin) eingetragen. Du kannst sie ändern und dann auf Ausführen klicken.';
+    }else{
+      editor.setValue('');
+      localStorage.setItem(CODE_KEY,'');
+      document.getElementById('consoleOut').textContent=taskText;
+      document.getElementById('stdinInput').value='';
+    }
     navigate('code');
-    setTimeout(()=>editor.focus(),100);
+    if(project.id==='registrations')setTimeout(()=>window.openRegistrationLab&&window.openRegistrationLab(),120);
+    setTimeout(()=>editor.focus(),180);
   };
 
   renderStarters();
@@ -5217,5 +5272,44 @@ try { history.replaceState({ builtStylePreview: true }, '', '/'); } catch (e) {}
 })();
 </script>
 
+<script id="registrationLabScript">
+(function(){
+  const REG_KEY='built_registration_app_v1';
+  let registrations=[];
+  try{registrations=JSON.parse(localStorage.getItem(REG_KEY)||'[]')}catch(e){registrations=[]}
+  if(!Array.isArray(registrations))registrations=[];
+  const lab=document.getElementById('registrationLab');
+  const terminal=document.getElementById('registrationTerminal');
+  const form=document.getElementById('registrationForm');
+  function esc(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+  function write(lines){if(!terminal)return;const text=Array.isArray(lines)?lines.join('\n'):String(lines);terminal.innerHTML+='\n'+esc(text);terminal.scrollTop=terminal.scrollHeight}
+  function save(){localStorage.setItem(REG_KEY,JSON.stringify(registrations))}
+  function formatDate(v){if(!v)return '';const p=v.split('-');return p.length===3?p[2]+'.'+p[1]+'.'+p[0]:v}
+  window.openRegistrationLab=function(){if(!lab)return;lab.style.display='block';lab.scrollIntoView({behavior:'smooth',block:'nearest'})};
+
+  document.getElementById('registrationShow')?.addEventListener('click',()=>{
+    if(!registrations.length){write(['','*** Alle Anmeldungen ***','Keine Anmeldungen vorhanden.']);return}
+    const lines=['','*** Alle Anmeldungen ***'];
+    registrations.forEach((r,i)=>{lines.push('',(i+1)+'. Anmeldung','Vorname:      '+r.first,'Nachname:     '+r.last,'Telefon:      '+r.phone,'Geburtsdatum: '+formatDate(r.birth),'Vorlesung:    '+r.lecture)});
+    write(lines);
+  });
+  document.getElementById('registrationNew')?.addEventListener('click',()=>{form.style.display='block';write(['','*** Neue Anmeldung ***','Bitte Daten im Formular eingeben.']);document.getElementById('regFirst')?.focus()});
+  document.getElementById('registrationCancel')?.addEventListener('click',()=>{form.style.display='none'});
+  document.getElementById('registrationSave')?.addEventListener('click',()=>{
+    const r={first:document.getElementById('regFirst').value.trim(),last:document.getElementById('regLast').value.trim(),phone:document.getElementById('regPhone').value.trim(),birth:document.getElementById('regBirth').value,lecture:document.getElementById('regLecture').value.trim()};
+    if(!r.first||!r.last||!r.phone||!r.birth||!r.lecture){write('Bitte alle Felder ausfüllen.');return}
+    registrations.push(r);save();write(['','Anmeldung gespeichert: '+r.first+' '+r.last+' → '+r.lecture]);
+    ['regFirst','regLast','regPhone','regBirth','regLecture'].forEach(id=>document.getElementById(id).value='');form.style.display='none';
+  });
+  document.getElementById('registrationLectures')?.addEventListener('click',()=>{
+    if(!registrations.length){write(['','*** Gebuchte Vorlesungen ***','Noch keine Vorlesungen gebucht.']);return}
+    const counts={};registrations.forEach(r=>counts[r.lecture]=(counts[r.lecture]||0)+1);
+    const lines=['','*** Gebuchte Vorlesungen ***'];Object.keys(counts).sort((a,b)=>a.localeCompare(b,'de')).forEach(k=>lines.push(k+': '+counts[k]+' Student(en)'));write(lines);
+  });
+  document.getElementById('registrationReset')?.addEventListener('click',()=>{
+    registrations=[];save();if(terminal)terminal.innerHTML='<div>*** Anmeldungen verwalten ***</div><div class="muted-console">Daten gelöscht. Wähle eine Funktion:</div>';form.style.display='none';
+  });
+})();
+</script>
 </body>
 </html>
