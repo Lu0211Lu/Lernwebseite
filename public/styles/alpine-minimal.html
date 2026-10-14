@@ -3803,6 +3803,47 @@
   #builtStyleMenu a small{font-size:9px;opacity:.62;font-weight:700}
   @media(max-width:700px){#builtStyleSwitcher{right:12px;bottom:12px}#builtStyleMenu{width:210px}}
 </style>
+
+<style id="builtCasinoStyles">
+  .casino-wallet{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+  .casino-wallet span{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+  .casino-wallet strong{font-size:22px;letter-spacing:-.04em}
+  .casino-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .casino-card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 10px 32px rgba(0,0,0,.06)}
+  .casino-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+  .casino-card-head h3{margin:3px 0 0;font-size:29px;letter-spacing:-.05em}
+  .casino-kicker{font-size:9px;font-weight:900;letter-spacing:.16em;color:var(--accent);text-transform:uppercase}
+  .casino-chip{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:22px;font-weight:900;border:1px solid var(--line)}
+  .bj-table{margin:20px 0;background:var(--panel-2);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .bj-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:12px;color:var(--muted)}
+  .bj-label strong{font-size:18px;color:var(--text)}
+  .bj-divider{height:1px;background:var(--line);margin:16px 0}
+  .playing-cards{display:flex;gap:8px;min-height:74px;align-items:center;flex-wrap:wrap}
+  .playing-card,.card-placeholder{width:50px;height:70px;border-radius:9px;display:grid;place-items:center;background:#fff;color:#16181d;border:1px solid rgba(0,0,0,.12);box-shadow:0 5px 14px rgba(0,0,0,.08);font-size:19px;font-weight:850}
+  .playing-card.red{color:#d84b55}
+  .card-placeholder{background:var(--panel);color:var(--muted);border-color:var(--line)}
+  .casino-status{min-height:42px;display:flex;align-items:center;margin:14px 0;padding:10px 12px;border-radius:11px;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700}
+  .casino-controls{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
+  .casino-controls label{display:grid;gap:6px;color:var(--muted);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+  .casino-controls input{width:105px;height:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);outline:none}
+  .casino-controls input:focus{border-color:var(--accent)}
+  .roulette-mini-wheel{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#be3e4a 0 25%,#17191e 25% 50%,#be3e4a 50% 75%,#17191e 75%);border:4px solid var(--panel-2);box-shadow:0 0 0 1px var(--line)}
+  .roulette-mini-wheel span{width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:#f2ead8;color:#111;font-size:9px}
+  .roulette-result{margin:20px 0;text-align:center;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel-2)}
+  .roulette-result span,.roulette-result small{display:block;color:var(--muted);font-size:10px}
+  .roulette-result strong{display:block;font-size:52px;line-height:1;margin:9px 0;letter-spacing:-.06em}
+  .roulette-bets{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:14px}
+  .roulette-choice{border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:9px;padding:9px 5px;font-size:11px;font-weight:800;cursor:pointer}
+  .roulette-choice.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}
+  .roulette-choice[data-roulette-bet="red"].active{background:#9f313d;color:#fff;border-color:#bd4a55}
+  .roulette-choice[data-roulette-bet="black"].active{background:#17191d;color:#fff;border-color:#4b5058}
+  .roulette-number-wrap{display:none!important}
+  .roulette-number-wrap.show{display:grid!important}
+  .casino-note{margin-top:14px;color:var(--muted);font-size:11px;line-height:1.55;text-align:center}
+  @media(max-width:950px){.casino-grid{grid-template-columns:1fr}}
+  @media(max-width:600px){.roulette-bets{grid-template-columns:repeat(2,1fr)}.casino-wallet{width:100%;justify-content:space-between}.page-title{flex-wrap:wrap}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -3995,12 +4036,80 @@ class Program
       </section>
 
       <section class="page" id="page-games">
-        <div class="page-title"><div><h2>Lernspiele</h2><p>Abwechslung für Wiederholung und Pausen.</p></div></div>
-        <div class="grid games-grid">
-          <div class="card game-card"><div class="tool-icon">⚡</div><h3>Schnellquiz</h3><p class="muted">Kurze Fragen gegen die Zeit.</p><button class="btn" disabled>Kommt bald</button></div>
-          <div class="card game-card"><div class="tool-icon">🧠</div><h3>Memory</h3><p class="muted">Begriffe und Definitionen verbinden.</p><button class="btn" disabled>Kommt bald</button></div>
-          <div class="card game-card"><div class="tool-icon">🏁</div><h3>PolyTrack Pause</h3><p class="muted">Eine kurze Pause zwischen zwei Lernblöcken.</p><a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Öffnen</a></div>
+        <div class="page-title">
+          <div>
+            <h2>Pausenspiele</h2>
+            <p>Blackjack und Roulette mit virtuellen BUILT Coins – nur zum Spielen, ohne Echtgeld.</p>
+          </div>
+          <div class="casino-wallet"><span>BUILT Coins</span><strong id="casinoCoins">1'000</strong></div>
         </div>
+
+        <div class="casino-grid">
+          <section class="casino-card">
+            <div class="casino-card-head">
+              <div><span class="casino-kicker">BLACKJACK</span><h3>21</h3></div>
+              <div class="casino-chip">♠</div>
+            </div>
+            <p class="muted">Komme näher an 21 als der Dealer, ohne darüber zu gehen.</p>
+
+            <div class="bj-table">
+              <div class="bj-hand">
+                <div class="bj-label"><span>Dealer</span><strong id="bjDealerValue">–</strong></div>
+                <div class="playing-cards" id="bjDealerCards"><span class="card-placeholder">?</span></div>
+              </div>
+              <div class="bj-divider"></div>
+              <div class="bj-hand">
+                <div class="bj-label"><span>Du</span><strong id="bjPlayerValue">–</strong></div>
+                <div class="playing-cards" id="bjPlayerCards"><span class="card-placeholder">?</span></div>
+              </div>
+            </div>
+
+            <div class="casino-status" id="bjStatus">Einsatz wählen und Runde starten.</div>
+            <div class="casino-controls">
+              <label>Einsatz
+                <input id="bjBet" type="number" min="10" step="10" value="50" inputmode="numeric">
+              </label>
+              <button class="btn primary" id="bjDeal">Runde starten</button>
+              <button class="btn" id="bjHit" disabled>Karte</button>
+              <button class="btn" id="bjStand" disabled>Halten</button>
+            </div>
+          </section>
+
+          <section class="casino-card roulette-card">
+            <div class="casino-card-head">
+              <div><span class="casino-kicker">ROULETTE</span><h3>European</h3></div>
+              <div class="roulette-mini-wheel"><span id="rouletteBall">•</span></div>
+            </div>
+            <p class="muted">Setze auf Rot, Schwarz, Gerade, Ungerade oder eine einzelne Zahl.</p>
+
+            <div class="roulette-result">
+              <span>Letzte Zahl</span>
+              <strong id="rouletteNumber">–</strong>
+              <small id="rouletteColour">Bereit</small>
+            </div>
+
+            <div class="roulette-bets">
+              <button class="roulette-choice active" data-roulette-bet="red">Rot</button>
+              <button class="roulette-choice" data-roulette-bet="black">Schwarz</button>
+              <button class="roulette-choice" data-roulette-bet="even">Gerade</button>
+              <button class="roulette-choice" data-roulette-bet="odd">Ungerade</button>
+              <button class="roulette-choice" data-roulette-bet="number">Zahl</button>
+            </div>
+
+            <div class="casino-controls roulette-controls">
+              <label>Einsatz
+                <input id="rouletteBet" type="number" min="10" step="10" value="50" inputmode="numeric">
+              </label>
+              <label id="roulettePickWrap" class="roulette-number-wrap">Zahl
+                <input id="roulettePick" type="number" min="0" max="36" value="7" inputmode="numeric">
+              </label>
+              <button class="btn primary" id="rouletteSpin">Drehen</button>
+            </div>
+            <div class="casino-status" id="rouletteStatus">Wähle deinen Einsatz.</div>
+          </section>
+        </div>
+
+        <div class="casino-note">Die Coins haben keinen Geldwert und können nicht gekauft, ausgezahlt oder übertragen werden. Dein Coin-Stand wird auf diesem Gerät im Browser gespeichert.</div>
       </section>
 
       <section class="page" id="page-focus">
@@ -5412,5 +5521,141 @@ try { history.replaceState({ builtStylePreview: true }, '', '/'); } catch (e) {}
   document.addEventListener('keydown',function(e){if(e.key==='Escape')m.classList.remove('open')});
 })();
 </script>
+
+<script id="builtCasinoScript">
+(function(){
+  const COINS_KEY='built_casino_coins_v1';
+  let coins=Number(localStorage.getItem(COINS_KEY));
+  if(!Number.isFinite(coins)) coins=1000;
+
+  const money=n=>Number.isInteger(n)?n.toLocaleString("de-CH"):n.toLocaleString("de-CH",{maximumFractionDigits:1});
+  function saveCoins(){
+    coins=Math.max(0,Math.round(coins*2)/2);
+    localStorage.setItem(COINS_KEY,String(coins));
+    document.querySelectorAll('#casinoCoins').forEach(el=>el.textContent=money(coins));
+  }
+  saveCoins();
+
+  function rng(max){
+    if(window.crypto&&crypto.getRandomValues){
+      const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%max;
+    }
+    return Math.floor(Math.random()*max);
+  }
+  function validBet(input){
+    const bet=Number(input.value);
+    if(!Number.isFinite(bet)||bet<10){return {ok:false,msg:'Mindesteinsatz: 10 Coins.'}}
+    if(bet>coins){return {ok:false,msg:'Du hast nicht genügend Coins.'}}
+    return {ok:true,bet};
+  }
+
+  const suits=['♠','♥','♦','♣'];
+  const ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  let bjDeck=[],bjPlayer=[],bjDealer=[],bjBet=0,bjLive=false;
+
+  function makeDeck(){
+    const d=[];
+    for(const s of suits) for(const r of ranks) d.push({r,s});
+    for(let i=d.length-1;i>0;i--){const j=rng(i+1);[d[i],d[j]]=[d[j],d[i]]}
+    return d;
+  }
+  function handValue(hand){
+    let total=0,aces=0;
+    hand.forEach(c=>{if(c.r==='A'){total+=11;aces++}else if(['J','Q','K'].includes(c.r))total+=10;else total+=Number(c.r)});
+    while(total>21&&aces){total-=10;aces--}
+    return total;
+  }
+  function renderCards(id,hand,hideSecond=false){
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=hand.map((c,i)=>{
+      if(hideSecond&&i===1) return '<span class="playing-card">?</span>';
+      const red=c.s==='♥'||c.s==='♦';
+      return '<span class="playing-card '+(red?'red':'')+'">'+c.r+c.s+'</span>';
+    }).join('');
+  }
+  function renderBJ(hideDealer=false){
+    renderCards('bjPlayerCards',bjPlayer,false);
+    renderCards('bjDealerCards',bjDealer,hideDealer);
+    const pv=document.getElementById('bjPlayerValue'),dv=document.getElementById('bjDealerValue');
+    if(pv)pv.textContent=bjPlayer.length?handValue(bjPlayer):'–';
+    if(dv)dv.textContent=bjDealer.length?(hideDealer?'?':handValue(bjDealer)):'–';
+  }
+  function setBJStatus(msg){const el=document.getElementById('bjStatus');if(el)el.textContent=msg}
+  function bjButtons(live){
+    const hit=document.getElementById('bjHit'),stand=document.getElementById('bjStand'),deal=document.getElementById('bjDeal');
+    if(hit)hit.disabled=!live;if(stand)stand.disabled=!live;if(deal)deal.disabled=live;
+  }
+  function settleBJ(result){
+    bjLive=false;bjButtons(false);
+    let award=0,msg='';
+    if(result==='blackjack'){award=bjBet*2.5;msg='Blackjack! +'+money(award-bjBet)+' Coins.'}
+    if(result==='win'){award=bjBet*2;msg='Gewonnen! +'+money(bjBet)+' Coins.'}
+    if(result==='push'){award=bjBet;msg='Unentschieden. Einsatz zurück.'}
+    if(result==='lose'){award=0;msg='Dealer gewinnt. -'+money(bjBet)+' Coins.'}
+    coins+=award;saveCoins();renderBJ(false);setBJStatus(msg);
+  }
+  function finishDealer(){
+    while(handValue(bjDealer)<17) bjDealer.push(bjDeck.pop());
+    const p=handValue(bjPlayer),d=handValue(bjDealer);
+    if(d>21||p>d) settleBJ('win');
+    else if(p===d) settleBJ('push');
+    else settleBJ('lose');
+  }
+
+  document.getElementById('bjDeal')?.addEventListener('click',()=>{
+    const input=document.getElementById('bjBet'),v=validBet(input);
+    if(!v.ok){setBJStatus(v.msg);return}
+    bjBet=v.bet;coins-=bjBet;saveCoins();
+    bjDeck=makeDeck();bjPlayer=[bjDeck.pop(),bjDeck.pop()];bjDealer=[bjDeck.pop(),bjDeck.pop()];bjLive=true;bjButtons(true);renderBJ(true);
+    const p=handValue(bjPlayer),d=handValue(bjDealer);
+    if(p===21&&d===21) settleBJ('push');
+    else if(p===21) settleBJ('blackjack');
+    else setBJStatus('Deine Runde läuft.');
+  });
+  document.getElementById('bjHit')?.addEventListener('click',()=>{
+    if(!bjLive)return;
+    bjPlayer.push(bjDeck.pop());renderBJ(true);
+    const v=handValue(bjPlayer);
+    if(v>21)settleBJ('lose');
+    else if(v===21)finishDealer();
+  });
+  document.getElementById('bjStand')?.addEventListener('click',()=>{if(bjLive)finishDealer()});
+
+  const reds=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+  let rouletteType='red';
+  document.querySelectorAll('.roulette-choice').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.roulette-choice').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');rouletteType=btn.dataset.rouletteBet;
+      document.getElementById('roulettePickWrap')?.classList.toggle('show',rouletteType==='number');
+    });
+  });
+  function rouletteColour(n){return n===0?'Grün':reds.has(n)?'Rot':'Schwarz'}
+  document.getElementById('rouletteSpin')?.addEventListener('click',()=>{
+    const status=document.getElementById('rouletteStatus'),input=document.getElementById('rouletteBet'),v=validBet(input);
+    if(!v.ok){if(status)status.textContent=v.msg;return}
+    let pick=Number(document.getElementById('roulettePick')?.value);
+    if(rouletteType==='number'&&(!Number.isInteger(pick)||pick<0||pick>36)){if(status)status.textContent='Wähle eine Zahl zwischen 0 und 36.';return}
+    const bet=v.bet;coins-=bet;saveCoins();
+    const n=rng(37),colour=rouletteColour(n);
+    document.getElementById('rouletteNumber').textContent=n;
+    document.getElementById('rouletteColour').textContent=colour;
+    const ball=document.getElementById('rouletteBall');if(ball)ball.textContent=n;
+    let win=false,multiplier=0;
+    if(rouletteType==='red'){win=reds.has(n);multiplier=2}
+    if(rouletteType==='black'){win=n!==0&&!reds.has(n);multiplier=2}
+    if(rouletteType==='even'){win=n!==0&&n%2===0;multiplier=2}
+    if(rouletteType==='odd'){win=n!==0&&n%2===1;multiplier=2}
+    if(rouletteType==='number'){win=n===pick;multiplier=36}
+    if(win){
+      const award=bet*multiplier;coins+=award;saveCoins();
+      if(status)status.textContent='Gewonnen! +'+money(award-bet)+' Coins.';
+    }else if(status){
+      status.textContent='Nicht getroffen. -'+money(bet)+' Coins.';
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
