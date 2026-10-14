@@ -4668,6 +4668,372 @@
       color:#65e3c8 !important;
     }
 
+
+    /* ===== BUILT – Ember Slate ===== */
+    :root{
+      --bg:#0f1115;
+      --panel:#171a20;
+      --panel-2:#13161b;
+      --text:#f5f1ea;
+      --muted:#94979d;
+      --line:#2a2e36;
+      --accent:#e8793f;
+      --accent-2:#6f7f9b;
+      --accent-soft:#2c1f18;
+      --success:#7fa98b;
+      --warning:#d8a35c;
+      --danger:#d96b5f;
+      --shadow:0 18px 55px rgba(0,0,0,.32);
+      --radius:16px;
+    }
+
+    html,body,.main,.content,.page{background:#0f1115 !important;color:#f5f1ea !important}
+    body{
+      background:
+        radial-gradient(circle at 75% -5%,rgba(232,121,63,.10),transparent 28%),
+        linear-gradient(180deg,#0d0f13 0%,#11141a 55%,#0d0f12 100%) !important;
+    }
+
+    .app{grid-template-columns:220px minmax(0,1fr) !important}
+    .sidebar{
+      background:#0a0c0f !important;
+      border-right:1px solid #22262d !important;
+      box-shadow:none !important;
+    }
+    .brand-mark{
+      background:#e8793f !important;
+      color:#130d09 !important;
+      box-shadow:none !important;
+    }
+    .brand strong{color:#f7f2eb !important}
+    .brand span{color:#767b83 !important}
+    .nav button{color:#8c929a !important;border-radius:8px !important}
+    .nav button:hover{background:#14181d !important;color:#fff !important}
+    .nav button.active{
+      background:#1a1f25 !important;
+      color:#fff3eb !important;
+      box-shadow:inset 3px 0 0 #e8793f !important;
+    }
+    .nav button.active .ico{color:#e8793f !important}
+    .profile{background:#12151a !important;border-color:#252a31 !important}
+    .profile .avatar{background:#2a201b !important;color:#efa47d !important}
+
+    .topbar{
+      background:rgba(15,17,21,.92) !important;
+      border-bottom:1px solid #242830 !important;
+      backdrop-filter:blur(18px) !important;
+    }
+    .topbar h1{color:#f4efe8 !important}
+
+    .content{max-width:1500px !important;padding:28px 30px 52px !important}
+
+    .btn,.icon-btn{
+      background:#171b20 !important;
+      color:#f0ece6 !important;
+      border:1px solid #30353e !important;
+      border-radius:9px !important;
+      box-shadow:none !important;
+    }
+    .btn:hover,.icon-btn:hover{background:#20252b !important;border-color:#3c434d !important}
+    .btn.primary{
+      background:#e8793f !important;
+      color:#140e0a !important;
+      border-color:#e8793f !important;
+      box-shadow:0 10px 26px rgba(232,121,63,.14) !important;
+    }
+
+    .ember-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.4fr) minmax(320px,.6fr);
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    .ember-copy{
+      min-height:330px;
+      padding:44px;
+      background:
+        linear-gradient(135deg,rgba(232,121,63,.08),transparent 32%),
+        #171a20;
+      border:1px solid #2a2e36;
+      border-radius:20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .ember-copy:after{
+      content:"";
+      position:absolute;
+      right:-80px;
+      bottom:-120px;
+      width:310px;
+      height:310px;
+      border:1px solid rgba(232,121,63,.18);
+      border-radius:50%;
+      box-shadow:0 0 0 45px rgba(232,121,63,.025),0 0 0 90px rgba(232,121,63,.015);
+    }
+
+    .ember-kicker{
+      display:block;
+      color:#c99173;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.18em;
+      margin-bottom:24px;
+    }
+
+    .ember-copy h2{
+      margin:0 0 16px;
+      font-size:58px;
+      line-height:.94;
+      letter-spacing:-.06em;
+      color:#faf5ee;
+      max-width:760px;
+    }
+
+    .ember-copy p{
+      margin:0;
+      color:#a4a6aa;
+      max-width:590px;
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .ember-actions{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+
+    .ember-today{
+      min-height:330px;
+      padding:28px;
+      background:#20252c;
+      border:1px solid #343a43;
+      border-radius:20px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .ember-today-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color:#858b94;
+      font-size:9px;
+      letter-spacing:.13em;
+      font-weight:900;
+    }
+    .ember-today-head b{font-size:28px;color:#e8793f;letter-spacing:-.04em}
+    .ember-focus-number{
+      margin-top:auto;
+      font-size:92px;
+      line-height:.8;
+      font-weight:900;
+      letter-spacing:-.08em;
+      color:#f6f0e8;
+    }
+    .ember-focus-label{margin-top:12px;color:#9ca0a6;font-size:12px}
+    .ember-focus-line{height:4px;background:#313741;margin:22px 0 20px;overflow:hidden}
+    .ember-focus-line span{display:block;width:68%;height:100%;background:#e8793f}
+
+    .ember-metrics{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1px;
+      background:#2a2e36;
+      border:1px solid #2a2e36;
+      border-radius:14px;
+      overflow:hidden;
+      margin-bottom:18px;
+    }
+    .ember-metrics>div{
+      background:#15191e;
+      padding:18px 20px;
+      min-height:88px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .ember-metrics span{font-size:8px;letter-spacing:.13em;color:#777d85;font-weight:900}
+    .ember-metrics strong{font-size:28px;color:#f3eee7}
+
+    .ember-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.65fr) minmax(290px,.45fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .ember-subjects,.ember-quick,.ember-challenges,.ember-footer{
+      background:#15191e;
+      border:1px solid #2a2f37;
+      border-radius:16px;
+      padding:20px;
+    }
+
+    .ember-section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .ember-section-head>div{display:flex;align-items:center;gap:10px}
+    .ember-section-head small{
+      width:26px;height:26px;display:grid;place-items:center;
+      border:1px solid #444a54;color:#d58a62;border-radius:50%;
+      font-size:8px;font-weight:900;
+    }
+    .ember-section-head h3{margin:0;font-size:19px;color:#f2ede6}
+
+    #homeSubjects.subject-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:10px !important;
+    }
+    #homeSubjects .subject-card{
+      min-height:155px !important;
+      padding:17px !important;
+      background:#1b2026 !important;
+      border:1px solid #303640 !important;
+      border-radius:12px !important;
+      box-shadow:none !important;
+    }
+    #homeSubjects .subject-card:hover{
+      background:#22282f !important;
+      border-color:#454d58 !important;
+      transform:translateY(-2px) !important;
+    }
+    #homeSubjects .subject-badge{
+      background:#30231c !important;
+      color:#ef9c70 !important;
+      border:none !important;
+      border-radius:8px !important;
+    }
+    #homeSubjects .subject-card h4{color:#f5efe8 !important}
+    #homeSubjects .subject-card p{color:#8f959d !important}
+    #homeSubjects .progress{background:#2b3138 !important;border:none !important}
+    #homeSubjects .progress span{background:#e8793f !important}
+
+    .ember-quick{display:flex;flex-direction:column}
+    .ember-quick .ember-section-head{margin-bottom:10px}
+    .ember-quick>button{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:13px 4px;
+      background:transparent;
+      color:#dfe3e7;
+      border:0;
+      border-bottom:1px solid #292f36;
+      font:inherit;
+      cursor:pointer;
+    }
+    .ember-quick>button:last-child{border-bottom:0}
+    .ember-quick>button span{font-size:12px;font-weight:750}
+    .ember-quick>button b{color:#e8793f}
+    .ember-quick>button:hover{color:#fff}
+
+    .ember-challenges{margin-bottom:18px}
+    .starter-controls{display:flex;align-items:center;gap:8px}
+    .starter-carousel{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+      padding:0 !important;
+    }
+    .starter-grid{gap:10px !important}
+    .starter-card{
+      background:#1a1f25 !important;
+      border:1px solid #303640 !important;
+      border-radius:12px !important;
+      box-shadow:none !important;
+      min-height:215px !important;
+    }
+    .starter-card:nth-child(n){background:#1a1f25 !important}
+    .starter-card:hover{background:#22282f !important;transform:translateY(-2px) !important}
+    .starter-card .level{
+      background:#2a211c !important;
+      color:#e89a73 !important;
+      border:1px solid #473227 !important;
+    }
+    .starter-card h4{color:#f0ebe4 !important}
+    .starter-card p,.starter-steps{color:#8e949c !important}
+
+    .ember-footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+      background:
+        linear-gradient(90deg,rgba(111,127,155,.10),transparent 45%),
+        #171b21;
+    }
+    .ember-footer span{font-size:8px;letter-spacing:.14em;color:#8794a8;font-weight:900}
+    .ember-footer h3{margin:8px 0 4px;font-size:24px;color:#f1ece5}
+    .ember-footer p{margin:0;color:#8f949b;font-size:12px}
+
+    .page-title,.card,.panel,.flash-card,.test-row,.game-card,.empty,.modal-card{
+      background:#171b20 !important;
+      border-color:#2e343c !important;
+      color:#f1ece6 !important;
+    }
+    .page-title{border-radius:15px !important;box-shadow:none !important}
+    .page-title h2{color:#f4efe8 !important}
+    .page-title p,.muted{color:#92979e !important}
+    .tag,.status{
+      background:#30231c !important;
+      color:#ef9f75 !important;
+      border-radius:8px !important;
+    }
+
+    .flash-practice-pill{
+      background:#171b20 !important;border-color:#303640 !important;color:#8f959d !important
+    }
+    .flash-practice-pill strong{color:#f3eee7 !important}
+    .flash-side-pile{background:#13171b !important;border-color:#303640 !important}
+    .flash-big-card{
+      background:
+        radial-gradient(circle at 80% 0%,rgba(232,121,63,.07),transparent 28%),
+        #191e23 !important;
+      border-color:#343b44 !important;
+      color:#f5f0e9 !important;
+      box-shadow:0 24px 70px rgba(0,0,0,.30) !important;
+    }
+    .flash-answer{border-top-color:#333941 !important;color:#f0a37b !important}
+    .flash-choice.known-btn{background:#1b2b21 !important;color:#93c8a2 !important;border-color:#34493b !important}
+    .flash-choice.unknown-btn{background:#311c19 !important;color:#e59083 !important;border-color:#51312b !important}
+    .flash-complete{background:#171b20 !important;border-color:#303640 !important;color:#f2ede6 !important}
+
+    .modal{background:rgba(5,7,10,.76) !important;backdrop-filter:blur(10px) !important}
+    .modal-card{background:#171b20 !important;border:1px solid #343a43 !important}
+    .field label{color:#a1a5ab !important}
+    .field input,.field textarea,.field select,.stdin-box{
+      background:#0f1317 !important;color:#eef1f4 !important;border-color:#303640 !important
+    }
+    .field input:focus,.field textarea:focus,.field select:focus,.stdin-box:focus{
+      border-color:#e8793f !important;box-shadow:0 0 0 3px rgba(232,121,63,.08) !important
+    }
+    .console{background:#0b0e11 !important;color:#d7a88d !important;border-color:#272c32 !important}
+
+    #builtStyleToggle{
+      background:#e8793f !important;color:#160e09 !important;border-color:#e8793f !important
+    }
+    #builtStyleMenu{background:rgba(18,21,26,.98) !important;border-color:#303640 !important}
+    #builtStyleMenu .title{color:#767c84 !important}
+    #builtStyleMenu a{color:#ece8e2 !important}
+    #builtStyleMenu a:hover{background:#20252b !important}
+    #builtStyleMenu a.active{background:#e8793f !important;color:#150e0a !important}
+
+    @media(max-width:1050px){
+      .ember-hero,.ember-layout{grid-template-columns:1fr}
+      .ember-metrics{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:700px){
+      .ember-copy{padding:28px 22px}
+      .ember-copy h2{font-size:42px}
+      .ember-metrics{grid-template-columns:1fr}
+      #homeSubjects.subject-grid{grid-template-columns:1fr !important}
+      .ember-footer{align-items:flex-start;flex-direction:column}
+    }
+
   </style>
 
 <style>
@@ -4724,64 +5090,54 @@
 
     <div class="content">
       <section class="page active" id="page-home">
-        <section class="paper-hero">
-          <div class="paper-hero-copy">
-            <div class="paper-label">BUILT / LEARNING DESK</div>
-            <h2>Dein Lernplatz.<br>Alles griffbereit.</h2>
-            <p>Kein klassisches Dashboard: BUILT wird zu deinem digitalen Schreibtisch mit Fächern, Übungen, Tests und Fokusblöcken.</p>
-            <div class="paper-actions">
+        <section class="ember-hero">
+          <div class="ember-copy">
+            <span class="ember-kicker">BUILT / STUDY SPACE</span>
+            <h2>Dein Lernen.<br>Dein Rhythmus.</h2>
+            <p>Fächer, Karteikarten, Tests und C# in einem ruhigen, fokussierten Arbeitsbereich.</p>
+            <div class="ember-actions">
               <button class="btn primary" data-go="subjects">Fächer öffnen</button>
-              <button class="btn" data-go="code">Code-Labor</button>
+              <button class="btn" data-go="flashcards">Karteikarten</button>
             </div>
           </div>
-          <div class="paper-board">
-            <div class="paper-note note-a">
-              <span>HEUTE</span>
-              <strong>25 Min</strong>
-              <small>Fokusblock</small>
-            </div>
-            <div class="paper-note note-b">
-              <span>TO-DO</span>
-              <strong>C# Übung</strong>
-              <small>selbst schreiben</small>
-            </div>
-            <div class="paper-note note-c">
-              <span>PAUSE</span>
-              <strong>5 Min</strong>
-              <small>kurz abschalten</small>
-            </div>
-            <div class="paper-pin"></div>
+          <div class="ember-today">
+            <div class="ember-today-head"><span>HEUTE</span><b>01</b></div>
+            <div class="ember-focus-number">25</div>
+            <div class="ember-focus-label">Minuten Fokus</div>
+            <div class="ember-focus-line"><span></span></div>
+            <button class="btn" data-go="focus">Fokus starten</button>
           </div>
         </section>
 
-        <section class="paper-stats">
+        <section class="ember-metrics">
           <div><span>FÄCHER</span><strong id="metricSubjects">0</strong></div>
           <div><span>KARTEIKARTEN</span><strong>0</strong></div>
           <div><span>TESTS</span><strong>0</strong></div>
-          <div><span>FOKUS HEUTE</span><strong>0m</strong></div>
+          <div><span>FOKUS</span><strong>0m</strong></div>
         </section>
 
-        <section class="paper-grid">
-          <div class="paper-main">
-            <div class="paper-section-title"><span>01</span><h3>Fächer</h3><button class="btn" id="addSubjectHome">+ Neues Fach</button></div>
+        <section class="ember-layout">
+          <div class="ember-subjects">
+            <div class="ember-section-head">
+              <div><small>01</small><h3>Deine Fächer</h3></div>
+              <button class="btn" id="addSubjectHome">+ Neues Fach</button>
+            </div>
             <div class="grid subject-grid" id="homeSubjects"></div>
           </div>
 
-          <aside class="paper-side">
-            <div class="paper-section-title"><span>02</span><h3>Schnellstart</h3></div>
-            <div class="paper-shortcuts">
-              <button data-go="flashcards">Karteikarten <b>→</b></button>
-              <button data-go="tests">Tests <b>→</b></button>
-              <button data-go="code">Code-Labor <b>→</b></button>
-              <button data-go="games">Lernspiele <b>→</b></button>
-              <button data-go="focus">Fokus & Pausen <b>→</b></button>
-            </div>
+          <aside class="ember-quick">
+            <div class="ember-section-head"><div><small>02</small><h3>Schnellstart</h3></div></div>
+            <button data-go="flashcards"><span>Karteikarten</span><b>→</b></button>
+            <button data-go="tests"><span>Tests</span><b>→</b></button>
+            <button data-go="code"><span>Code-Labor</span><b>→</b></button>
+            <button data-go="games"><span>Lernspiele</span><b>→</b></button>
+            <button data-go="focus"><span>Fokus & Pausen</span><b>→</b></button>
           </aside>
         </section>
 
-        <section class="paper-challenges">
-          <div class="paper-section-title">
-            <span>03</span><h3>C# Übungen</h3>
+        <section class="ember-challenges">
+          <div class="ember-section-head">
+            <div><small>03</small><h3>C# Übungen</h3></div>
             <div class="starter-controls">
               <span class="starter-counter" id="starterCounter">1–4 von 10</span>
               <button class="icon-btn" id="starterPrev">←</button>
@@ -4791,18 +5147,13 @@
           <div class="starter-carousel"><div class="starter-grid" id="starterGrid"></div></div>
         </section>
 
-        <section class="paper-footer-cards">
-          <div class="paper-callout yellow-note">
-            <span>MERKSATZ</span>
-            <h3>Kleine Schritte schlagen Chaos.</h3>
-            <p>Eine Aufgabe starten, fertig machen, dann die nächste.</p>
-          </div>
-          <div class="paper-callout blue-note">
+        <section class="ember-footer">
+          <div>
             <span>PAUSE</span>
-            <h3>Kopf frei?</h3>
-            <p>Wenn nicht: kurz raus aus dem Lernmodus.</p>
-            <a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener">PolyTrack ↗</a>
+            <h3>Kurz abschalten.</h3>
+            <p>Ein paar Minuten raus, dann wieder mit klarem Kopf weiter.</p>
           </div>
+          <a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener">PolyTrack öffnen ↗</a>
         </section>
       </section>
 
