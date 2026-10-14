@@ -3934,6 +3934,42 @@
 
 </style>
 
+
+<style id="builtTradingStyles">
+  .trading-hero{display:grid;grid-template-columns:1.6fr .4fr;gap:18px;padding:26px;margin-bottom:16px;background:var(--panel);border:1px solid var(--line);border-radius:20px}
+  .trading-kicker{display:block;font-size:9px;font-weight:900;letter-spacing:.16em;color:var(--accent);margin-bottom:8px}
+  .trading-hero h3{font-size:32px;margin:0 0 8px;letter-spacing:-.045em}
+  .trading-hero p{margin:0;color:var(--muted);line-height:1.65;max-width:760px}
+  .trading-progress-card{display:flex;flex-direction:column;justify-content:center;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2)}
+  .trading-progress-card span{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+  .trading-progress-card strong{font-size:34px;margin:6px 0}
+  .trading-progress{height:7px;border-radius:999px;background:var(--line);overflow:hidden}.trading-progress i{display:block;height:100%;width:0;background:var(--accent);border-radius:999px;transition:.25s}
+  .trading-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+  .trading-tabs button{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:9px 13px;border-radius:10px;font-weight:800;cursor:pointer}
+  .trading-tabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .trading-panel{display:none}.trading-panel.active{display:block}
+  .trading-path{display:grid;gap:10px}
+  .trading-module{display:grid;grid-template-columns:48px 1fr auto;gap:15px;align-items:center;padding:17px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .trading-module-no{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:900}
+  .trading-module h4{margin:0 0 5px}.trading-module p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+  .trading-module label{font-size:11px;color:var(--muted);font-weight:750;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .trading-cheat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}.trading-cheat-grid .panel{padding:18px}.trading-cheat-grid h4{margin:0 0 6px}
+  .trading-risk-grid,.trading-journal-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.trading-risk-grid .panel,.trading-journal-grid .panel{padding:22px}
+  .trading-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  .trading-form-grid label,.trading-journal-label{display:grid;gap:6px;color:var(--muted);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.05em}
+  .trading-form-grid input,.trading-journal-label input,.trading-journal-label textarea{border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:10px;padding:10px 11px;outline:none}
+  .trading-risk-result{margin-top:14px;padding:13px;border-radius:11px;background:var(--panel-2);border:1px solid var(--line);font-weight:750}
+  .trading-rules{display:grid;gap:10px;margin-top:14px}.trading-rules>div{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.trading-rules>div:last-child{border-bottom:0}.trading-rules b{color:var(--accent)}
+  .paper-sim{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}.paper-sim-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.paper-sim-top h3{margin:0;font-size:24px}.paper-balance{text-align:right}.paper-balance span{display:block;color:var(--muted);font-size:10px}.paper-balance strong{font-size:24px}
+  #paperChart{display:block;width:100%;height:330px;margin:18px 0;background:var(--panel-2);border:1px solid var(--line);border-radius:14px}
+  .paper-price-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.paper-price-row>div{padding:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px}.paper-price-row span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}.paper-price-row strong{display:block;margin-top:4px}
+  .paper-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end}.paper-controls label{display:grid;gap:6px;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase}.paper-controls input{width:115px;padding:10px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:10px}
+  .trading-journal-label{margin:14px 0}.trading-save-state{margin-left:10px;color:var(--muted);font-size:11px}
+  .trading-glossary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.trading-glossary article{padding:15px;background:var(--panel);border:1px solid var(--line);border-radius:12px}.trading-glossary b{display:block;margin-bottom:5px}.trading-glossary span{color:var(--muted);font-size:12px;line-height:1.5}
+  @media(max-width:1000px){.trading-hero,.trading-risk-grid,.trading-journal-grid{grid-template-columns:1fr}.trading-cheat-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:650px){.trading-module{grid-template-columns:42px 1fr}.trading-module label{grid-column:2}.trading-form-grid,.trading-glossary,.paper-price-row{grid-template-columns:1fr}.trading-cheat-grid{grid-template-columns:1fr}.paper-sim-top{flex-direction:column}.paper-balance{text-align:left}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -3948,6 +3984,7 @@
       <button data-page="flashcards"><span class="ico">◫</span>Karteikarten</button>
       <button data-page="tests"><span class="ico">✓</span>Tests</button>
       <button data-page="code"><span class="ico">&lt;/&gt;</span>Code-Labor</button>
+      <button data-page="trading"><span class="ico">↗</span>Trading</button>
       <button data-page="games"><span class="ico">◇</span>Lernspiele</button>
       <button data-page="focus"><span class="ico">◷</span>Fokus & Pausen</button>
       <button data-page="admin"><span class="ico">⚙</span>Admin</button>
@@ -4125,6 +4162,188 @@ class Program
         </div>
       </section>
 
+      <section class="page" id="page-trading">
+        <div class="page-title">
+          <div>
+            <h2>Trading lernen</h2>
+            <p>Von den Grundlagen bis zu Risiko, Strategie, Psychologie und Paper Trading.</p>
+          </div>
+          <span class="status">Nur Lernmodus</span>
+        </div>
+
+        <div class="trading-hero">
+          <div>
+            <span class="trading-kicker">BUILT TRADING ACADEMY</span>
+            <h3>Verstehen, üben, testen.</h3>
+            <p>Kein Echtgeld, keine Signale. Du lernst zuerst Marktmechanik, Risiko und saubere Entscheidungsprozesse und kannst danach im Simulator üben.</p>
+          </div>
+          <div class="trading-progress-card">
+            <span>Fortschritt</span>
+            <strong id="tradingProgressText">0%</strong>
+            <div class="trading-progress"><i id="tradingProgressBar"></i></div>
+          </div>
+        </div>
+
+        <div class="trading-tabs" id="tradingTabs">
+          <button class="active" data-trading-tab="path">Lernpfad</button>
+          <button data-trading-tab="risk">Risiko</button>
+          <button data-trading-tab="sim">Simulator</button>
+          <button data-trading-tab="journal">Journal</button>
+          <button data-trading-tab="glossary">Glossar</button>
+        </div>
+
+        <div class="trading-panel active" data-trading-panel="path">
+          <div class="trading-path">
+            <article class="trading-module">
+              <div class="trading-module-no">01</div>
+              <div><h4>Marktgrundlagen</h4><p>Bid/Ask, Spread, Liquidität, Market- und Limit-Orders, Long/Short, Hebel und Margin.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="market"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">02</div>
+              <div><h4>Chart lesen</h4><p>Candlesticks, Zeitrahmen, Trends, Hochs/Tiefs, Support und Resistance.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="chart"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">03</div>
+              <div><h4>Marktstruktur</h4><p>Higher Highs, Lower Lows, Break of Structure, Range, Trend und Konsolidierung.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="structure"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">04</div>
+              <div><h4>Technische Analyse</h4><p>Moving Averages, RSI, Volumen und ATR. Indikatoren als Hilfe, nicht als Garantie.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="ta"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">05</div>
+              <div><h4>Risk Management</h4><p>Positionsgrösse, Stop-Loss, Risk/Reward, Maximalverlust pro Trade und Drawdown.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="risk"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">06</div>
+              <div><h4>Strategie bauen</h4><p>Setup, Entry, Invalidierung, Stop, Target, Marktbedingungen und klare Regeln.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="strategy"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">07</div>
+              <div><h4>Backtesting</h4><p>Historische Trades testen, Trefferquote, durchschnittliches R, Erwartungswert und Stichprobengrösse.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="backtest"> Erledigt</label>
+            </article>
+            <article class="trading-module">
+              <div class="trading-module-no">08</div>
+              <div><h4>Psychologie</h4><p>FOMO, Revenge Trading, Overtrading, Verlustserien, Geduld und Regelkonstanz.</p></div>
+              <label><input class="trading-check" type="checkbox" data-trading-check="psych"> Erledigt</label>
+            </article>
+          </div>
+
+          <div class="trading-cheat-grid">
+            <div class="card panel"><h4>Long</h4><p class="muted">Du profitierst im Simulator, wenn der Kurs steigt.</p></div>
+            <div class="card panel"><h4>Short</h4><p class="muted">Du profitierst im Simulator, wenn der Kurs fällt.</p></div>
+            <div class="card panel"><h4>R-Multiple</h4><p class="muted">Ergebnis relativ zum anfänglich riskierten Betrag. +2R bedeutet das Doppelte des Risikos gewonnen.</p></div>
+            <div class="card panel"><h4>Hebel</h4><p class="muted">Vergrössert Markt-Exposure und damit Gewinne wie Verluste. Kein Ersatz für gutes Risikomanagement.</p></div>
+          </div>
+        </div>
+
+        <div class="trading-panel" data-trading-panel="risk">
+          <div class="trading-risk-grid">
+            <div class="card panel trading-calculator">
+              <h3>Positionsgrössen-Rechner</h3>
+              <p class="muted">Berechnet die theoretische Positionsgrösse anhand deines maximalen Risikos.</p>
+              <div class="trading-form-grid">
+                <label>Kontogrösse<input id="riskAccount" type="number" min="1" value="10000"></label>
+                <label>Risiko pro Trade %<input id="riskPercent" type="number" min="0.1" max="100" step="0.1" value="1"></label>
+                <label>Entry<input id="riskEntry" type="number" min="0.0001" step="0.01" value="100"></label>
+                <label>Stop-Loss<input id="riskStop" type="number" min="0.0001" step="0.01" value="98"></label>
+              </div>
+              <button class="btn primary" id="riskCalcBtn">Berechnen</button>
+              <div class="trading-risk-result" id="riskResult">Max. Risiko: – · Positionsgrösse: –</div>
+            </div>
+
+            <div class="card panel">
+              <h3>Risk-Regeln</h3>
+              <div class="trading-rules">
+                <div><b>1.</b><span>Vor dem Entry wissen, wo der Trade ungültig wird.</span></div>
+                <div><b>2.</b><span>Positionsgrösse aus dem Risiko berechnen, nicht umgekehrt.</span></div>
+                <div><b>3.</b><span>Nach Verlusten Risiko nicht impulsiv erhöhen.</span></div>
+                <div><b>4.</b><span>Hebel verändert nicht die Qualität eines Setups.</span></div>
+                <div><b>5.</b><span>Drawdown-Limit definieren und bei Erreichen stoppen.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trading-panel" data-trading-panel="sim">
+          <div class="paper-sim">
+            <div class="paper-sim-top">
+              <div><span class="trading-kicker">PAPER TRADING</span><h3>BUILT Market Simulator</h3></div>
+              <div class="paper-balance"><span>Virtuelles Kapital</span><strong id="paperBalance">10'000.00</strong></div>
+            </div>
+            <canvas id="paperChart" width="900" height="330"></canvas>
+            <div class="paper-price-row">
+              <div><span>Kurs</span><strong id="paperPrice">100.00</strong></div>
+              <div><span>Position</span><strong id="paperPosition">Keine</strong></div>
+              <div><span>Unrealisiert</span><strong id="paperPnl">0.00</strong></div>
+            </div>
+            <div class="paper-controls">
+              <label>Positionsgrösse<input id="paperSize" type="number" min="1" step="1" value="10"></label>
+              <button class="btn primary" id="paperLong">Long</button>
+              <button class="btn" id="paperShort">Short</button>
+              <button class="btn" id="paperNext">Nächste Kerze</button>
+              <button class="btn" id="paperClose">Position schliessen</button>
+              <button class="btn" id="paperReset">Simulator zurücksetzen</button>
+            </div>
+            <div class="casino-status" id="paperStatus">Paper Trading verwendet nur virtuelles Kapital.</div>
+          </div>
+        </div>
+
+        <div class="trading-panel" data-trading-panel="journal">
+          <div class="trading-journal-grid">
+            <div class="card panel">
+              <h3>Trading Journal</h3>
+              <p class="muted">Speichere deine Überlegungen. Das Journal bleibt auf diesem Gerät erhalten.</p>
+              <label class="trading-journal-label">Setup<input id="journalSetup" placeholder="z. B. Breakout + Retest"></label>
+              <label class="trading-journal-label">Warum der Trade?<textarea id="journalReason" rows="4" placeholder="Marktstruktur, Trigger, Invalidierung ..."></textarea></label>
+              <label class="trading-journal-label">Was habe ich gelernt?<textarea id="journalLearned" rows="4" placeholder="Was war gut? Was ändere ich?"></textarea></label>
+              <button class="btn primary" id="journalSave">Journal speichern</button>
+              <span class="trading-save-state" id="journalState"></span>
+            </div>
+            <div class="card panel">
+              <h3>Vor jedem Trade</h3>
+              <div class="trading-rules">
+                <div><b>□</b><span>Passt der Trade zu meinem Setup?</span></div>
+                <div><b>□</b><span>Wo liegt die Invalidierung?</span></div>
+                <div><b>□</b><span>Wie viel riskiere ich?</span></div>
+                <div><b>□</b><span>Ist das Chance-Risiko-Verhältnis sinnvoll?</span></div>
+                <div><b>□</b><span>Handle ich aus Plan oder Emotion?</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trading-panel" data-trading-panel="glossary">
+          <div class="trading-glossary">
+            <article><b>Bid</b><span>Höchster Preis, den Käufer aktuell bieten.</span></article>
+            <article><b>Ask</b><span>Niedrigster Preis, zu dem Verkäufer anbieten.</span></article>
+            <article><b>Spread</b><span>Differenz zwischen Bid und Ask.</span></article>
+            <article><b>Liquidity</b><span>Wie leicht ein Markt grosse Orders aufnehmen kann.</span></article>
+            <article><b>Volatility</b><span>Stärke und Geschwindigkeit von Preisbewegungen.</span></article>
+            <article><b>Stop-Loss</b><span>Vorab definierter Ausstieg, wenn die Idee invalidiert wird.</span></article>
+            <article><b>Take-Profit</b><span>Vorab definierter Zielbereich für Gewinnmitnahme.</span></article>
+            <article><b>Drawdown</b><span>Rückgang vom bisherigen Kontohöchststand.</span></article>
+            <article><b>Leverage</b><span>Hebel, der Markt-Exposure relativ zum Kapital vergrössert.</span></article>
+            <article><b>Margin</b><span>Kapital, das für eine gehebelte Position gebunden wird.</span></article>
+            <article><b>Breakout</b><span>Ausbruch des Preises aus einem definierten Bereich.</span></article>
+            <article><b>Retest</b><span>Erneuter Test eines zuvor gebrochenen Levels.</span></article>
+            <article><b>R</b><span>Einheit für das Risiko eines Trades.</span></article>
+            <article><b>Expectancy</b><span>Durchschnittlich erwartetes Ergebnis pro Trade über viele Trades.</span></article>
+            <article><b>Backtest</b><span>Strategie auf historischen Daten nach festen Regeln testen.</span></article>
+            <article><b>Paper Trading</b><span>Simulation ohne Echtgeld.</span></article>
+          </div>
+        </div>
+
+        <div class="casino-note">Trading kann zu erheblichen Verlusten führen. Dieser Bereich dient ausschliesslich zum Lernen und Simulieren und stellt keine Anlageberatung oder Handelsempfehlung dar.</div>
+      </section>
+
       <section class="page" id="page-games">
         <div class="page-title">
           <div>
@@ -4285,7 +4504,7 @@ class Program
 
   const pages = document.querySelectorAll('.page');
   const navButtons = document.querySelectorAll('.nav button[data-page]');
-  const titleMap = {home:'Startseite',subjects:'Fächer',flashcards:'Karteikarten',tests:'Tests',code:'Code-Labor',games:'Lernspiele',focus:'Fokus & Pausen',admin:'Admin Center'};
+  const titleMap = {home:'Startseite',subjects:'Fächer',flashcards:'Karteikarten',tests:'Tests',code:'Code-Labor',games:'Lernspiele',trading:'Trading lernen',focus:'Fokus & Pausen',admin:'Admin Center'};
 
   function navigate(page){
     pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
@@ -5806,6 +6025,119 @@ try { history.replaceState({ builtStylePreview: true }, '', '/'); } catch (e) {}
       if(spinBtn){spinBtn.disabled=false;spinBtn.textContent='Drehen'}
     },4300);
   });
+})();
+</script>
+
+
+<script id="builtTradingScript">
+(function(){
+  const PROGRESS_KEY='built_trading_progress_v1';
+  const JOURNAL_KEY='built_trading_journal_v1';
+  const PAPER_KEY='built_paper_trading_v1';
+
+  document.querySelectorAll('[data-trading-tab]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('[data-trading-tab]').forEach(b=>b.classList.toggle('active',b===btn));
+      document.querySelectorAll('[data-trading-panel]').forEach(p=>p.classList.toggle('active',p.dataset.tradingPanel===btn.dataset.tradingTab));
+      if(btn.dataset.tradingTab==='sim') setTimeout(drawPaperChart,30);
+    });
+  });
+
+  let tradingProgress={};
+  try{tradingProgress=JSON.parse(localStorage.getItem(PROGRESS_KEY)||'{}')}catch(e){}
+  const checks=[...document.querySelectorAll('.trading-check')];
+  function renderTradingProgress(){
+    checks.forEach(ch=>ch.checked=!!tradingProgress[ch.dataset.tradingCheck]);
+    const done=checks.filter(ch=>ch.checked).length;
+    const pct=checks.length?Math.round(done/checks.length*100):0;
+    const txt=document.getElementById('tradingProgressText'),bar=document.getElementById('tradingProgressBar');
+    if(txt)txt.textContent=pct+'%';if(bar)bar.style.width=pct+'%';
+  }
+  checks.forEach(ch=>ch.addEventListener('change',()=>{tradingProgress[ch.dataset.tradingCheck]=ch.checked;localStorage.setItem(PROGRESS_KEY,JSON.stringify(tradingProgress));renderTradingProgress()}));
+  renderTradingProgress();
+
+  document.getElementById('riskCalcBtn')?.addEventListener('click',()=>{
+    const account=Number(document.getElementById('riskAccount').value);
+    const pct=Number(document.getElementById('riskPercent').value);
+    const entry=Number(document.getElementById('riskEntry').value);
+    const stop=Number(document.getElementById('riskStop').value);
+    const out=document.getElementById('riskResult');
+    if(!(account>0&&pct>0&&entry>0&&stop>0&&entry!==stop)){out.textContent='Bitte gültige Werte eingeben.';return}
+    const maxRisk=account*(pct/100);
+    const distance=Math.abs(entry-stop);
+    const units=maxRisk/distance;
+    out.textContent='Max. Risiko: '+maxRisk.toLocaleString('de-CH',{maximumFractionDigits:2})+' · Theoretische Positionsgrösse: '+units.toLocaleString('de-CH',{maximumFractionDigits:4})+' Einheiten';
+  });
+
+  let journal={};try{journal=JSON.parse(localStorage.getItem(JOURNAL_KEY)||'{}')}catch(e){}
+  const js=document.getElementById('journalSetup'),jr=document.getElementById('journalReason'),jl=document.getElementById('journalLearned');
+  if(js)js.value=journal.setup||'';if(jr)jr.value=journal.reason||'';if(jl)jl.value=journal.learned||'';
+  document.getElementById('journalSave')?.addEventListener('click',()=>{
+    journal={setup:js?.value||'',reason:jr?.value||'',learned:jl?.value||'',savedAt:Date.now()};
+    localStorage.setItem(JOURNAL_KEY,JSON.stringify(journal));
+    const state=document.getElementById('journalState');if(state){state.textContent='Gespeichert';setTimeout(()=>state.textContent='',1600)}
+  });
+
+  const defaultPaper={balance:10000,prices:[100],position:null};
+  let paper;
+  try{paper=JSON.parse(localStorage.getItem(PAPER_KEY)||'null')}catch(e){}
+  if(!paper||!Array.isArray(paper.prices)||!paper.prices.length) paper=JSON.parse(JSON.stringify(defaultPaper));
+
+  function savePaper(){localStorage.setItem(PAPER_KEY,JSON.stringify(paper))}
+  function currentPrice(){return paper.prices[paper.prices.length-1]}
+  function unrealized(){
+    if(!paper.position)return 0;
+    const diff=(currentPrice()-paper.position.entry)*(paper.position.side==='long'?1:-1);
+    return diff*paper.position.size;
+  }
+  function nextPaperPrice(){
+    const last=currentPrice();
+    const shock=(Math.random()-.5)*3.2;
+    const drift=(Math.random()-.5)*.4;
+    const next=Math.max(5,last+shock+drift);
+    paper.prices.push(Math.round(next*100)/100);
+    if(paper.prices.length>80)paper.prices.shift();
+    savePaper();renderPaper();
+  }
+  function drawPaperChart(){
+    const canvas=document.getElementById('paperChart');if(!canvas)return;
+    const ctx=canvas.getContext('2d');
+    const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+    canvas.width=Math.max(300,Math.floor(rect.width*dpr));canvas.height=Math.floor(330*dpr);ctx.scale(dpr,dpr);
+    const w=rect.width,h=330;ctx.clearRect(0,0,w,h);
+    const vals=paper.prices,min=Math.min(...vals)-2,max=Math.max(...vals)+2,range=Math.max(1,max-min);
+    ctx.strokeStyle='rgba(127,137,150,.18)';ctx.lineWidth=1;
+    for(let i=1;i<5;i++){const y=i*h/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+    ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6558f5';ctx.lineWidth=2.2;ctx.beginPath();
+    vals.forEach((v,i)=>{const x=vals.length===1?w/2:i*(w/(vals.length-1));const y=h-24-((v-min)/range)*(h-48);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();
+  }
+  function renderPaper(){
+    const price=currentPrice(),pnl=unrealized();
+    document.getElementById('paperBalance').textContent=paper.balance.toLocaleString('de-CH',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('paperPrice').textContent=price.toFixed(2);
+    document.getElementById('paperPosition').textContent=paper.position?(paper.position.side==='long'?'Long ':'Short ')+paper.position.size+' @ '+paper.position.entry.toFixed(2):'Keine';
+    const pnlEl=document.getElementById('paperPnl');pnlEl.textContent=(pnl>=0?'+':'')+pnl.toFixed(2);
+    pnlEl.style.color=pnl>0?'var(--success)':pnl<0?'var(--danger)':'';
+    drawPaperChart();
+  }
+  function openPaper(side){
+    const size=Number(document.getElementById('paperSize').value),status=document.getElementById('paperStatus');
+    if(paper.position){status.textContent='Schliesse zuerst die bestehende Position.';return}
+    if(!(size>0)){status.textContent='Gib eine gültige Positionsgrösse ein.';return}
+    paper.position={side,size,entry:currentPrice()};savePaper();renderPaper();status.textContent=(side==='long'?'Long':'Short')+' eröffnet.';
+  }
+  document.getElementById('paperLong')?.addEventListener('click',()=>openPaper('long'));
+  document.getElementById('paperShort')?.addEventListener('click',()=>openPaper('short'));
+  document.getElementById('paperNext')?.addEventListener('click',nextPaperPrice);
+  document.getElementById('paperClose')?.addEventListener('click',()=>{
+    const status=document.getElementById('paperStatus');if(!paper.position){status.textContent='Keine offene Position.';return}
+    const pnl=unrealized();paper.balance=Math.round((paper.balance+pnl)*100)/100;paper.position=null;savePaper();renderPaper();status.textContent='Position geschlossen: '+(pnl>=0?'+':'')+pnl.toFixed(2);
+  });
+  document.getElementById('paperReset')?.addEventListener('click',()=>{
+    paper=JSON.parse(JSON.stringify(defaultPaper));savePaper();renderPaper();document.getElementById('paperStatus').textContent='Simulator zurückgesetzt.';
+  });
+  renderPaper();
+  window.addEventListener('resize',()=>{if(document.querySelector('[data-trading-panel="sim"]')?.classList.contains('active'))drawPaperChart()});
 })();
 </script>
 
