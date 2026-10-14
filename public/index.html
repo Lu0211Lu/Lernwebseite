@@ -5594,6 +5594,565 @@
       #homeSubjects.subject-grid{grid-template-columns:1fr !important}
     }
 
+
+    /* ===== BUILT – Noir Prestige ===== */
+    :root{
+      --bg:#0a0a0b;
+      --panel:#111112;
+      --panel-2:#0d0d0e;
+      --text:#f3efe8;
+      --muted:#8f8a81;
+      --line:#242321;
+      --accent:#c6a76b;
+      --accent-2:#7d6842;
+      --accent-soft:#241e14;
+      --success:#789a7e;
+      --warning:#c6a76b;
+      --danger:#b96e63;
+      --shadow:0 24px 80px rgba(0,0,0,.48);
+      --radius:18px;
+    }
+
+    html,body,.main,.content,.page{background:#0a0a0b !important;color:#f3efe8 !important}
+    body{
+      background:
+        radial-gradient(circle at 80% -10%,rgba(198,167,107,.09),transparent 28%),
+        linear-gradient(180deg,#09090a 0%,#0c0c0d 55%,#09090a 100%) !important;
+    }
+
+    .app{grid-template-columns:240px minmax(0,1fr) !important}
+
+    .sidebar{
+      background:#080809 !important;
+      border-right:1px solid #1d1d1d !important;
+      box-shadow:none !important;
+      padding:22px 14px !important;
+    }
+
+    .brand{padding-bottom:30px !important}
+    .brand-mark{
+      width:38px !important;height:38px !important;
+      border-radius:50% !important;
+      background:#c6a76b !important;
+      color:#0b0a08 !important;
+      box-shadow:none !important;
+      font-family:Georgia,"Times New Roman",serif !important;
+    }
+    .brand strong{
+      color:#f7f2ea !important;
+      font-family:Georgia,"Times New Roman",serif !important;
+      font-size:18px !important;
+      font-weight:500 !important;
+      letter-spacing:.03em !important;
+    }
+    .brand span{color:#6e6a64 !important}
+
+    .nav{gap:2px !important}
+    .nav button{
+      color:#8d8982 !important;
+      border-radius:8px !important;
+      background:transparent !important;
+      font-size:12px !important;
+      padding:11px 12px !important;
+    }
+    .nav button:hover{
+      background:#111112 !important;
+      color:#f1ede6 !important;
+    }
+    .nav button.active{
+      background:#151513 !important;
+      color:#f4efe7 !important;
+      box-shadow:inset 2px 0 0 #c6a76b !important;
+    }
+    .nav button.active .ico{color:#c6a76b !important}
+
+    .profile{
+      background:#0f0f10 !important;
+      border-color:#242321 !important;
+      border-radius:12px !important;
+    }
+    .profile .avatar{
+      background:#211b12 !important;
+      color:#d3b77b !important;
+    }
+
+    .topbar{
+      background:rgba(10,10,11,.90) !important;
+      border-bottom:1px solid #202020 !important;
+      backdrop-filter:blur(18px) !important;
+    }
+    .topbar h1{
+      color:#d9d5ce !important;
+      font-family:Georgia,"Times New Roman",serif !important;
+      font-size:16px !important;
+      font-weight:500 !important;
+    }
+
+    .content{
+      padding:30px 34px 60px !important;
+      max-width:1540px !important;
+    }
+
+    .btn,.icon-btn{
+      background:#121213 !important;
+      color:#ece7df !important;
+      border:1px solid #2a2926 !important;
+      border-radius:9px !important;
+      box-shadow:none !important;
+    }
+    .btn:hover,.icon-btn:hover{
+      background:#191918 !important;
+      border-color:#3b382f !important;
+    }
+    .btn.primary{
+      background:#c6a76b !important;
+      color:#0c0a07 !important;
+      border-color:#c6a76b !important;
+      box-shadow:0 12px 28px rgba(198,167,107,.12) !important;
+    }
+
+    .noir-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .noir-hero-left{
+      min-height:410px;
+      padding:52px 50px;
+      background:
+        linear-gradient(145deg,rgba(198,167,107,.055),transparent 35%),
+        #111112;
+      border:1px solid #232321;
+      border-radius:24px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 26px 80px rgba(0,0,0,.34);
+    }
+
+    .noir-hero-left:after{
+      content:"";
+      position:absolute;
+      width:380px;height:380px;
+      right:-150px;bottom:-190px;
+      border:1px solid rgba(198,167,107,.14);
+      border-radius:50%;
+      box-shadow:0 0 0 48px rgba(198,167,107,.02),0 0 0 96px rgba(198,167,107,.012);
+    }
+
+    .noir-overline{
+      color:#8f7a54;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.22em;
+      margin-bottom:30px;
+    }
+
+    .noir-hero-left h2{
+      margin:0 0 22px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:68px;
+      line-height:.94;
+      font-weight:500;
+      letter-spacing:-.045em;
+      color:#f5f0e8;
+    }
+
+    .noir-hero-left h2 span{
+      color:#c6a76b;
+      font-style:italic;
+    }
+
+    .noir-hero-left p{
+      margin:0;
+      max-width:630px;
+      color:#9a958c;
+      font-size:14px;
+      line-height:1.75;
+    }
+
+    .noir-actions{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+
+    .noir-hero-right{
+      display:grid;
+      grid-template-rows:1fr auto;
+      gap:16px;
+    }
+
+    .noir-focus-card{
+      min-height:310px;
+      padding:26px;
+      background:#151513;
+      border:1px solid #2c2922;
+      border-radius:24px;
+      display:flex;
+      flex-direction:column;
+      box-shadow:0 26px 80px rgba(0,0,0,.30);
+    }
+
+    .noir-focus-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#847c6f;
+      font-size:8px;
+      letter-spacing:.15em;
+      font-weight:900;
+    }
+
+    .noir-focus-top b{
+      color:#c6a76b;
+      font-size:26px;
+      letter-spacing:-.04em;
+    }
+
+    .noir-focus-ring{
+      width:150px;
+      height:150px;
+      margin:auto;
+      border-radius:50%;
+      border:1px solid #4a4030;
+      display:grid;
+      place-items:center;
+      box-shadow:inset 0 0 0 12px #181713;
+    }
+
+    .noir-focus-ring div{text-align:center}
+    .noir-focus-ring strong{
+      display:block;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:52px;
+      line-height:.9;
+      font-weight:500;
+      color:#f4efe7;
+    }
+    .noir-focus-ring span{
+      color:#8d846f;
+      font-size:8px;
+      letter-spacing:.16em;
+    }
+
+    .noir-mini-stat{
+      padding:18px 20px;
+      background:#0f0f10;
+      border:1px solid #242321;
+      border-radius:16px;
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+    }
+    .noir-mini-stat span{
+      color:#6e6a64;
+      font-size:8px;
+      letter-spacing:.14em;
+      font-weight:900;
+    }
+    .noir-mini-stat strong{
+      font-family:Georgia,"Times New Roman",serif;
+      color:#f3eee6;
+      font-size:34px;
+      font-weight:500;
+    }
+
+    .noir-dashboard{
+      display:grid;
+      grid-template-columns:minmax(0,1.7fr) minmax(280px,.45fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .noir-main-column,.noir-side-block,.noir-progress-block,.noir-challenges,.noir-footer-note{
+      background:#111112;
+      border:1px solid #242321;
+      border-radius:18px;
+    }
+
+    .noir-main-column{padding:22px}
+    .noir-side-column{display:grid;gap:16px;align-content:start}
+    .noir-side-block{padding:20px}
+    .noir-progress-block{padding:22px}
+
+    .noir-section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .noir-section-head>div{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .noir-section-head span{
+      color:#9b8254;
+      font-size:8px;
+      letter-spacing:.12em;
+      font-weight:900;
+    }
+
+    .noir-section-head h3{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:22px;
+      font-weight:500;
+      color:#f0ebe3;
+    }
+
+    #homeSubjects.subject-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:10px !important;
+    }
+
+    #homeSubjects .subject-card{
+      min-height:160px !important;
+      padding:17px !important;
+      background:#151516 !important;
+      border:1px solid #2a2927 !important;
+      border-radius:12px !important;
+      box-shadow:none !important;
+    }
+    #homeSubjects .subject-card:hover{
+      background:#1a1a1a !important;
+      border-color:#40392d !important;
+      transform:translateY(-2px) !important;
+    }
+    #homeSubjects .subject-badge{
+      background:#211b12 !important;
+      color:#d1b476 !important;
+      border:1px solid #3c321f !important;
+      border-radius:8px !important;
+    }
+    #homeSubjects .subject-card h4{
+      color:#f1ece4 !important;
+      font-family:Georgia,"Times New Roman",serif !important;
+      font-size:18px !important;
+      font-weight:500 !important;
+    }
+    #homeSubjects .subject-card p{color:#8c877f !important}
+    #homeSubjects .progress{background:#262421 !important}
+    #homeSubjects .progress span{background:#c6a76b !important}
+
+    .noir-side-block>button{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:13px 0;
+      color:#ddd8d0;
+      background:transparent;
+      border:0;
+      border-bottom:1px solid #262522;
+      font:inherit;
+      cursor:pointer;
+    }
+    .noir-side-block>button:last-child{border-bottom:0}
+    .noir-side-block>button span{font-size:12px}
+    .noir-side-block>button b{color:#c6a76b;font-weight:500}
+    .noir-side-block>button:hover{color:#fff}
+
+    .noir-progress-block span{
+      display:block;
+      color:#716b61;
+      font-size:8px;
+      letter-spacing:.14em;
+      font-weight:900;
+    }
+    .noir-progress-block strong{
+      display:block;
+      margin-top:14px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:42px;
+      font-weight:500;
+      color:#f2ede5;
+    }
+    .noir-progress-block small{color:#857f75}
+    .noir-progress-line{
+      height:3px;
+      background:#292721;
+      margin-top:20px;
+      overflow:hidden;
+    }
+    .noir-progress-line i{
+      display:block;
+      width:36%;
+      height:100%;
+      background:#c6a76b;
+    }
+
+    .noir-challenges{
+      padding:22px;
+      margin-bottom:18px;
+    }
+    .starter-controls{display:flex;align-items:center;gap:8px}
+    .starter-carousel{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+      padding:0 !important;
+    }
+    .starter-grid{gap:10px !important}
+    .starter-card{
+      background:#151516 !important;
+      border:1px solid #2b2a28 !important;
+      border-radius:12px !important;
+      box-shadow:none !important;
+      min-height:220px !important;
+    }
+    .starter-card:nth-child(n){background:#151516 !important}
+    .starter-card:hover{
+      background:#1a1a1a !important;
+      border-color:#40392d !important;
+      transform:translateY(-2px) !important;
+    }
+    .starter-card .level{
+      background:#211b12 !important;
+      color:#d1b476 !important;
+      border:1px solid #3b311f !important;
+    }
+    .starter-card h4{
+      color:#f0ebe3 !important;
+      font-family:Georgia,"Times New Roman",serif !important;
+      font-weight:500 !important;
+    }
+    .starter-card p,.starter-steps{color:#8b867e !important}
+
+    .noir-footer-note{
+      padding:24px 26px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      background:
+        linear-gradient(90deg,rgba(198,167,107,.05),transparent 45%),
+        #111112;
+    }
+
+    .noir-footer-note span{
+      color:#8e7850;
+      font-size:8px;
+      letter-spacing:.16em;
+      font-weight:900;
+    }
+    .noir-footer-note h3{
+      margin:7px 0 0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:25px;
+      font-weight:500;
+      color:#f1ece4;
+    }
+
+    .page-title,.card,.panel,.flash-card,.test-row,.game-card,.empty,.modal-card{
+      background:#111112 !important;
+      border-color:#292825 !important;
+      color:#f0ebe3 !important;
+    }
+    .page-title{
+      border-radius:16px !important;
+      box-shadow:none !important;
+    }
+    .page-title h2{
+      color:#f3eee6 !important;
+      font-family:Georgia,"Times New Roman",serif !important;
+      font-weight:500 !important;
+    }
+    .page-title p,.muted{color:#8d8981 !important}
+
+    .tag,.status{
+      background:#211b12 !important;
+      color:#d1b476 !important;
+      border-radius:8px !important;
+    }
+
+    .flash-practice-pill{
+      background:#121213 !important;
+      border-color:#2a2927 !important;
+      color:#8b867e !important;
+    }
+    .flash-practice-pill strong{color:#f0ebe3 !important}
+    .flash-side-pile{
+      background:#0f0f10 !important;
+      border-color:#292825 !important;
+    }
+    .flash-big-card{
+      background:
+        radial-gradient(circle at 82% 0%,rgba(198,167,107,.06),transparent 28%),
+        #141414 !important;
+      border-color:#34312b !important;
+      color:#f4efe7 !important;
+      box-shadow:0 28px 85px rgba(0,0,0,.42) !important;
+    }
+    .flash-big-card .flash-main,
+    .flash-answer{
+      font-family:Georgia,"Times New Roman",serif !important;
+      font-weight:500 !important;
+    }
+    .flash-answer{
+      border-top-color:#302f2c !important;
+      color:#d8bc82 !important;
+    }
+    .flash-choice.known-btn{
+      background:#17241a !important;
+      color:#92b79a !important;
+      border-color:#304235 !important;
+    }
+    .flash-choice.unknown-btn{
+      background:#291817 !important;
+      color:#d78c82 !important;
+      border-color:#4a2b28 !important;
+    }
+
+    .modal{background:rgba(0,0,0,.78) !important;backdrop-filter:blur(10px) !important}
+    .modal-card{
+      background:#131314 !important;
+      border:1px solid #302e2a !important;
+    }
+    .field label{color:#a29c92 !important}
+    .field input,.field textarea,.field select,.stdin-box{
+      background:#0b0b0c !important;
+      color:#eee9e2 !important;
+      border-color:#2b2a28 !important;
+    }
+    .field input:focus,.field textarea:focus,.field select:focus,.stdin-box:focus{
+      border-color:#c6a76b !important;
+      box-shadow:0 0 0 3px rgba(198,167,107,.08) !important;
+    }
+
+    #builtStyleToggle{
+      background:#c6a76b !important;
+      color:#0b0906 !important;
+      border-color:#c6a76b !important;
+      box-shadow:0 12px 30px rgba(0,0,0,.35) !important;
+    }
+    #builtStyleMenu{
+      background:rgba(16,16,17,.98) !important;
+      border-color:#2c2a27 !important;
+    }
+    #builtStyleMenu .title{color:#777168 !important}
+    #builtStyleMenu a{color:#ece7df !important}
+    #builtStyleMenu a:hover{background:#181817 !important}
+    #builtStyleMenu a.active{
+      background:#c6a76b !important;
+      color:#0b0906 !important;
+    }
+
+    @media(max-width:1050px){
+      .noir-hero,.noir-dashboard{grid-template-columns:1fr}
+      .noir-hero-right{grid-template-columns:1fr 1fr;grid-template-rows:none}
+      .noir-focus-card{min-height:270px}
+    }
+
+    @media(max-width:760px){
+      .noir-hero-left{padding:34px 24px}
+      .noir-hero-left h2{font-size:48px}
+      .noir-hero-right{grid-template-columns:1fr}
+      #homeSubjects.subject-grid{grid-template-columns:1fr !important}
+      .noir-footer-note{flex-direction:column;align-items:flex-start}
+    }
+
   </style>
 
 <style>
@@ -5650,71 +6209,64 @@
 
     <div class="content">
       <section class="page active" id="page-home">
-        <section class="orbit-shell">
-          <div class="orbit-main">
-            <div class="orbit-topline">
-              <span>BUILT / STUDY CONTROL</span>
-              <span>FRANZÖSISCH AKTIV</span>
-            </div>
-
-            <div class="orbit-title-wrap">
-              <h2>Lernen.<br><em>Konzentriert.</em></h2>
-              <p>Dein Lernbereich ist jetzt wie ein Kontrollzentrum aufgebaut: eine Hauptaufgabe, klare Module und direkte Wege zu allem Wichtigen.</p>
-            </div>
-
-            <div class="orbit-primary-row">
-              <button class="orbit-action primary" data-go="flashcards">
-                <span class="orbit-action-no">01</span>
-                <span><b>Karteikarten</b><small>Direkt weiterlernen</small></span>
-                <i>↗</i>
-              </button>
-              <button class="orbit-action" data-go="subjects">
-                <span class="orbit-action-no">02</span>
-                <span><b>Fächer</b><small>Inhalte verwalten</small></span>
-                <i>↗</i>
-              </button>
-              <button class="orbit-action" data-go="code">
-                <span class="orbit-action-no">03</span>
-                <span><b>Code-Labor</b><small>C# öffnen</small></span>
-                <i>↗</i>
-              </button>
-            </div>
-
-            <div class="orbit-subjects">
-              <div class="orbit-section-head">
-                <div><span>AKTIV</span><h3>Deine Fächer</h3></div>
-                <button class="btn" id="addSubjectHome">+ Neues Fach</button>
-              </div>
-              <div class="grid subject-grid" id="homeSubjects"></div>
+        <section class="noir-hero">
+          <div class="noir-hero-left">
+            <div class="noir-overline">BUILT / PRIVATE STUDY</div>
+            <h2>Excellence<br><span>by design.</span></h2>
+            <p>Ein fokussierter Lernraum für Fächer, Karteikarten, Tests und C# – reduziert auf das Wesentliche, gestaltet wie ein Premium-Arbeitsplatz.</p>
+            <div class="noir-actions">
+              <button class="btn primary" data-go="flashcards">Weiterlernen</button>
+              <button class="btn" data-go="subjects">Fächer ansehen</button>
             </div>
           </div>
+          <div class="noir-hero-right">
+            <div class="noir-focus-card">
+              <div class="noir-focus-top"><span>FOCUS SESSION</span><b>25</b></div>
+              <div class="noir-focus-ring">
+                <div><strong>25</strong><span>MIN</span></div>
+              </div>
+              <button class="btn" data-go="focus">Session starten</button>
+            </div>
+            <div class="noir-mini-stat">
+              <span>AKTIVE FÄCHER</span>
+              <strong id="metricSubjects">0</strong>
+            </div>
+          </div>
+        </section>
 
-          <aside class="orbit-rail">
-            <div class="orbit-focus">
-              <span class="orbit-eyebrow">FOKUS</span>
-              <div class="orbit-clock">25</div>
-              <p>Minuten</p>
-              <button class="btn primary" data-go="focus">Starten</button>
+        <section class="noir-dashboard">
+          <div class="noir-main-column">
+            <div class="noir-section-head">
+              <div>
+                <span>01</span>
+                <h3>Deine Fächer</h3>
+              </div>
+              <button class="btn" id="addSubjectHome">+ Fach</button>
+            </div>
+            <div class="grid subject-grid" id="homeSubjects"></div>
+          </div>
+
+          <aside class="noir-side-column">
+            <div class="noir-side-block">
+              <div class="noir-section-head"><div><span>02</span><h3>Schnellzugriff</h3></div></div>
+              <button data-go="flashcards"><span>Karteikarten</span><b>↗</b></button>
+              <button data-go="tests"><span>Tests</span><b>↗</b></button>
+              <button data-go="code"><span>Code-Labor</span><b>↗</b></button>
+              <button data-go="games"><span>Lernspiele</span><b>↗</b></button>
             </div>
 
-            <div class="orbit-stats">
-              <div><span>Fächer</span><strong id="metricSubjects">0</strong></div>
-              <div><span>Karten</span><strong>0</strong></div>
-              <div><span>Tests</span><strong>0</strong></div>
-              <div><span>Fokus</span><strong>0m</strong></div>
-            </div>
-
-            <div class="orbit-links">
-              <button data-go="tests"><span>Tests</span><b>→</b></button>
-              <button data-go="games"><span>Lernspiele</span><b>→</b></button>
-              <button data-go="focus"><span>Fokus & Pausen</span><b>→</b></button>
+            <div class="noir-progress-block">
+              <span>HEUTE</span>
+              <strong>0m</strong>
+              <small>Fokuszeit</small>
+              <div class="noir-progress-line"><i></i></div>
             </div>
           </aside>
         </section>
 
-        <section class="orbit-challenges">
-          <div class="orbit-section-head">
-            <div><span>TRAINING</span><h3>C# Challenges</h3></div>
+        <section class="noir-challenges">
+          <div class="noir-section-head">
+            <div><span>03</span><h3>C# Challenges</h3></div>
             <div class="starter-controls">
               <span class="starter-counter" id="starterCounter">1–4 von 10</span>
               <button class="icon-btn" id="starterPrev">←</button>
@@ -5722,6 +6274,14 @@
             </div>
           </div>
           <div class="starter-carousel"><div class="starter-grid" id="starterGrid"></div></div>
+        </section>
+
+        <section class="noir-footer-note">
+          <div>
+            <span>BUILT PRINCIPLE</span>
+            <h3>Weniger Oberfläche. Mehr Fokus.</h3>
+          </div>
+          <a class="btn" href="https://www.kodub.com/apps/polytrack" target="_blank" rel="noopener">Pause ↗</a>
         </section>
       </section>
 
