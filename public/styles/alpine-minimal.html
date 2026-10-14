@@ -5525,6 +5525,11 @@ try { history.replaceState({ builtStylePreview: true }, '', '/'); } catch (e) {}
 <script id="builtCasinoScript">
 (function(){
   const COINS_KEY='built_casino_coins_v1';
+  const COINS_VERSION_KEY='built_casino_coins_version_v2';
+  if(localStorage.getItem(COINS_VERSION_KEY)!=='2'){
+    localStorage.setItem(COINS_KEY,'1000');
+    localStorage.setItem(COINS_VERSION_KEY,'2');
+  }
   let coins=Number(localStorage.getItem(COINS_KEY));
   if(!Number.isFinite(coins)) coins=1000;
 
