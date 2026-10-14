@@ -5589,7 +5589,7 @@ class Program
             <p class="muted" style="font-size:12px;line-height:1.6;margin-top:18px">Der Code wird für die Kompilierung in einer externen Sandbox ausgeführt. Keine Passwörter, Tokens oder vertraulichen Daten in den Code schreiben.</p>
             <div class="registration-lab" id="registrationLab" style="display:none">
               <div class="registration-lab-head">
-                <div><strong>Interaktive Konsolen-App</strong><small>Hier kannst du die Aufgabe wie in einer echten Konsole bedienen. Die Anmeldungen werden im Browser gespeichert.</small></div>
+                <div><strong>Interaktive Anmeldungs-App</strong><small>Das ist keine Bild-Demo: Du kannst wirklich Daten eingeben, speichern, anzeigen und auswerten. Die Anmeldungen bleiben nach Neuladen und erneutem Öffnen erhalten.</small></div>
                 <button class="btn" id="registrationReset">Daten löschen</button>
               </div>
               <div class="registration-terminal" id="registrationTerminal"><div>*** Anmeldungen verwalten ***</div><div class="muted-console">Wähle eine Funktion:</div></div>
@@ -7107,8 +7107,8 @@ class Program
         <ul class="starter-steps">${p.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
         <p style="font-size:12px"><strong>Wichtig:</strong> Du bekommst keine fertige Lösung. Du programmierst das Projekt selbst.</p>
         <div class="starter-actions">
-          <button class="btn primary" onclick="startChallenge('${p.id}')">Aufgabe starten</button>
-          <a class="btn video-link" href="${p.video}" target="_blank" rel="noopener">▶ Erklärungsvideo</a>
+          <button class="btn primary" onclick="startChallenge('${p.id}')">${p.id==='registrations'?'Interaktive App öffnen':'Aufgabe starten'}</button>
+          ${p.video?'<a class="btn video-link" href="'+p.video+'" target="_blank" rel="noopener">▶ Erklärungsvideo</a>':''}
         </div>
       </article>`
     ).join('');
@@ -7125,7 +7125,13 @@ class Program
       'Das solltest du dabei üben:\n- '+project.steps.join('\n- ')+
       '\n\nWenn du Hilfe brauchst, öffne das Erklärungsvideo auf der Startseite.';
 
-    if(project.runnable){
+    if(project.id==='registrations'){
+      editor.setValue(project.code||'');
+      localStorage.setItem(CODE_KEY,project.code||'');
+      document.getElementById('stdinInput').value='';
+      document.getElementById('consoleOut').textContent=
+        'Die Aufgabe ist als echte interaktive Web-App eingebaut. Nutze unten das Menü für a, n und g. Neue Anmeldungen werden dauerhaft in deinem Browser gespeichert.\n\nDen C#-Code kannst du links ansehen, verändern und separat in der Sandbox testen.';
+    }else if(project.runnable){
       editor.setValue(project.code||'');
       localStorage.setItem(CODE_KEY,project.code||'');
       document.getElementById('stdinInput').value=project.stdinExample||'';
