@@ -7319,7 +7319,7 @@ class Program
             <div class="casino-status" id="bjStatus">Einsatz wählen und Runde starten.</div>
             <div class="casino-controls">
               <label>Einsatz
-                <input id="bjBet" type="number" min="10" step="10" value="50" inputmode="numeric">
+                <input id="bjBet" type="number" min="1" step="1" value="10" inputmode="numeric">
               </label>
               <button class="btn primary" id="bjDeal">Runde starten</button>
               <button class="btn" id="bjHit" disabled>Karte</button>
@@ -7355,7 +7355,7 @@ class Program
 
             <div class="casino-controls roulette-controls">
               <label>Einsatz
-                <input id="rouletteBet" type="number" min="10" step="10" value="50" inputmode="numeric">
+                <input id="rouletteBet" type="number" min="1" step="1" value="10" inputmode="numeric">
               </label>
               <label id="roulettePickWrap" class="roulette-number-wrap">Zahl
                 <input id="roulettePick" type="number" min="0" max="36" value="7" inputmode="numeric">
@@ -8800,13 +8800,13 @@ class Program
 <script id="builtCasinoScript">
 (function(){
   const COINS_KEY='built_casino_coins_v1';
-  const COINS_VERSION_KEY='built_casino_coins_version_v2';
-  if(localStorage.getItem(COINS_VERSION_KEY)!=='2'){
-    localStorage.setItem(COINS_KEY,'1000');
-    localStorage.setItem(COINS_VERSION_KEY,'2');
+  const COINS_VERSION_KEY='built_casino_coins_version_v3';
+  if(localStorage.getItem(COINS_VERSION_KEY)!=='3'){
+    localStorage.setItem(COINS_KEY,'100');
+    localStorage.setItem(COINS_VERSION_KEY,'3');
   }
   let coins=Number(localStorage.getItem(COINS_KEY));
-  if(!Number.isFinite(coins)) coins=1000;
+  if(!Number.isFinite(coins)) coins=100;
 
   const money=n=>Number.isInteger(n)?n.toLocaleString("de-CH"):n.toLocaleString("de-CH",{maximumFractionDigits:1});
   function saveCoins(){
@@ -8824,7 +8824,7 @@ class Program
   }
   function validBet(input){
     const bet=Number(input.value);
-    if(!Number.isFinite(bet)||bet<10){return {ok:false,msg:'Mindesteinsatz: 10 Coins.'}}
+    if(!Number.isFinite(bet)||bet<1){return {ok:false,msg:'Mindesteinsatz: 1 Coin.'}}
     if(bet>coins){return {ok:false,msg:'Du hast nicht genügend Coins.'}}
     return {ok:true,bet};
   }
