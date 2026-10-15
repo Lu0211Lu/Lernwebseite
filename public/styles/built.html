@@ -787,6 +787,52 @@
       margin:10px auto 0!important;
     }
   }
+
+  /* Roulette usability: wheel stays visible while controls scroll */
+  .roulette-card{position:relative!important}
+  .roulette-head{
+    position:sticky!important;
+    top:82px!important;
+    z-index:18!important;
+    background:rgba(255,255,255,.96)!important;
+    backdrop-filter:blur(14px)!important;
+    padding:14px 14px 16px!important;
+    margin:-8px -8px 14px!important;
+    border:1px solid rgba(226,232,240,.92)!important;
+    border-radius:18px!important;
+    box-shadow:0 12px 34px rgba(15,23,42,.08)!important;
+  }
+  .roulette-wheel-wrap{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:10px!important;
+  }
+  .roulette-spin-sticky{
+    position:absolute!important;
+    left:50%!important;
+    bottom:-48px!important;
+    transform:translateX(-50%)!important;
+    min-width:116px!important;
+    z-index:35!important;
+    box-shadow:0 10px 26px rgba(91,92,240,.22)!important;
+  }
+  .roulette-head + .roulette-settings{
+    margin-top:56px!important;
+  }
+  @media(max-width:760px){
+    .roulette-head{
+      top:72px!important;
+      position:relative!important;
+    }
+    .roulette-spin-sticky{
+      position:static!important;
+      transform:none!important;
+      margin-top:4px!important;
+    }
+    .roulette-head + .roulette-settings{margin-top:16px!important}
+  }
 </style>
 
 
@@ -1074,6 +1120,7 @@ class Program
                   <span class="roulette-ball"></span>
                 </div>
                 <div class="roulette-wheel" id="rouletteWheel"></div>
+                <button class="btn primary roulette-spin-sticky" id="rouletteSpinSticky" type="button">Drehen</button>
               </div>
               </div>
             </div>
@@ -2905,7 +2952,7 @@ class Program
     const bet=v.bet;
     coins-=bet;saveCoins();
     rouletteSpinning=true;
-    if(spinBtn){spinBtn.disabled=true;spinBtn.textContent='Dreht …'}
+    if(spinBtn){spinBtn.disabled=true;spinBtn.textContent='Dreht …'} const stickySpin=document.getElementById('rouletteSpinSticky'); if(stickySpin){stickySpin.disabled=true;stickySpin.textContent='Dreht …'}
     if(status)status.textContent='Das Rad und die Kugel drehen …';
 
     const idx=rng(cfg.order.length);
@@ -2945,10 +2992,13 @@ class Program
 
       rouletteSpinning=false;
       rouletteWheel?.classList.remove('spinning');
-      if(spinBtn){spinBtn.disabled=false;spinBtn.textContent='Drehen'}
+      if(spinBtn){spinBtn.disabled=false;spinBtn.textContent='Drehen'} const stickySpin=document.getElementById('rouletteSpinSticky'); if(stickySpin){stickySpin.disabled=false;stickySpin.textContent='Drehen'}
     },4850);
   });
 })();
+  document.getElementById('rouletteSpinSticky')?.addEventListener('click',()=>{
+    document.getElementById('rouletteSpin')?.click();
+  });
 </script>
 
 
