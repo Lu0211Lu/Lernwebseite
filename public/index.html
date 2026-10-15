@@ -1137,21 +1137,7 @@ class Program
                 <select id="rouletteBetType">
                   <option value="red">Rot</option>
                   <option value="black">Schwarz</option>
-                  <option value="even">Gerade</option>
-                  <option value="odd">Ungerade</option>
-                  <option value="low">1–18</option>
-                  <option value="high">19–36</option>
-                  <option value="dozen1">1. Dutzend</option>
-                  <option value="dozen2">2. Dutzend</option>
-                  <option value="dozen3">3. Dutzend</option>
-                  <option value="column1">Kolonne 1</option>
-                  <option value="column2">Kolonne 2</option>
-                  <option value="column3">Kolonne 3</option>
-                  <option value="sixline">Transversale simple · 6 Zahlen</option>
-                  <option value="corner">Carré · 4 Zahlen</option>
-                  <option value="street">Transversale pleine · 3 Zahlen</option>
-                  <option value="split">Cheval · 2 Zahlen</option>
-                  <option value="number">Plein · 1 Zahl</option>
+                  <option value="green">Grün</option>
                 </select>
               </label>
             </div>
@@ -1171,14 +1157,6 @@ class Program
             <div class="casino-controls roulette-controls">
               <label>Einsatz
                 <input id="rouletteBet" type="number" min="1" step="1" value="10" inputmode="numeric">
-              </label>
-
-              <label id="roulettePickWrap" class="roulette-number-wrap">Zahl
-                <input id="roulettePick" type="number" min="0" max="36" value="7" inputmode="numeric">
-              </label>
-
-              <label id="rouletteGroupWrap" class="roulette-number-wrap">Zahlen
-                <input id="rouletteGroup" type="text" value="1,2" placeholder="z. B. 1,2">
               </label>
 
               <button class="btn primary" id="rouletteSpin">Drehen</button>
@@ -2725,21 +2703,7 @@ class Program
   const betDefs={
     red:{covered:18,payout:'1 : 1',multiplier:2},
     black:{covered:18,payout:'1 : 1',multiplier:2},
-    even:{covered:18,payout:'1 : 1',multiplier:2},
-    odd:{covered:18,payout:'1 : 1',multiplier:2},
-    low:{covered:18,payout:'1 : 1',multiplier:2},
-    high:{covered:18,payout:'1 : 1',multiplier:2},
-    dozen1:{covered:12,payout:'2 : 1',multiplier:3},
-    dozen2:{covered:12,payout:'2 : 1',multiplier:3},
-    dozen3:{covered:12,payout:'2 : 1',multiplier:3},
-    column1:{covered:12,payout:'2 : 1',multiplier:3},
-    column2:{covered:12,payout:'2 : 1',multiplier:3},
-    column3:{covered:12,payout:'2 : 1',multiplier:3},
-    sixline:{covered:6,payout:'5 : 1',multiplier:6},
-    corner:{covered:4,payout:'8 : 1',multiplier:9},
-    street:{covered:3,payout:'11 : 1',multiplier:12},
-    split:{covered:2,payout:'17 : 1',multiplier:18},
-    number:{covered:1,payout:'35 : 1',multiplier:36}
+    green:{covered:1,payout:'35 : 1',multiplier:36}
   };
 
   function rouletteConfig(){
@@ -2875,19 +2839,14 @@ class Program
     const cfg=rouletteConfig();
     const type=rouletteBetType?.value||'red';
     const def=betDefs[type];
-    const chance=(def.covered/cfg.slots*100).toFixed(2)+' %';
+    const covered=type==='green'?(cfg.american?2:1):def.covered;
+    const chance=(covered/cfg.slots*100).toFixed(2)+' %';
+    const payout=(type==='green'&&cfg.american)?'17 : 1':def.payout;
     document.getElementById('rouletteChance').textContent=chance;
-    document.getElementById('roulettePayout').textContent=def.payout;
+    document.getElementById('roulettePayout').textContent=payout;
     document.getElementById('rouletteEdge').textContent=cfg.edge;
-
-    const count={sixline:6,corner:4,street:3,split:2}[type]||0;
-    roulettePickWrap?.classList.toggle('show',type==='number');
-    rouletteGroupWrap?.classList.toggle('show',count>0);
-    if(count>0 && rouletteGroup){
-      const examples={sixline:'1,2,3,4,5,6',corner:'1,2,4,5',street:'1,2,3',split:'1,2'};
-      rouletteGroup.value=examples[type];
-      rouletteGroup.placeholder='Genau '+count+' Zahlen';
-    }
+    roulettePickWrap?.classList.remove('show');
+    rouletteGroupWrap?.classList.remove('show');
   }
 
   function parseGroup(type){
@@ -2903,18 +2862,7 @@ class Program
     const num=typeof n==='number'?n:Number(n);
     if(type==='red')return n!==0&&n!=='00'&&reds.has(num);
     if(type==='black')return n!==0&&n!=='00'&&!reds.has(num);
-    if(type==='even')return n!==0&&n!=='00'&&num%2===0;
-    if(type==='odd')return n!==0&&n!=='00'&&num%2===1;
-    if(type==='low')return n!==0&&n!=='00'&&num>=1&&num<=18;
-    if(type==='high')return n!==0&&n!=='00'&&num>=19&&num<=36;
-    if(type==='dozen1')return num>=1&&num<=12;
-    if(type==='dozen2')return num>=13&&num<=24;
-    if(type==='dozen3')return num>=25&&num<=36;
-    if(type==='column1')return num>=1&&num<=34&&num%3===1;
-    if(type==='column2')return num>=2&&num<=35&&num%3===2;
-    if(type==='column3')return num>=3&&num<=36&&num%3===0;
-    if(['sixline','corner','street','split'].includes(type))return Array.isArray(group)&&group.includes(num);
-    if(type==='number')return String(n)===String(pick);
+    if(type==='green')return n===0||n==='00';
     return false;
   }
 
@@ -2931,22 +2879,10 @@ class Program
 
     const cfg=rouletteConfig();
     const type=rouletteBetType?.value||'red';
-    const def=betDefs[type];
-    const pick=roulettePick?.value;
-    const group=parseGroup(type);
-
-    if(type==='number'){
-      if(cfg.american && pick==='00'){
-        // 00 is accepted below as a string if entered through future UI; current number input supports 0–36.
-      }else{
-        const p=Number(pick);
-        if(!Number.isInteger(p)||p<0||p>36){if(status)status.textContent='Wähle eine Zahl zwischen 0 und 36.';return}
-      }
-    }
-    if(['sixline','corner','street','split'].includes(type)&&!group){
-      if(status)status.textContent='Gib die richtige Anzahl verschiedener Zahlen zwischen 1 und 36 ein.';
-      return;
-    }
+    const def={...betDefs[type]};
+    if(type==='green'&&cfg.american){def.payout='17 : 1';def.multiplier=18;}
+    const pick=null;
+    const group=null;
 
     const spinBtn=document.getElementById('rouletteSpin');
     const bet=v.bet;
