@@ -697,6 +697,96 @@
     .roulette-wheel-wrap{width:220px!important;height:220px!important;flex-basis:220px!important;margin:8px auto 0!important}
     .roulette-settings,.roulette-chances{grid-template-columns:1fr}
   }
+
+  /* Roulette V3 — crisp SVG wheel, no pointer, realistic ball track */
+  .roulette-pointer{display:none!important}
+  .roulette-wheel-wrap{
+    width:330px!important;
+    height:330px!important;
+    flex:0 0 330px!important;
+    margin-left:auto!important;
+    filter:drop-shadow(0 24px 34px rgba(15,23,42,.16));
+  }
+  .roulette-wheel{
+    position:absolute!important;
+    inset:10px!important;
+    border:0!important;
+    border-radius:50%!important;
+    overflow:visible!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    transform-origin:50% 50%!important;
+    transition:transform 4.8s cubic-bezier(.12,.68,.18,1)!important;
+  }
+  .roulette-wheel:after{display:none!important}
+  .roulette-wheel svg{
+    display:block;
+    width:100%;
+    height:100%;
+    overflow:visible;
+    shape-rendering:geometricPrecision;
+    text-rendering:geometricPrecision;
+  }
+  .roulette-ball-track{
+    position:absolute!important;
+    inset:0!important;
+    z-index:30!important;
+    pointer-events:none!important;
+    transform-origin:50% 50%!important;
+    transition:transform 4.8s cubic-bezier(.08,.7,.12,1)!important;
+    will-change:transform!important;
+  }
+  .roulette-ball-track:before{
+    content:"";
+    position:absolute;
+    inset:5px;
+    border-radius:50%;
+    border:1px solid rgba(17,24,39,.16);
+    box-shadow:
+      inset 0 0 0 6px rgba(255,255,255,.78),
+      inset 0 0 0 8px rgba(167,139,82,.18);
+  }
+  .roulette-ball{
+    position:absolute!important;
+    top:3px!important;
+    left:50%!important;
+    width:12px!important;
+    height:12px!important;
+    margin-left:-6px!important;
+    border-radius:50%!important;
+    background:
+      radial-gradient(circle at 31% 28%,#fff 0 18%,#f8fafc 24%,#d8dde3 52%,#8f98a3 100%)!important;
+    border:1px solid rgba(255,255,255,.92)!important;
+    box-shadow:
+      0 3px 7px rgba(15,23,42,.42),
+      inset -2px -2px 3px rgba(30,41,59,.22),
+      inset 2px 2px 3px rgba(255,255,255,.9)!important;
+    transition:
+      top 1.15s cubic-bezier(.22,.8,.22,1),
+      width .25s ease,
+      height .25s ease,
+      margin-left .25s ease!important;
+  }
+  .roulette-ball-track.dropping .roulette-ball{
+    top:24px!important;
+    width:11px!important;
+    height:11px!important;
+    margin-left:-5.5px!important;
+  }
+  .roulette-ball-track.settled .roulette-ball{
+    top:31px!important;
+  }
+  .roulette-wheel.spinning svg{
+    filter:saturate(1.04) contrast(1.02);
+  }
+  @media(max-width:760px){
+    .roulette-wheel-wrap{
+      width:270px!important;
+      height:270px!important;
+      flex-basis:270px!important;
+      margin:10px auto 0!important;
+    }
+  }
 </style>
 
 
@@ -980,13 +1070,11 @@ class Program
               </div>
 
               <div class="roulette-wheel-wrap" aria-label="Roulette-Rad">
-                <div class="roulette-pointer"></div>
-                <div class="roulette-ball-track" id="rouletteBallTrack" aria-hidden="true">
+<div class="roulette-ball-track" id="rouletteBallTrack" aria-hidden="true">
                   <span class="roulette-ball"></span>
                 </div>
-                <div class="roulette-wheel" id="rouletteWheel">
-                  <div class="roulette-wheel-center"><span>BUILT</span></div>
-                </div>
+                <div class="roulette-wheel" id="rouletteWheel"></div>
+              </div>
               </div>
             </div>
 
@@ -2623,25 +2711,112 @@ class Program
     return reds.has(Number(n))?'Rot':'Schwarz';
   }
 
+  function polar(cx,cy,r,deg){
+    const a=(deg-90)*Math.PI/180;
+    return {x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)};
+  }
+
+  function ringSectorPath(cx,cy,r1,r2,a0,a1){
+    const p0=polar(cx,cy,r2,a0),p1=polar(cx,cy,r2,a1);
+    const p2=polar(cx,cy,r1,a1),p3=polar(cx,cy,r1,a0);
+    const large=(a1-a0)>180?1:0;
+    return [
+      'M',p0.x.toFixed(3),p0.y.toFixed(3),
+      'A',r2,r2,0,large,1,p1.x.toFixed(3),p1.y.toFixed(3),
+      'L',p2.x.toFixed(3),p2.y.toFixed(3),
+      'A',r1,r1,0,large,0,p3.x.toFixed(3),p3.y.toFixed(3),
+      'Z'
+    ].join(' ');
+  }
+
   function buildRouletteWheel(){
     if(!rouletteWheel)return;
     const cfg=rouletteConfig();
-    rouletteWheel.querySelectorAll('.roulette-wheel-number').forEach(el=>el.remove());
+    const ns='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('viewBox','0 0 320 320');
+    svg.setAttribute('role','img');
+    svg.setAttribute('aria-label',(cfg.american?'Amerikanisches':'Europäisches')+' Roulette-Rad');
+
+    const defs=document.createElementNS(ns,'defs');
+    defs.innerHTML=
+      '<radialGradient id="wood" cx="38%" cy="30%"><stop offset="0%" stop-color="#f3dfae"/><stop offset="55%" stop-color="#d2b477"/><stop offset="100%" stop-color="#a78346"/></radialGradient>'+
+      '<radialGradient id="bowl" cx="36%" cy="30%"><stop offset="0%" stop-color="#f4e4bc"/><stop offset="58%" stop-color="#d6bd84"/><stop offset="100%" stop-color="#aa874f"/></radialGradient>'+
+      '<filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity=".22"/></filter>';
+    svg.appendChild(defs);
+
+    const outer=document.createElementNS(ns,'circle');
+    outer.setAttribute('cx','160');outer.setAttribute('cy','160');outer.setAttribute('r','154');
+    outer.setAttribute('fill','url(#wood)');
+    outer.setAttribute('stroke','#9d7c43');outer.setAttribute('stroke-width','3');
+    outer.setAttribute('filter','url(#softShadow)');
+    svg.appendChild(outer);
+
+    const track=document.createElementNS(ns,'circle');
+    track.setAttribute('cx','160');track.setAttribute('cy','160');track.setAttribute('r','145');
+    track.setAttribute('fill','#f4ead2');track.setAttribute('stroke','#c5a86d');track.setAttribute('stroke-width','2');
+    svg.appendChild(track);
+
     const step=360/cfg.order.length;
-    const stops=[];
     cfg.order.forEach((n,i)=>{
-      const start=i*step,end=(i+1)*step;
-      const colour=(n===0||n==='00')?'#198754':(reds.has(Number(n))?'#b83f4a':'#181a1f');
-      stops.push(colour+' '+start+'deg '+end+'deg');
-      const label=document.createElement('span');
-      label.className='roulette-wheel-number';
-      label.textContent=n;
-      const angle=(i+.5)*step;
-      const radius=rouletteWheel.clientWidth>=240?101:78;
-      label.style.transform='rotate('+angle+'deg) translateY(-'+radius+'px) rotate('+(-angle)+'deg)';
-      rouletteWheel.appendChild(label);
+      const start=i*step;
+      const end=(i+1)*step;
+      const path=document.createElementNS(ns,'path');
+      const fill=(n===0||n==='00')?'#138a55':(reds.has(Number(n))?'#c54652':'#171a1f');
+      path.setAttribute('d',ringSectorPath(160,160,88,137,start,end));
+      path.setAttribute('fill',fill);
+      path.setAttribute('stroke','#f4ead2');
+      path.setAttribute('stroke-width','.8');
+      svg.appendChild(path);
+
+      const mid=(start+end)/2;
+      const pt=polar(160,160,113,mid);
+      const txt=document.createElementNS(ns,'text');
+      txt.setAttribute('x',pt.x.toFixed(2));
+      txt.setAttribute('y',pt.y.toFixed(2));
+      txt.setAttribute('fill','#ffffff');
+      txt.setAttribute('font-size',cfg.order.length===38?'8.2':'8.5');
+      txt.setAttribute('font-weight','800');
+      txt.setAttribute('font-family','Inter,Arial,sans-serif');
+      txt.setAttribute('text-anchor','middle');
+      txt.setAttribute('dominant-baseline','middle');
+      txt.setAttribute('transform','rotate('+(mid)+','+pt.x.toFixed(2)+','+pt.y.toFixed(2)+')');
+      txt.textContent=n;
+      svg.appendChild(txt);
     });
-    rouletteWheel.style.background='conic-gradient(from -90deg,'+stops.join(',')+')';
+
+    const innerLip=document.createElementNS(ns,'circle');
+    innerLip.setAttribute('cx','160');innerLip.setAttribute('cy','160');innerLip.setAttribute('r','88');
+    innerLip.setAttribute('fill','url(#bowl)');
+    innerLip.setAttribute('stroke','#b08d51');innerLip.setAttribute('stroke-width','4');
+    svg.appendChild(innerLip);
+
+    const bowl=document.createElementNS(ns,'circle');
+    bowl.setAttribute('cx','160');bowl.setAttribute('cy','160');bowl.setAttribute('r','62');
+    bowl.setAttribute('fill','url(#bowl)');
+    bowl.setAttribute('stroke','#e8d4a5');bowl.setAttribute('stroke-width','2');
+    svg.appendChild(bowl);
+
+    const hub=document.createElementNS(ns,'circle');
+    hub.setAttribute('cx','160');hub.setAttribute('cy','160');hub.setAttribute('r','31');
+    hub.setAttribute('fill','#151922');
+    hub.setAttribute('stroke','#e7d3a1');hub.setAttribute('stroke-width','3');
+    svg.appendChild(hub);
+
+    const logo=document.createElementNS(ns,'text');
+    logo.setAttribute('x','160');logo.setAttribute('y','161');
+    logo.setAttribute('fill','#f4e1b3');
+    logo.setAttribute('font-size','12');
+    logo.setAttribute('font-weight','900');
+    logo.setAttribute('font-family','Inter,Arial,sans-serif');
+    logo.setAttribute('letter-spacing','2');
+    logo.setAttribute('text-anchor','middle');
+    logo.setAttribute('dominant-baseline','middle');
+    logo.textContent='BUILT';
+    svg.appendChild(logo);
+
+    rouletteWheel.replaceChildren(svg);
+
     const title=document.getElementById('rouletteVariantTitle');
     if(title)title.textContent=cfg.title;
     const note=document.getElementById('rouletteNote');
@@ -2737,12 +2912,23 @@ class Program
     const n=cfg.order[idx];
     const step=360/cfg.order.length;
     const target=360-(idx+.5)*step;
-    rouletteRotation += 360*6 + ((target-(rouletteRotation%360)+360)%360);
-    rouletteBallRotation -= 360*9;
+    rouletteRotation += 360*5 + ((target-(rouletteRotation%360)+360)%360);
 
+    // Kugel läuft entgegengesetzt und endet optisch über dem gezogenen Zahlenfach.
+    const pocketAngle=(idx+.5)*step;
+    const finalBallAngle=((rouletteRotation+pocketAngle)%360+360)%360;
+    const currentBallMod=((rouletteBallRotation%360)+360)%360;
+    const backwardsDelta=(currentBallMod-finalBallAngle+360)%360;
+    rouletteBallRotation -= 360*8 + backwardsDelta;
+
+    rouletteBallTrack?.classList.remove('dropping','settled');
     rouletteWheel?.classList.add('spinning');
     if(rouletteWheel)rouletteWheel.style.transform='rotate('+rouletteRotation+'deg)';
     if(rouletteBallTrack)rouletteBallTrack.style.transform='rotate('+rouletteBallRotation+'deg)';
+
+    // Erst mehrere Runden auf der äusseren Bahn, danach fällt die Kugel nach innen.
+    setTimeout(()=>rouletteBallTrack?.classList.add('dropping'),3000);
+    setTimeout(()=>rouletteBallTrack?.classList.add('settled'),4050);
 
     setTimeout(()=>{
       document.getElementById('rouletteNumber').textContent=n;
@@ -2760,7 +2946,7 @@ class Program
       rouletteSpinning=false;
       rouletteWheel?.classList.remove('spinning');
       if(spinBtn){spinBtn.disabled=false;spinBtn.textContent='Drehen'}
-    },4400);
+    },4850);
   });
 })();
 </script>
