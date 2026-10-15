@@ -833,6 +833,18 @@
     }
     .roulette-head + .roulette-settings{margin-top:16px!important}
   }
+
+  .casino-wallet{gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .casino-wallet-balance{display:flex;align-items:center;gap:10px}
+  .casino-rescue-btn{
+    padding:8px 11px!important;
+    font-size:11px!important;
+    border-radius:10px!important;
+  }
+  .casino-rescue-btn:disabled{
+    opacity:.45!important;
+    cursor:not-allowed!important;
+  }
 </style>
 
 
@@ -1073,7 +1085,10 @@ class Program
             <h2>Pausenspiele</h2>
             <p>Blackjack und Roulette mit virtuellen BUILT Coins – nur zum Spielen, ohne Echtgeld.</p>
           </div>
-          <div class="casino-wallet"><span>BUILT Coins</span><strong id="casinoCoins">100</strong></div>
+          <div class="casino-wallet">
+            <div class="casino-wallet-balance"><span>BUILT Coins</span><strong id="casinoCoins">100</strong></div>
+            <button class="btn casino-rescue-btn" id="casinoRescueCoin" type="button">+1 Coin holen</button>
+          </div>
         </div>
 
         <div class="casino-grid">
@@ -2595,7 +2610,23 @@ class Program
     coins=Math.max(0,Math.round(coins*2)/2);
     localStorage.setItem(COINS_KEY,String(coins));
     document.querySelectorAll('#casinoCoins').forEach(el=>el.textContent=money(coins));
+    const rescue=document.getElementById('casinoRescueCoin');
+    if(rescue){
+      rescue.disabled=coins>0;
+      rescue.title=coins>0?'Nur bei 0 Coins verfügbar.':'1 BUILT Coin holen und weiterspielen.';
+    }
   }
+
+  document.getElementById('casinoRescueCoin')?.addEventListener('click',()=>{
+    if(coins>0)return;
+    coins=1;
+    saveCoins();
+    const bjStatus=document.getElementById('bjStatus');
+    const rouletteStatus=document.getElementById('rouletteStatus');
+    if(bjStatus)bjStatus.textContent='1 BUILT Coin abgeholt. Du kannst wieder spielen.';
+    if(rouletteStatus)rouletteStatus.textContent='1 BUILT Coin abgeholt. Du kannst wieder drehen.';
+  });
+
   saveCoins();
 
   function rng(max){
