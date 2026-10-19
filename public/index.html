@@ -2634,29 +2634,29 @@ class Program
 <script id="builtCasinoScript">
 (function(){
   const COINS_KEY='built_casino_coins_v1';
-  const COINS_VERSION_KEY='built_casino_coins_version_v3';
-  if(localStorage.getItem(COINS_VERSION_KEY)!=='3'){
+  const COINS_VERSION_KEY='built_casino_coins_version_v4';
+  if(localStorage.getItem(COINS_VERSION_KEY)!=='4'){
     localStorage.setItem(COINS_KEY,'100');
-    localStorage.setItem(COINS_VERSION_KEY,'3');
+    localStorage.setItem(COINS_VERSION_KEY,'4');
   }
   let coins=Number(localStorage.getItem(COINS_KEY));
   if(!Number.isFinite(coins)) coins=100;
 
   const money=n=>Number.isInteger(n)?n.toLocaleString("de-CH"):n.toLocaleString("de-CH",{maximumFractionDigits:1});
   function saveCoins(){
-    coins=Math.max(0,Math.round(coins*2)/2);
+    coins=Math.max(0,Math.round(coins));
     localStorage.setItem(COINS_KEY,String(coins));
     document.querySelectorAll('#casinoCoins').forEach(el=>el.textContent=money(coins));
     const rescue=document.getElementById('casinoRescueCoin');
     if(rescue){
-      rescue.classList.toggle('show',coins===0);
-      rescue.disabled=coins!==0;
-      rescue.title=coins===0?'1 BUILT Coin holen und weiterspielen.':'';
+      rescue.classList.toggle('show',coins<1);
+      rescue.disabled=coins>=1;
+      rescue.title=coins<1?'1 BUILT Coin holen und weiterspielen.':'';
     }
   }
 
   document.getElementById('casinoRescueCoin')?.addEventListener('click',()=>{
-    if(coins>0)return;
+    if(coins>=1)return;
     coins=1;
     saveCoins();
     const bjStatus=document.getElementById('bjStatus');
@@ -2719,7 +2719,7 @@ class Program
   function settleBJ(result){
     bjLive=false;bjButtons(false);
     let award=0,msg='';
-    if(result==='blackjack'){award=bjBet*2.5;msg='Blackjack! +'+money(award-bjBet)+' Coins.'}
+    if(result==='blackjack'){award=Math.ceil(bjBet*2.5);msg='Blackjack! +'+money(award-bjBet)+' Coins.'}
     if(result==='win'){award=bjBet*2;msg='Gewonnen! +'+money(bjBet)+' Coins.'}
     if(result==='push'){award=bjBet;msg='Unentschieden. Einsatz zurück.'}
     if(result==='lose'){award=0;msg='Dealer gewinnt. -'+money(bjBet)+' Coins.'}
