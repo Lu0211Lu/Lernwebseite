@@ -834,16 +834,16 @@
     .roulette-head + .roulette-settings{margin-top:16px!important}
   }
 
-  .casino-wallet{gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .casino-wallet{gap:10px;flex-wrap:nowrap;justify-content:flex-end;white-space:nowrap}
   .casino-wallet-balance{display:flex;align-items:center;gap:10px}
   .casino-rescue-btn{
+    display:none!important;
     padding:8px 11px!important;
     font-size:11px!important;
     border-radius:10px!important;
   }
-  .casino-rescue-btn:disabled{
-    opacity:.45!important;
-    cursor:not-allowed!important;
+  .casino-rescue-btn.show{
+    display:inline-flex!important;
   }
 </style>
 
@@ -2612,8 +2612,9 @@ class Program
     document.querySelectorAll('#casinoCoins').forEach(el=>el.textContent=money(coins));
     const rescue=document.getElementById('casinoRescueCoin');
     if(rescue){
-      rescue.disabled=coins>0;
-      rescue.title=coins>0?'Nur bei 0 Coins verfügbar.':'1 BUILT Coin holen und weiterspielen.';
+      rescue.classList.toggle('show',coins===0);
+      rescue.disabled=coins!==0;
+      rescue.title=coins===0?'1 BUILT Coin holen und weiterspielen.':'';
     }
   }
 
