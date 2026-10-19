@@ -1124,7 +1124,7 @@ class Program
           </div>
           <div class="casino-wallet">
             <div class="casino-wallet-balance"><span>BUILT Coins</span><strong id="casinoCoins">100</strong></div>
-            <button class="btn casino-rescue-btn" id="casinoRescueCoin" type="button">+1 Coin holen</button>
+            <button class="btn casino-rescue-btn" id="casinoRescueCoin" type="button">+10 Coins holen</button>
           </div>
         </div>
 
@@ -2651,18 +2651,18 @@ class Program
     if(rescue){
       rescue.classList.toggle('show',coins<1);
       rescue.disabled=coins>=1;
-      rescue.title=coins<1?'1 BUILT Coin holen und weiterspielen.':'';
+      rescue.title=coins<1?'10 BUILT Coins holen und weiterspielen.':'';
     }
   }
 
   document.getElementById('casinoRescueCoin')?.addEventListener('click',()=>{
     if(coins>=1)return;
-    coins=1;
+    coins=10;
     saveCoins();
     const bjStatus=document.getElementById('bjStatus');
     const rouletteStatus=document.getElementById('rouletteStatus');
-    if(bjStatus)bjStatus.textContent='1 BUILT Coin abgeholt. Du kannst wieder spielen.';
-    if(rouletteStatus)rouletteStatus.textContent='1 BUILT Coin abgeholt. Du kannst wieder drehen.';
+    if(bjStatus)bjStatus.textContent='10 BUILT Coins abgeholt. Du kannst wieder spielen.';
+    if(rouletteStatus)rouletteStatus.textContent='10 BUILT Coins abgeholt. Du kannst wieder drehen.';
   });
 
   saveCoins();
