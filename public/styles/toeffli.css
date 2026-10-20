@@ -1,0 +1,68 @@
+
+/* Töffli Theorie – Kategorie M */
+.mofa-shell{display:grid;gap:16px}
+.mofa-intro{overflow:hidden;position:relative;padding:28px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#10172a 0%,#1c2850 56%,#6558f5 100%);box-shadow:0 18px 48px rgba(15,23,42,.13)}
+.mofa-intro:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;right:-55px;bottom:-110px;background:rgba(255,255,255,.08)}
+.mofa-intro-inner{position:relative;z-index:1;max-width:820px}
+.mofa-kicker{font-size:11px;font-weight:850;letter-spacing:.15em;text-transform:uppercase;color:#c7d2fe}
+.mofa-intro h3{font-size:30px;letter-spacing:-.045em;margin:9px 0 8px}
+.mofa-intro p{max-width:760px;margin:0;color:#dbe4f0;line-height:1.65;font-size:13px}
+.mofa-exam-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:20px 0}
+.mofa-fact{padding:12px 13px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.08);border-radius:12px}
+.mofa-fact strong{display:block;font-size:18px;line-height:1}
+.mofa-fact span{display:block;font-size:10px;color:#cbd5e1;margin-top:6px}
+.mofa-note{font-size:10px!important;color:#aeb7c9!important;margin-top:12px!important}
+.mofa-note a,.mofa-credit a{color:inherit}
+.mofa-resume{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:15px}
+.mofa-best{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.09);font-size:11px;font-weight:800}
+.mofa-exam-layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;align-items:start}
+.mofa-question-card{padding:22px}
+.mofa-question-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}
+.mofa-question-number{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:850;color:#6558f5}
+.mofa-question-card h3{margin:5px 0 0;font-size:21px;letter-spacing:-.03em;line-height:1.35}
+.mofa-topic{padding:6px 9px;border-radius:999px;background:#f0efff;color:#5b50d6;font-size:10px;font-weight:800;white-space:nowrap}
+.mofa-photo{margin:14px 0 18px;border:1px solid #e8eaf0;border-radius:16px;overflow:hidden;background:#f8fafc}
+.mofa-photo img{width:100%;height:320px;object-fit:cover;display:block;background:#fff}
+.mofa-photo.sign img{object-fit:contain;padding:26px;height:280px}
+.mofa-credit{font-size:9px;color:#7b8494;padding:7px 10px;background:#fbfcfe;border-top:1px solid #eceef2}
+.mofa-image-error{display:grid;place-items:center;height:180px;color:#8b94a4;font-size:12px;padding:20px;text-align:center}
+.mofa-statements{display:grid;gap:10px}
+.mofa-statement{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:13px 14px;border:1px solid #e6e9ef;border-radius:13px;background:#fbfcfe}
+.mofa-statement-text{font-size:13px;line-height:1.5;font-weight:650}
+.mofa-binary{display:flex;border:1px solid #dfe3ea;border-radius:10px;overflow:hidden;background:#fff}
+.mofa-binary button{border:0;background:#fff;padding:8px 10px;font-size:10px;font-weight:850;color:#697386;min-width:66px}
+.mofa-binary button+button{border-left:1px solid #dfe3ea}
+.mofa-binary button.true.selected{background:#e9f8f1;color:#167a53}
+.mofa-binary button.false.selected{background:#fff0f0;color:#b93838}
+.mofa-question-actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+.mofa-question-actions .right{display:flex;gap:9px}
+.mofa-side{position:sticky;top:86px;display:grid;gap:12px}
+.mofa-side-card{padding:16px}
+.mofa-side-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mofa-timer{font-size:24px;font-weight:900;letter-spacing:-.04em}
+.mofa-timer.warning{color:#b45309}.mofa-timer.danger{color:#b91c1c}
+.mofa-side-label{font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:800;color:#8b94a4}
+.mofa-progressbar{height:7px;background:#edf0f4;border-radius:99px;overflow:hidden;margin:11px 0 7px}
+.mofa-progressbar span{display:block;height:100%;background:linear-gradient(90deg,#6558f5,#22c55e);border-radius:99px}
+.mofa-side-copy{font-size:10px;color:#7b8494}
+.mofa-nav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.mofa-nav-grid button{border:1px solid #e2e6ed;background:#fff;border-radius:8px;height:34px;font-size:10px;font-weight:800;color:#687386}
+.mofa-nav-grid button.done{background:#edf8f3;border-color:#ccebdd;color:#177454}
+.mofa-nav-grid button.current{background:#6558f5;border-color:#6558f5;color:#fff}
+.mofa-submit{width:100%;margin-top:12px}
+.mofa-exam-help{font-size:10px;line-height:1.55;color:#7b8494;margin:10px 0 0}
+.mofa-result{padding:24px}
+.mofa-result-hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;padding-bottom:20px;border-bottom:1px solid #eceef2}
+.mofa-result-score{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;text-align:center;background:conic-gradient(#22a06b var(--score),#eceef3 0);position:relative}
+.mofa-result-score:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}
+.mofa-result-score div{position:relative}.mofa-result-score strong{display:block;font-size:26px;line-height:1}.mofa-result-score span{font-size:9px;color:#7b8494}
+.mofa-result h3{margin:0 0 5px;font-size:25px}.mofa-result p{margin:0;color:#687386;font-size:12px;line-height:1.55}
+.mofa-result-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mofa-result-badge{padding:7px 10px;border-radius:999px;background:#f4f5f8;font-size:10px;font-weight:800}
+.mofa-result-badge.pass{background:#eaf8f1;color:#177454}.mofa-result-badge.fail{background:#fff0f0;color:#b93838}
+.mofa-review{display:grid;gap:10px;margin-top:18px}.mofa-review h4{margin:0 0 2px}
+.mofa-review-item{padding:13px 14px;border:1px solid #f0d7d7;border-radius:12px;background:#fffafa}
+.mofa-review-item strong{display:block;font-size:11px;margin-bottom:5px}.mofa-review-item p{font-size:11px;margin:3px 0;color:#5f6878}.mofa-review-item .why{color:#8a3b3b}
+.mofa-result-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+@media(max-width:980px){.mofa-exam-layout{grid-template-columns:1fr}.mofa-side{position:static}.mofa-exam-facts{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.mofa-intro{padding:22px 18px}.mofa-intro h3{font-size:25px}.mofa-exam-facts{grid-template-columns:1fr 1fr}.mofa-question-card{padding:16px}.mofa-question-head{display:block}.mofa-topic{display:inline-flex;margin-top:9px}.mofa-photo img{height:240px}.mofa-photo.sign img{height:230px;padding:20px}.mofa-statement{grid-template-columns:1fr;gap:9px}.mofa-binary{width:100%}.mofa-binary button{flex:1}.mofa-question-actions{flex-direction:column}.mofa-question-actions .right{display:grid;grid-template-columns:1fr 1fr}.mofa-result-hero{grid-template-columns:1fr;text-align:center}.mofa-result-score{margin:auto}}
